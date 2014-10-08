@@ -29,7 +29,7 @@ $result=$mysqli->query($sql);
 
 
 if($accion==1){
-    $sql="UPDATE documento
+    $sql="UPDATE solicitudes
              SET reservada='1', estado_actual='1',area_flujo='$id_area',usuario_reserva='$id_user'
            WHERE id_solicitudes='$valor_solicitud'";
     $result=$mysqli->query($sql); 
@@ -44,7 +44,7 @@ if($accion==1){
 if($accion==2){
 
     $sql="SELECT *
-           FROM documento
+           FROM solicitudes
           WHERE id_solicitudes='$valor_solicitud'";
     $result=$mysqli->query($sql);
     $row=$result->fetch_array(MYSQLI_ASSOC);

@@ -67,8 +67,8 @@ $result_comentario2=$mysqli->query($sql_comentario);
 <br><br><br><br>
           <table class="gridview">
 				 <tr >
-                        <td class="title">Fecha Observaciòn</td>
-                        <td class="title">Observaciòn</td>
+                        <td >Fecha Observaciòn</td>
+                        <td >Observaciòn</td>
                        <td ></td>
                         
             </tr>

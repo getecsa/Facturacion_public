@@ -38,7 +38,7 @@ $id = $_GET['id'];
 session_start();
  $id_user = $_SESSION['uid'];
 $estado = $_GET['estado'];
-echo $estado;
+
 $sql = "SELECT fecha_observacion as fecha, observacion 
 FROM `observaciones` WHERE `solicitudes_id_solicitudes` = '$id'
 and estado = '0'

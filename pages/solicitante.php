@@ -67,32 +67,33 @@ location = location.pathname + '?id=solicitante&param=' + valor;
 
 if ($param=='Pendiente'){
 $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha
-        FROM solicitudes so
-  INNER JOIN documento do ON so.id_solicitudes=do.solicitudes_idSolicitudes
+        FROM documento do
+  INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND so.estado_actual=0 || so.estado_actual=1 || so.estado_actual=2 || so.estado_actual=3 ||
-             so.estado_actual=5 || so.estado_actual=6 ORDER BY fecha DESC";
+         AND do.estado_actual=0 || do.estado_actual=1 || do.estado_actual=2 || do.estado_actual=3 ||
+             do.estado_actual=5 || do.estado_actual=6 ORDER BY fecha DESC";
+
 }
 
 if ($param=='Rechazada'){
-$sql="SELECT distinct so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, so.estado_actual as estado
-  INNER JOIN documento do ON so.id_solicitudes=do.solicitudes_idSolicitudes
-  INNER JOIN historial_estados hi ON so.id_solicitudes=hi.solicitudes_idSolicitudes
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha
+        FROM documento do
+  INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND so.estado_actual=4 ORDER BY fecha DESC";
+         AND do.estado_actual=4";
 
 }
 
 if ($param=='Aceptada'){
 $sql="SELECT distinct so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, so.estado_actual as estado
-        FROM solicitudes so
-  INNER JOIN documento do ON so.id_solicitudes=do.solicitudes_idSolicitudes
+        FROM documento do
+  INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN historial_estados hi ON so.id_solicitudes=hi.solicitudes_idSolicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND so.estado_actual=7 ORDER BY fecha DESC";
+         AND do.estado_actual=7 ORDER BY fecha DESC";
 
 }
 

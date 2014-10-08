@@ -68,9 +68,8 @@ $result_comentario2=$mysqli->query($sql_comentario);
           <table class="gridview">
 				 <tr >
                         <td >Fecha Observaciòn</td>
-                        <td >Observaciòn</td>
-                       <td ></td>
-                        
+                       <td >Observación</td>
+                        <td ></td>
             </tr>
             <?php while($row = $result_comentario1->fetch_array(MYSQLI_ASSOC)) {
 ?>
