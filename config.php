@@ -1,0 +1,19 @@
+<?php
+
+$server="localhost"; 
+$db="sis_fac"; 
+$dbuser="root"; 
+$dbpass="getecsa"; 
+ 
+$link=mysql_connect($server,$dbuser,$dbpass);
+mysql_query("SET NAMES 'utf8'");
+
+$mysqli = new mysqli($server, $dbuser, $dbpass, $db);
+$mysqli->set_charset("utf8");
+
+if (mysqli_connect_errno()) {
+    printf("Error de conexión: %s\n", mysqli_connect_error());
+    exit();
+}
+
+?>

@@ -1,0 +1,59 @@
+#ventana{
+	font-size: small;
+}
+
+.block {
+display: inline-block;
+padding-left: 10px;
+}
+
+.block_right {
+display: inline-block;
+padding-left: 10px;
+float: right;
+}
+
+.detalles_factura{
+	width: 100%;
+	padding: 0px;
+}
+
+.detalles_factura ul
+{ float:left;
+  margin:0px;
+  padding:0px;
+}
+
+.detalles_factura ul li
+{  list-style:none;
+	padding:4px 9px;
+}
+
+.detalles_factura ul li.title
+{  font-weight:bold;
+   background: #00517a;
+  /*  border: .5px solid #90bade; */
+  border-top: 1px solid #fff;
+   color:#fff;
+}
+
+.detalles_factura ul li.title2
+{  font-weight:bold;
+   background:#015A86;
+  border-top: 1px solid #fff;   
+   color:#fff;
+}
+
+.detalles_factura ul li.uno
+{
+	background: #FFF;
+}
+
+.detalles_factura ul li.dos
+{  background: #FFEEE6;
+
+}
+
+.ancho_descripcion{
+	width: 380px;
+}

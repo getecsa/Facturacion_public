@@ -1,0 +1,346 @@
+﻿@import url('cssreset-min.css');
+@import url('fonts.css');
+@import url('menu.css');
+@import url('notificaciones.css');
+
+html, body {
+    font-family: "MovistarTextRegular";
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.formulario{
+    display: block;
+    background-image: url(../images/bgmovistar.jpg);
+    background-attachment: fixed;
+    background-repeat: repeat-x;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+h1 {
+    font-family: 'MovistarHeadlineBold';
+    font-size: 36px;
+    font-weight: normal;
+    color: #00517A;
+    height: 51px;
+    padding-left: 20px;
+    padding-top: 20px;
+    vertical-align: text-bottom;
+}
+
+h2 {
+    color: #7AB800;
+    font-size: 24px;
+}
+
+p {
+    margin: 10px 0px 10px 0px;
+}
+
+ul {
+    list-style-type: disc;
+    margin: 20px 0px 20px 30px;
+}
+
+ul ul {
+    list-style-type: circle;
+}
+
+ul ul ul {
+    list-style-type: square;
+}
+
+ul ul ul ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: decimal;
+    margin: 20px 0px 20px 30px;
+}
+
+ol ol {
+    list-style-type: decimal-leading-zero;
+}
+
+ol ol ol {
+    list-style-type: upper-roman;
+}
+
+ol ol ol ol {
+    list-style-type: lower-roman;
+}
+
+input, select {
+    font-size: 14px;
+    padding: 4px;
+    margin: 2px;
+}
+
+input[type=text], input[type=password], input[type=file], select {
+    border: 1px solid #CCC;
+    color: #515559;
+    background-color: rgb(230, 231, 232);
+}
+
+input[type=radio], input[type=checkbox] {
+    border: 1px solid #CCC;
+    color: #515559;
+    background-color: rgb(230, 231, 232);
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+label[for] {
+    color: #515559;
+    cursor: pointer;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    background: url(../images/botonbgcenter.fw.png) top repeat-x; /* for all you older browsers out there */
+    background: url(../images/botonbgleft.fw.png) left top no-repeat, url(../images/botonbgright.fw.png) right top no-repeat, url(../images/botonbgcenter.fw.png) center top repeat-x;
+    height: 24px;
+    border: 0px;
+    padding: 2px 8px 2px 8px;
+    color: white;			
+    cursor: pointer;
+}
+.CampoNumerico
+{
+    text-align:right;
+    }
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+    background-position-y: -25px; /* for all you older browsers out there*/
+    background-position-y: -25px, -25px, -25px;
+}
+
+.header {
+    background-image: url(../images/cabecera.png);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    margin-top: 60px;
+}
+
+.header img.logotipo {
+    margin-left: 787px;
+}
+
+.contenedor {
+    width: 980px;
+    margin: auto;
+}
+
+#main{
+    position: relative;
+    background-image: url(../images/bgmovistar.jpg);
+    background-attachment: fixed;
+    background-repeat: repeat-x;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+
+}
+
+.content {
+    background-image: url(../images/content.png);
+    background-repeat: repeat-y;
+    padding: 18px;
+    color: #00517A;
+    font-size: 16px;
+    min-height: 250px;
+}
+
+.footer {
+    background: url(../images/footer.png) no-repeat center top;
+    padding: 20px 10px 10px 10px;
+    margin: auto;
+    clear: both;
+}
+
+.footer p {
+    text-align: center;
+    color: #515559;
+    font-family: Arial;
+    font-size: 10px;
+}
+
+.login {
+    width: 400px;
+    margin: 40px auto 0px auto;
+}
+
+.login img {
+    float: left;
+}
+
+.login p {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.login input[type=text] {
+    text-transform: uppercase;
+}
+
+.gridview {
+    width: 100%;
+    background-color: #fff;
+    border-collapse: collapse;
+    font-size: small;
+}
+
+.gridcontainer {
+    margin: 5px 0 10px 0;
+    max-width: 930px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.gridview td {
+    padding: 2px;
+    color: #717171;
+}
+
+.gridview th {
+    padding: 4px 2px;
+    color: #fff;
+    background: #13547A url(../images/grd_head_blue.fw.png) repeat-x top;
+    border-left: solid 1px #525252;
+    font-size: 0.9em;
+}
+
+.gridview .alternate {
+    background: #fcfcfc url(../images/grd_alt.png) repeat-x top;
+}
+
+.gridview .pager {
+    background: #13547A url(../images/grd_pgr_blue.fw.png) repeat-x top;
+}
+
+.gridview .pager table {
+    margin: 5px 0;
+}
+
+.gridview .pager td {
+    border-width: 0;
+    padding: 0 6px;
+    border-left: solid 1px #FFF;
+    font-weight: bold;
+    color: #7AB800;
+    line-height: 12px;
+}
+
+.gridview .pager a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+.gridview .pager a:hover {
+    color: #7AB800;
+    text-decoration: none;
+}
+
+.gridview .selected {
+    background-color:#D5F5FF;
+    color:#00A5BD;
+}
+
+.datos {
+    margin-bottom: 40px;
+    font-size: 14px;
+}
+
+.grupo {
+    display: inline-block;
+    min-width: 200px;
+    margin-right: 20px;
+}
+
+.grupo span {
+    color: #7AB800;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.remark {
+    font-weight: bold !important;
+    color: #CB1515 !important;
+}
+
+.highlight {
+    font-weight: bold !important;
+    color: #7AB800 !important;
+}
+
+.nota {
+    color: gray !important;
+    font-size: 14px !important;
+}
+
+.cierre {
+    margin-top: 40px;
+}
+.oculta { display: none;}
+.visible { display: block;}
+
+.custom-input-file {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 5px;
+background: url(../images/botonbgcenter.fw.png) top repeat-x; /* for all you older browsers out there */
+    background: url(../images/botonbgleft.fw.png) left top no-repeat, url(../images/botonbgright.fw.png) right top no-repeat, url(../images/botonbgcenter.fw.png) center top repeat-x;
+        color: #fff;
+    text-align: center;
+    font-family: verdana;
+    font-size: 10pt;
+    width: 200px;
+    min-height: 30px;
+}
+.custom-input-file:hover {
+    background-color: #000;
+    color: #fff;
+}
+.custom-input-file .input-file {
+    margin: 0;
+    padding: 0;outline:0;
+    font-size: 10000px;
+    border: 10000px solid transparent;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    position: absolute;
+    right: -1000px;
+    top: -1000px;
+    cursor: pointer;
+}
+.custom-input-file .archivo {
+    background-color: #fff;
+    color: #000;
+    font-size: 7pt;
+    overflow: hidden;
+}
+.custom-input-file:hover .archivo {
+    background-color: #fff;
+    color: #000;   
+}
+
+
+.contentBoxError{
+    background-color: #FFE9E7;
+    border: 1px solid red;
+    margin-left:30px;
+    margin-top:30px;    
+    width:850px;
+    line-height:auto;
+    padding:10px;
+    font-size:13px;
+    font-family: arial;
+    text-align:center;
+}

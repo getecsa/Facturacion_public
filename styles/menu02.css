@@ -1,0 +1,78 @@
+﻿.menu {
+    background: url(../images/bgmenu.fw.png) repeat-x;
+    background: url(../images/bgmenuleft.fw.png) left top no-repeat, url(../images/bgmenuright.fw.png) right top no-repeat, url(../images/bgmenu.fw.png) center top repeat-x;
+    padding: 0px;
+    padding-bottom: 4px;
+    padding-left: 35px;
+    height: 60px;
+    list-style: none;
+    margin: 0px;
+    margin-bottom:-20px;
+}
+
+.menu a {
+    color: #FFF;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 16px;
+    font-variant: small-caps;
+    font-weight: bold;
+    display: block;
+}
+
+.menu a:hover {
+    color: #8C1;
+}
+
+.menu a.activo {
+    color: white;
+}
+
+.menu a.activo:hover {
+    color: white;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0px;
+}
+
+.menu li {
+    float: left;
+    min-width: 120px;
+}
+
+.menu li ul {
+    position: absolute;
+    display: block;
+    display: none;
+    background-color: #003046;
+}
+
+.menu li:hover ul {
+    display: block;
+}
+
+.menu li li {
+    display: list-item;
+    float: none;
+}
+
+.menu li li a {
+    font-weight: normal;
+    font-variant: normal;
+}
+
+.menu li li a:hover {
+    color: white;
+}
+
+.menu li.salir {
+    float: right;
+    min-width: 0px;
+    margin-right:10px;
+}
+
+.menu li.salir:hover {
+    background-color: transparent;
+}

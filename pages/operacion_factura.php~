@@ -1,0 +1,261 @@
+<div id="divNotificacion" />
+      <div class="contenedor">
+                  <div class="header">
+                      <img alt="Movistar" class="logotipo" src="images/logo.png" />
+                      <h1>Validacion</h1>
+                  </div>
+          <div class="content">
+<?php
+ include("config.php");
+
+
+  if(isset($_POST["submit"])) {    
+
+    $estado_actual=$_POST["estado_actual"];
+    $area_flujo=$_POST["area_flujo"];
+    $id_documento=$_POST["id_documento"];
+    $id_solicitud=$_POST["id_solicitud"];    
+    $observaciones=$_POST["observaciones"];
+    $id_usuario=$_SESSION['uid'];
+
+
+$sql="SELECT prioridad_flujo, area_flujo, do.tipo_documento_idtipo_doc as tipo_documento
+        FROM solicitudes so
+  INNER JOIN documento do ON so.id_solicitudes=do.solicitudes_idSolicitudes 
+        WHERE id_solicitudes='$id_solicitud'";
+$result=$mysqli->query($sql);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+$tipo_documento=$row['tipo_documento'];
+$prioridad=$row['prioridad_flujo']+1;
+
+$query1="SELECT area_id_area
+          FROM flujo_trabajo
+         WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' LIMIT 1";
+$result1=$mysqli->query($query1);
+$row1=$result1->fetch_array(MYSQLI_ASSOC);
+$area_inicial=$row1['area_id_area'];
+$cont = $result1->num_rows;
+  
+  if($cont==0){
+
+        $sql="UPDATE solicitudes
+             SET reservada='2', estado_actual='7',area_flujo='$area_inicial',area_flujo_anterior='$area_flujo',prioridad_flujo='$prioridad',usuario_reserva='$id_usuario'
+           WHERE id_solicitudes='$id_solicitud'";
+        $result=$mysqli->query($sql); 
+
+    } else {
+
+
+    $sql="UPDATE solicitudes
+             SET reservada='0', estado_actual='0',area_flujo='$area_inicial',area_flujo_anterior='$area_flujo',prioridad_flujo='$prioridad',usuario_reserva=''
+           WHERE id_solicitudes='$id_solicitud'";
+    $result=$mysqli->query($sql); 
+
+ $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
+ $result=$mysqli->query($query);
+
+            if($result){
+              
+                  $query="INSERT INTO historial_estados (fecha,estado_solicitud_idestado_solicitud,solicitudes_idSolicitudes,users_id_usuario,area_id_area) VALUES (now(),'$estado_actual','$id_solicitud','$id_usuario','$area_flujo')";
+                  $result0=$mysqli->query($query);
+
+                           if($result0){
+                            header('Location: homepage.php?id=operador');
+                                } else {
+                                  echo "Error: No guardado 0" . $mysqli->error;
+                                }
+
+
+                  } else{
+                    echo "Error: No guardado" . $mysqli->error;
+                  }
+          }
+      }
+
+
+  if(isset($_POST["valor_solicitud"])) {
+  
+  $id_solicitud=$_POST["valor_solicitud"];
+  $id_documento=$_POST["id_documento"];
+
+  $sql="SELECT *
+          FROM documento do
+    INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes 
+         WHERE solicitudes_idSolicitudes='$id_solicitud' AND id_documento='$id_documento'";
+  $result=$mysqli->query($sql);
+  $row=$result->fetch_array(MYSQLI_ASSOC);
+
+  $area_flujo=$row['area_flujo'];
+  $cod_cliente=$row['id_codigo_cliente'];
+  $motivo_sol=$row['motivos'];
+  $dias_ven=$row['dias_vencimiento'];
+  $leyenda_doc=$row['leyenda_doc'];
+  $iva=$row["IVA_idIVA"];
+  $leyenda_mat=$row['leyenda_mat'];
+  $razon_social=$row['razon_social'];
+  $compa_fac=$row['compa_fac'];
+  $moneda=$row['Moneda_idMoneda'];
+  $salida=$row['salida'];
+  $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
+  $tipo_documento=$row['tipo_documento_idtipo_doc'];
+
+  $sql="SELECT *
+          FROM conceptos_doc
+         WHERE documento_iddocumento='$id_documento'";
+         $result=$mysqli->query($sql);
+         $num_concepto = $result->num_rows;
+         $b=1;
+         while ($row=$result->fetch_array(MYSQLI_ASSOC)){
+          $array_cont[$b][0]=$row['id_codigo_concepto'];
+          $array_cont[$b][1]=$row['tx_concepto'];
+          $array_cont[$b][2]=$row['fac_unidades'];
+          $array_cont[$b][3]=$row['fac_precio_uni'];
+          $array_cont[$b][4]=$row['fac_unidades']*$row['fac_precio_uni'];
+          $array_cont[$b][5]=$row['fac_descuento'];
+          $array_cont[$b][6]=($row['fac_unidades']*$row['fac_precio_uni'])-$row['fac_descuento'];
+          $b++;
+         }
+
+?>
+  <form class="formulario_n" action="#" method="post" id="nueva_factura" enctype="multipart/form-data">
+                    <fieldset>
+                      <div class="column">
+                        <label for="cod_cliente">Código de cliente:</label><p><?php echo $cod_cliente;?></p>
+                        <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $motivo_sol;?></p>
+                        <label for="dias_ven">Días de vencimiento:</label><p><?php echo $dias_ven;?></p>
+                        <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $leyenda_doc;?></p>
+                      </div>  
+                      <div class="column bottom">   
+                      <label for="iva">IVA:</label>
+                        <?php 
+                            $sql_iva="select * from iva where id_iva=$iva";
+                            $result_iva=mysql_db_query($db, $sql_iva,$link);
+                            if($row=mysql_fetch_array($result_iva)){
+                            $id_iva=$row['id_iva'];
+                            echo "<p>",$row['valor_tx'],"</p>";
+                              }
+                          ?>
+                    <label for="leyenda_mat">Leyenda Material:</label><p><?php echo $leyenda_mat;?></p>
+                      </div>
+
+                      <div class="column">      
+                        <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
+                        <label for="compa_fac">Compañia facturadora:</label><p><?php echo $compa_fac;?></p>
+                        <label for="moneda">Moneda:</label>
+                        <?php 
+                            $sql_moneda="select * from moneda where id_moneda=$moneda";
+                            $result_moneda=mysql_db_query($db, $sql_moneda,$link);
+                            if($row=mysql_fetch_array($result_moneda)){
+                            echo "<p>",$row['moneda'],"</p>";
+                              }
+                          ?>
+
+
+                        <label for="salida">Salida:</label><p><?php echo $salida;?></p>
+                      </div>
+                    
+  <div id="detalles_factura">
+  <table class="gridview" id="agregar_detalle">
+    <tr>
+      <td>Codigo Concepto</td>
+      <td>Descripcion Concepto</td>
+      <td>Unidades</td>
+      <td>Precio Unitario</td>
+      <td>Cargo</td>
+      <td>Descuento</td>
+      <td>Subtotal</td>
+    </tr>
+    <?php
+    $subtotal=0;
+    for($i=1;$i<=$num_concepto;$i++){
+    $subtotal=$subtotal+$array_cont[$i][6];
+    ?>
+    <tr class="add_factura">
+      <td><?php echo $array_cont[$i][0]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
+      <td><?php echo $array_cont[$i][1]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][2]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][3]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][3]" value="<?php echo $array_cont[$i][3]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][4]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][4]" value="<?php echo $array_cont[$i][4]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][5]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][5]" value="<?php echo $array_cont[$i][5]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][6]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][6]" value="<?php echo $array_cont[$i][6]; ?>" />
+      </td>
+    </tr>
+    <?php } ?>
+    <tr>
+    <td colspan="7" ><br></td>           
+    </tr>
+    <tr>
+    <td></td>
+    <td colspan="4" rowspan="6">
+    </td>   
+    <td>SubTotal:</td>
+    <td class="total_subtotal"><?php echo $subtotal; ?></td>
+   </tr>   
+<tr>
+    <td colspan="5" >&nbsp;</td>
+    <td>IVA:</td>
+    <td><?php
+    $sql="select * from iva where id_iva=$iva";
+    $result=mysql_db_query($db,$sql,$link);
+    $row=mysql_fetch_array($result);
+    $iva=$row['valor_int']*$subtotal;
+    echo $iva; ?></td>
+   </tr>   
+    <tr>
+    <td colspan="5">&nbsp;</td>
+    <td>IEPS:</td>
+    <td>$0</td>
+   </tr>
+   <tr>
+    <td colspan="5">&nbsp;</td>
+    <td>Total:</td>
+    <td><?php echo $iva+$subtotal; ?></td>
+   </tr>
+    </table>
+      <div class="observaciones">
+      <p>Observaciones:</p><textarea name="observaciones" COLS=30 ROWS=6></textarea>
+      <span>Estado:</span>
+ <select name="estado_actual">
+<option value='...'>---</option> 
+<?php
+ $id_area=$_SESSION['area'];
+  $sql_per="SELECT pe.id_estado_solicitud, es.estado_sol
+          FROM permisos pe
+    INNER JOIN estado_solicitud es ON pe.id_estado_solicitud=es.id_estado_solicitud 
+         WHERE permiso=1 AND id_area='$id_area' AND es.id_estado_solicitud!='0' AND es.id_estado_solicitud!='1'";
+
+    $result=$mysqli->query($sql_per);
+    while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+?>
+  <option value='<?php echo $row['id_estado_solicitud']; ?>'><?php echo $row['estado_sol']; ?></option> 
+                        
+<?php } ?>
+                    
+</select>
+      </div>
+
+
+        </fieldset>
+                   <div class="boton_envio">                               
+                    <input type="hidden" name="area_flujo" id="area_flujo" value="<?php echo $area_flujo; ?>">
+                    <input type="hidden" name="id_documento" value="<?php echo $id_documento; ?>">
+                    <input type="hidden" name="id_solicitud" value="<?php echo $id_solicitud; ?>">
+                    <input type="submit" id="submit" name="submit" value="Enviar" >
+     </form>
+
+<?php } ?>
+          </div>
+        </div>
+ </div>   	
