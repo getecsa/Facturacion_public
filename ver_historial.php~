@@ -18,7 +18,7 @@ $result3=$mysqli->query($sql);
 $sql_comentario="SELECT id_observaciones ,date(fecha_observacion) as fecha, observacion as observacion, username as usuario
         				FROM observaciones o
   						INNER JOIN users us ON o.users_id_usuario=us.id_usuario
-       				WHERE solicitudes_id_solicitudes='$id_solicitud'
+       				WHERE id_documento='$id_solicitud'
        				and o.estado = '0'
        				";
 $result_comentario=$mysqli->query($sql_comentario);
@@ -68,9 +68,8 @@ $result_comentario2=$mysqli->query($sql_comentario);
           <table class="gridview">
 				 <tr >
                         <td >Fecha Observaciòn</td>
-                        <td >Observaciòn</td>
-                       <td ></td>
-                        
+                       <td >Observación</td>
+                        <td ></td>
             </tr>
             <?php while($row = $result_comentario1->fetch_array(MYSQLI_ASSOC)) {
 ?>

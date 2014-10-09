@@ -213,9 +213,9 @@ $('#id_estados_sol').submit();
 //funcion para tomar solicitud
 
 $('.tomar_solicitud').click(function(){
-var id_solicitud = $(this).attr("id");
+var id_documento = $(this).attr("id");
 $('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
-$("#valor_solicitud").val(id_solicitud);
+$("#id_documento").val(id_documento);
 $("#accion").val(1);
 $('#tomar_solicitud').submit();  
 });
@@ -223,9 +223,9 @@ $('#tomar_solicitud').submit();
 //funcion para liberar solicitud
 
 $('.liberar_solicitud').click(function(){
-var id_solicitud = $(this).attr("id");
+var id_documento = $(this).attr("id");
 $('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
-$("#valor_solicitud").val(id_solicitud);
+$("#id_documento").val(id_documento);
 $("#accion").val(2);
 $('#tomar_solicitud').submit();  
 });
@@ -235,8 +235,15 @@ $('#tomar_solicitud').submit();
 $('.seguir_solicitud').click(function(){
 var id_solicitud = $(this).attr("id");
 var id_documento = $(this).attr("rel");
-console.log(id_documento);
-$('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_factura');
+var tipo_documento = $(this).attr("title");
+console.log(tipo_documento);
+      if(tipo_documento=="FACTURA"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_factura');
+      }
+
+      if(tipo_documento=="NOTA DE CREDITO"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_nota');
+      }
 $("#valor_solicitud").val(id_solicitud);
 $("#id_documento").val(id_documento);
 $('#tomar_solicitud').submit();  

@@ -33,7 +33,7 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="styles/normalize.min.css">
+        <link rel="stylesheet" href="styles/normalize.css">
         <link rel="stylesheet" href="styles/main.css">
     <link rel="shortcut icon" href="images/movistar.ico" />
     <link href="styles/style.css" rel="stylesheet" rev="stylesheet" type="text/css" />

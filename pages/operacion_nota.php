@@ -137,22 +137,6 @@
                                          WHERE id_documento='$id_documento'";       
                                   $result=$mysqli->query($sql); 
 
-                                 /*
-                                      //generacion de nota de credito
-
-                                      if($generar_nota==1)
-                                      {
-                                        include("scripts/funciones.php");
-                                        $resultado=mysql_clonar_registro("documento",$id_documento);
-                                        $sql="UPDATE documento
-                                                 SET tipo_documento_idtipo_doc='2'
-                                               WHERE id_documento='$resultado'";
-                                        $result=$mysqli->query($sql);       
-                                        echo $resultado;
-                                      }
-                                  */
-
-
                                 }
 
                               if ($area_flujo==5){
@@ -346,16 +330,18 @@
   $area_flujo=$row['area_flujo'];
   $cod_cliente=$row['id_codigo_cliente'];
   $motivo_sol=$row['motivos'];
-  $dias_ven=$row['dias_vencimiento'];
+  $folio_fac_origen=$row['folio_fac_origen'];
   $leyenda_doc=$row['leyenda_doc'];
+  $tipo_nc=$row['tipo_nc'];
   $iva=$row["IVA_idIVA"];
-  $leyenda_mat=$row['leyenda_mat'];
+  $mt_fac_orig=$row['monto_total_fac_orig'];
+  $fecha_emision_nc=$row['fecha_emision_nc'];
   $razon_social=$row['razon_social'];
-  $compa_fac=$row['compa_fac'];
+  $monto_afectar_nc=$row['monto_afectar_nc'];
   $moneda=$row['Moneda_idMoneda'];
-  $salida=$row['salida'];
   $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
   $tipo_documento=$row['tipo_documento_idtipo_doc'];
+
 
   $sql="SELECT *
           FROM conceptos_doc
@@ -384,78 +370,40 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
 
 ?>
   <form class="formulario_n" action="#" method="post" enctype="multipart/form-data">
-                    <fieldset>
+                     <fieldset>
                       <div class="column">
                         <label for="cod_cliente">Código de cliente:</label><p><?php echo $cod_cliente;?></p>
                         <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $motivo_sol;?></p>
-                        <label for="dias_ven">Días de vencimiento:</label><p><?php if ($area_flujo==2){?><input type="text" name="dias_ven" id="dias_ven" value="<?php echo $dias_ven; ?>" /> <?php } else { echo $dias_ven; }?></p>
                         <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $leyenda_doc;?></p>
+                        <label for="folio_fac_origen">Folio factura origen:</label><p><?php echo $folio_fac_origen;?></p>
                       </div>  
-                      <div class="column bottom">   
+                      <div class="column bottom_nc">
+                      <label for="tipo_nc">Tipo Nota Crédito:</label><p><?php echo $tipo_nc;?></p>
                       <label for="iva">IVA:</label>
-                          <?php
-                               if ($area_operador==2){
-                             ?>
-                      <select id="iva" name="iva">
-                          <option value="0">Seleccione IVA</option>
-                      <?php 
-                            while($row=mysql_fetch_array($result_iva)){
-                            echo "<option value='",$row['id_iva'],"'";
-                                if($row['id_iva']==$iva)
-                                  {
-                                    echo"selected";
-                                  }
-                            echo ">",$row['valor_tx'],"</option>";
-                              }
-                          ?>
-                      </select>
-
                         <?php 
-                      } else {
                             $sql_iva="select * from iva where id_iva=$iva";
                             $result_iva=mysql_db_query($db, $sql_iva,$link);
                             if($row=mysql_fetch_array($result_iva)){
                             $id_iva=$row['id_iva'];
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
-                          }
                           ?>
-                         
-                    <label for="leyenda_mat">Leyenda Material:</label><p><?php if ($area_flujo==2){?><input type="text" name="leyenda_mat" id="leyenda_mat" value="<?php echo $leyenda_mat; ?>" /> <?php } else { echo $leyenda_mat; }?></p>
+                    <label for="mt_fac_orig">Monto Total (Fac Origen):</label><p><?php echo $mt_fac_orig;?></p>
                       </div>
 
                       <div class="column">      
                         <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
-                        <label for="compa_fac">Compañia facturadora:</label><p><?php if ($area_flujo==2){?><input type="text" name="compa_fac" id="compa_fac" value="<?php echo $compa_fac; ?>" /> <?php } else { echo $compa_fac; }?></p>
                         <label for="moneda">Moneda:</label>
-                            <?php
-                               if ($area_operador==2){
-                             ?>
-                          <select name="moneda">
-                          <option value="0">Seleccione Moneda</option>
-                          <?php 
-                            while($row=mysql_fetch_array($result_moneda)){
-                            echo "<option value='",$row['id_moneda'],"'";
-                                if($row['id_moneda']==$moneda)
-                                  {
-                                    echo"selected";
-                                } 
-                            echo ">",$row['moneda'],"</option>";
+                        <?php 
+                            $sql_moneda="select * from moneda where id_moneda=$moneda";
+                            $result_moneda=mysql_db_query($db, $sql_moneda,$link);
+                            if($row=mysql_fetch_array($result_moneda)){
+                            echo "<p>",$row['moneda'],"</p>";
                               }
                           ?>
-                        </select>
-                        <?php 
-                         } else {
-                                $sql_moneda="select * from moneda where id_moneda=$moneda";
-                                $result_moneda=mysql_db_query($db, $sql_moneda,$link);
-                                if($row=mysql_fetch_array($result_moneda)){
-                                echo "<p>",$row['moneda'],"</p>";
-                                  }
-                             }     
-                          ?>
-                        
 
-                        <label for="salida">Salida:</label><p><?php if ($area_flujo==2){?><input type="text" name="salida" id="salida" value="<?php echo $salida; ?>" /> <?php } else { echo $salida; }?></p>
+                        <label for="fecha_emision_nc">Fecha Emisión:</label><p><?php echo $fecha_emision_nc;?></p>
+                        <label for="monto_afectar_nc">Monto Afectar con NC:</label><p><?php echo $monto_afectar_nc;?></p>
                       </div>
                     
   <div id="detalles_factura">
@@ -475,18 +423,10 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
     $subtotal=$subtotal+$array_cont[$i][6];
     ?>
     <tr class="add_factura">
-      <td><?php if ($area_operador==2){ ?>
-      <input  type="text" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
-           <?php }  else{ ?>
-      <?php echo $array_cont[$i][0]; ?>
+      <td><?php echo $array_cont[$i][0]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
-      <?php } ?>
-      <td><?php if ($area_operador==2){ ?>
-      <input  type="text" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /> 
-      <?php }  else{ ?>
-      <?php echo $array_cont[$i][1]; ?>
+      <td><?php echo $array_cont[$i][1]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" />
-      <?php } ?>
       </td>
       <td><?php echo $array_cont[$i][2]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" />
@@ -607,7 +547,6 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
           if ($area_operador==2){
         ?>
       <div class="funciones_operador">
-     <!-- <div>Generar Nota de credito: <input type="checkbox" name="generar_nota" value="1" /></div> -->
       <div>Clasificacion: <input type="text" name="clasificacion"></div>
       </div>
 

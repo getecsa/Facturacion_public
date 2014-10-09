@@ -57,7 +57,8 @@ location = location.pathname + '?id=solicitante&param=' + valor;
                         
                     </tr>
                     <tr bgcolor="00517A">
-                        <td ><font color="#fff">ID</font></td>
+                        <td ><font color="#fff">ID Solicitud</font></td>
+                        <td ><font color="#fff">ID Documento</font></td>
                         <td ><font color="#fff">Tipo de solictud</font></td>
                         <td ><font color="#fff">Fecha Ingreso</font></td>
                         
@@ -66,7 +67,7 @@ location = location.pathname + '?id=solicitante&param=' + valor;
 //Si el estado esta en proceso para el solicitante
 
 if ($param=='Pendiente'){
-$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -77,23 +78,22 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha
 }
 
 if ($param=='Rechazada'){
-$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual=4";
+         AND do.estado_actual= 4 ORDER BY fecha DESC";
 
 }
 
 if ($param=='Aceptada'){
-$sql="SELECT distinct so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, so.estado_actual as estado
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
-  INNER JOIN historial_estados hi ON so.id_solicitudes=hi.solicitudes_idSolicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual=7 ORDER BY fecha DESC";
+         AND do.estado_actual= 7 ORDER BY fecha DESC";
 
 }
 
@@ -105,9 +105,10 @@ while ($fila = mysqli_fetch_assoc($rs)) {
 
                     <tr>
             
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_solicitudes"];?>&estado=<?php echo $fila["estado"];?>" title="Folio <?php echo $fila["id_solicitudes"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_solicitudes"];?>&estado=<?php echo $fila["estado"];?>" title="Folio <?php echo $fila["id_solicitudes"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_solicitudes"];?>&estado=<?php echo $fila["estado"];?>" title="Folio <?php echo $fila["id_solicitudes"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
+                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
+								<td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
+                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); ?></a></td>
+                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
                        
                     </tr>
 <?php }

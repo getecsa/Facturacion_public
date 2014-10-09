@@ -107,7 +107,7 @@ AND  `area` =  '6'";
 if ($rs_adjuntos = mysqli_query($con, $adjuntos)) {
 	/* fetch array asociativo*/
 		while ($fila_adjuntos = mysqli_fetch_assoc($rs_adjuntos)) {
-				echo '<a href="Archivos/'.$fila_adjuntos["nombre"].'"><h2>"DESCARGAR DOCUMENTO GENERADO"</h2></a>';
+				echo '<a href="Archivos/'.$fila_adjuntos["nombre"].'"><h2>DESCARGAR DOCUMENTO GENERADO</h2></a>';
 		}
 }
 }

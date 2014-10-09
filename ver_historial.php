@@ -1,14 +1,14 @@
 <?php
     include("configuracion.php");
 
-$id_solicitud=$_GET['sol'];
+$id_documento=$_GET['sol'];
 	
-$sql="SELECT fecha, estado_sol as estado_solicitud, username as usuario, tx_area as area
-        FROM historial_estados hi
-  INNER JOIN estado_solicitud es ON hi.estado_solicitud_idestado_solicitud=es.id_estado_solicitud
-  INNER JOIN users us ON hi.users_id_usuario=us.id_usuario
-  INNER JOIN area ar ON hi.area_id_area=ar.id_area
-       WHERE solicitudes_idSolicitudes='$id_solicitud'";
+$sql="SELECT fecha, estado_sol AS estado_solicitud, username AS usuario, tx_area AS area
+FROM historial_estados hi
+INNER JOIN estado_solicitud es ON hi.estado_solicitud_idestado_solicitud = es.id_estado_solicitud
+INNER JOIN users us ON hi.users_id_usuario = us.id_usuario
+INNER JOIN area ar ON hi.area_id_area = ar.id_area
+WHERE  id_documento = '$id_documento'";
 
 $result=$mysqli->query($sql);
 $result1=$mysqli->query($sql);
@@ -18,7 +18,7 @@ $result3=$mysqli->query($sql);
 $sql_comentario="SELECT id_observaciones ,date(fecha_observacion) as fecha, observacion as observacion, username as usuario
         				FROM observaciones o
   						INNER JOIN users us ON o.users_id_usuario=us.id_usuario
-       				WHERE solicitudes_id_solicitudes='$id_solicitud'
+       				WHERE id_documento='$id_documento'
        				and o.estado = '0'
        				";
 $result_comentario=$mysqli->query($sql_comentario);

@@ -17,21 +17,6 @@ function Ocultar(clase,id_b)
     }  
 }  
 </script>
-
-
-<div id="ver_folio">
-
-    <br>
-      <h2>Historial de folio</h2>
-    <br>
-      <table class="gridview">
-				 <tr bgcolor="00517A">
-                        <td ><font color="#fff">Fecha Observaciòn</font></td>
-                        <td ><font color="#fff">Observaciòn</font></td>
-                      
-                        
-            </tr>
-
 <?php 
 	include("conectar_bd.php");
 $id = $_GET['id'];
@@ -40,11 +25,67 @@ session_start();
 $estado = $_GET['estado'];
 echo $estado;
 $sql = "SELECT fecha_observacion as fecha, observacion 
-FROM `observaciones` WHERE `solicitudes_id_solicitudes` = '$id'
+FROM `observaciones` WHERE `id_documento` = '$id'
 and estado = '0'
 ";
 
+?>
 
+<div id="ver_folio">
+
+    <br>
+      <h2>Historial de folio</h2>
+    <br>
+    
+<?php
+if($estado == '7' || $estado == '4'){
+
+($estado==7)?$estado='Aceptada':'Rechazada';
+
+$sql_fecha = "SELECT * 
+FROM  `historial_estados` 
+WHERE id_documento = '$id'
+AND (
+`estado_solicitud_idestado_solicitud` =7
+OR  `estado_solicitud_idestado_solicitud` =4
+)";
+			
+	echo		'<table class="gridview">
+				 <tr bgcolor="00517A">
+                        <td ><font color="#fff">Fecha de Resolución</font></td>
+                        <td ><font color="#fff">Estatus</font></td>
+                      
+                        
+            </tr>';
+if ($rs_fecha = mysqli_query($con, $sql_fecha)) {
+	/* fetch array asociativo*/
+while ($fila_fecha = mysqli_fetch_assoc($rs_fecha)) {
+ 
+ 			echo '<tr>
+            
+                        <td>'.$fila_fecha["fecha"].'</td>
+                        <td>'.$estado.'</td>
+         
+                       
+                    </tr>
+				</table>                    
+                    ';
+ 
+  }          
+ }           
+		
+}
+
+?>    
+      <table class="gridview">
+				 <tr bgcolor="00517A">
+                        <td ><font color="#fff">Fecha Observaciòn</font></td>
+                        <td ><font color="#fff">Observaciòn</font></td>
+                      
+                        
+            </tr>
+
+<?php
 
 if ($rs = mysqli_query($con, $sql)) {
 	/* fetch array asociativo*/
