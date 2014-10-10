@@ -8,6 +8,7 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 <ul class="menu"> 
 	 	<li> <a href="homepage.php?id=solicitante">Inicio</a></li>
         <li> <a href="homepage.php?id=nueva_solicitud">Nueva Solicitud</a></li>
+        <li> <a href="homepage.php?id=aclaracion_queja">Aclaración o Queja</a></li>
         <li> <a href="homepage.php?id=buscar" >Buscar Solicitud</a></li>
 </ul>
 <?php }

@@ -102,7 +102,7 @@ if($fila["estado_actual"]==7) {
 
 $adjuntos="SELECT * 
 FROM  `adjuntos` 
-WHERE  `solicitudes_id_solicitudes` =  '$folio'
+WHERE  `id_documento` =  '$folio'
 AND  `area` =  '6'";
 if ($rs_adjuntos = mysqli_query($con, $adjuntos)) {
 	/* fetch array asociativo*/

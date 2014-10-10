@@ -2,7 +2,7 @@
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Confirmacion Nota de credito</h1>
+                      <h1>Confirmación Nota de crédito</h1>
                   </div>
           <div class="content">
 <?php
@@ -39,6 +39,146 @@ $tipo_documento=$_POST['tipo_documento'];
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
 
+
+
+$query="SELECT *
+          FROM flujo_trabajo
+         WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='$tipo_documento'";
+$result=$mysqli->query($query) or die(mysqli_error());
+$row=$result->fetch_array(MYSQLI_ASSOC);
+$area_inicial=$row['area_id_area'];
+
+ $query="INSERT INTO solicitudes (fecha_solicitud,
+                                  area_idarea,
+                                  tipo_cliente_idtipo_cliente,
+                                  users_id_usuario) 
+                          VALUES (now(),
+                                  '$id_area',
+                                  '$tipo_cliente',
+                                  '$id_usuario')";
+ $result=$mysqli->query($query) or die(mysqli_error());
+ $id_solicitud=$mysqli->insert_id;
+
+        if($result){
+          $query="INSERT INTO documento (id_codigo_cliente,
+                                         tipo_nc,leyenda_doc,
+                                         IVA_idIVA,
+                                         Moneda_idMoneda,
+                                         tipo_documento_idtipo_doc,
+                                         solicitudes_idSolicitudes,
+                                         razon_social,
+                                         motivos,
+                                         folio_fac_origen,
+                                         monto_total_fac_orig,
+                                         monto_afectar_nc,
+                                         fecha_emision_nc,
+                                         estado_actual,
+                                         area_flujo,
+                                         area_flujo_anterior,
+                                         prioridad_flujo,
+                                         subprioridad_flujo,
+                                         usuario_reserva,
+                                         reservada) 
+                                VALUES ('$cod_cliente',
+                                        '$tipo_nc',
+                                        '$leyenda_doc',
+                                        '$iva',
+                                        '$moneda',
+                                        '$tipo_documento',
+                                        ' $id_solicitud',
+                                        '$razon_social',
+                                        '$motivo_sol',
+                                        '$folio_fac_origen',
+                                        '$mt_fac_orig',
+                                        '$monto_afectar_nc',
+                                        '$fecha_emision_nc',
+                                         0,
+                                        '$area_inicial', 
+                                        '$id_area',
+                                         1,
+                                         0,
+                                        '$id_usuario',
+                                         0)";
+                       
+
+                        $result1=$mysqli->query($query) or die(mysqli_error());
+                        $id_documento=$mysqli->insert_id;
+
+                        //guarda Historial
+                               $query="INSERT INTO historial_estados (fecha,
+                                                   estado_solicitud_idestado_solicitud,
+                                                   users_id_usuario,
+                                                   area_id_area,
+                                                   id_documento) 
+                                            VALUES (now(),
+                                                    0,
+                                                    '$id_usuario',
+                                                    '$id_area',
+                                                    '$id_documento')";
+                                $mysqli->query($query) or die(mysqli_error());
+
+
+                        //guarda Conceptos
+                          if($result1){
+                            for($i=1;$i<=$num_concepto;$i++){
+                              $id_concepto=$array_cont[$i][0];
+                              $tx_concepto=$array_cont[$i][1];
+                              $fac_unidades=$array_cont[$i][2];
+                              $fac_precio_uni=$array_cont[$i][3];
+                              $fac_descuento=$array_cont[$i][5];
+
+                                      if( ($id_concepto!='') || ($tx_concepto!='') || ($fac_unidades!='')){
+
+                                        $query="INSERT INTO conceptos_doc (id_codigo_concepto,tx_concepto,fac_unidades,fac_precio_uni,fac_descuento,documento_iddocumento) VALUES ('".$id_concepto."','".$tx_concepto."','".$fac_unidades."','".$fac_precio_uni."','".$fac_descuento."','".$id_documento."')";
+                                        $result2=$mysqli->query($query);
+                                                     if($result2){
+                                                                if($num_concepto==$i){
+                                                                  header('Location: homepage.php?id=solicitante');
+                                                                }
+                                                     } else { echo "no guardado" . $mysqli->error;}
+                                      } else { echo "no guardo conceptos";}
+                            }
+                          }
+                   
+
+                         //Guarda archivos
+
+                            $status = "";
+                            if ($_POST["action"] == "upload") {
+                            // obtenemos los datos del archivo 
+                            $tamano = $_FILES["archivo"]['size'];
+                            $tipo = $_FILES["archivo"]['type'];
+                            $archivo = $_FILES["archivo"]['name'];
+                            $prefijo = substr(md5(uniqid(rand())),0,6);
+                            
+                            if ($archivo != "") {
+                              // guardamos el archivo a la carpeta files
+                              $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
+                              if (copy($_FILES['archivo']['tmp_name'],$destino)) {
+                                $status = "Archivo subido: <b>".$archivo."</b>";
+                              } else {
+                                $status = "Error al subir el archivo";
+                              }
+                            } else {
+                              $status = "Error al subir archivo";
+                            }
+
+                          }
+                                
+                            if ($archivo != "")   {
+                                $ext_archivo = $id_solicitud.'-'.$archivo;
+                                $query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes, id_usuario) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario')";
+                                $result_adjunto = $mysqli->query($query_adjuntos);
+                            }      
+        }
+
+} 
+
+
+
+
+
+/*
 
 $query="SELECT *
           FROM flujo_trabajo
@@ -128,6 +268,7 @@ if ($archivo != "") 	{
 
       }
 
+*/
 
 
 	if(isset($_POST["submit"])) {
@@ -158,7 +299,7 @@ if ($archivo != "") 	{
                         <label for="folio_fac_origen">Folio factura origen:</label><p><?php echo $folio_fac_origen;?></p>
                       </div>  
                       <div class="column bottom_nc">
-                      <label for="tipo_nc">Tipo Nota Credito:</label><p><?php echo $tipo_nc;?></p>
+                      <label for="tipo_nc">Tipo Nota Crédito:</label><p><?php echo $tipo_nc;?></p>
                       <label for="iva">IVA:</label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
@@ -182,15 +323,15 @@ if ($archivo != "") 	{
                               }
                           ?>
 
-                        <label for="fecha_emision_nc">Fecha Emision:</label><p><?php echo $fecha_emision_nc;?></p>
+                        <label for="fecha_emision_nc">Fecha Emisión:</label><p><?php echo $fecha_emision_nc;?></p>
                         <label for="monto_afectar_nc">Monto Afectar con NC:</label><p><?php echo $monto_afectar_nc;?></p>
                       </div>
                     
   <div id="detalles_factura">
   <table class="gridview" id="agregar_detalle">
     <tr>
-      <td>Codigo Concepto</td>
-      <td>Descripcion Concepto</td>
+      <td>Código Concepto</td>
+      <td>Descripción Concepto</td>
       <td>Unidades</td>
       <td>Precio Unitario</td>
       <td>Cargo</td>

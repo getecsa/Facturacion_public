@@ -27,7 +27,7 @@ $result=$mysqli->query($sql);
 }
 	
 
-
+echo $id_area_op;
 if($accion==1){
     $sql="UPDATE documento
              SET reservada='1', estado_actual='1',area_flujo='$id_area',usuario_reserva='$id_user'
@@ -164,7 +164,7 @@ $sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_
   INNER JOIN estado_solicitud es ON do.estado_actual=es.id_estado_solicitud
   INNER JOIN users us ON so.users_id_usuario=us.id_usuario
        WHERE area_flujo='$id_area_op' AND reservada=0 AND estado_actual='$id_estado_click' ORDER BY fecha DESC"  ;
-
+echo "entro aqui";
 }
 
 if ($id_estado_click==1){
@@ -262,12 +262,33 @@ $sql="SELECT DISTINCT so.id_solicitudes, do.id_documento, us.username,ar.tx_area
                           <a href="#" class="seguir_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="<?php echo $row['tipo_doc']; ?>"><span class="icon-eye espacio"></span></a>
                            <?php
                                 }
+                              if (($id_estado_click==1) AND ($id_area_op==2)){
+                              ?>
+                          <a href="#" class="asignar_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
+
+                            <?php
+                                }
                             if ($id_estado_click==1){
                               ?>
                           <a href="#" class="liberar_solicitud" id="<?php echo $row['id_documento']; ?>"><span class="icon-close espacio"></span></a>
                             <?php } ?>
                           <a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>
-                           <?php } ?>
+                           <?php } 
+                          $id_documento=$row['id_documento'];
+                          $sql="SELECT *
+                                  FROM adjuntos
+                                 WHERE id_documento='$id_documento'";
+                          $result=$mysqli->query($sql);
+                          $cont = $result->num_rows;
+                          $row=$result->fetch_array(MYSQLI_ASSOC);
+                          if($cont>0){       
+                           ?>
+                          <a href="<?php echo "Archivos/",$row['nombre']; ?>" title="<?php echo $row['nombre']; ?>"><span class="icon-download espacio azul"></span></a>
+                          <?php
+                            }
+                           if ($id_area_op==6){ ?>
+                          <a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-download espacio verde"></span></a>
+                          <?php } ?>
                         </td>
                     </tr>
 <?php }  

@@ -121,6 +121,45 @@ $(document).ready(function(){
                   return false;
                   });
 
+//agregar campos en nota de credito
+
+                var contenedor      = $("#agregar_detalle"); 
+                var AddButton       = $("#agregar_campo_nota"); 
+               
+                var x = $("#agregar_detalle").length + 1;
+                var FieldCount = x-1;
+                var y = $("#num_return").val();
+                
+                if(y!=0){
+                  FieldCount=parseFloat(FieldCount)+parseFloat(y)-1;
+                  }
+                
+                
+                $(AddButton).click(function (e)  
+                {
+                                       
+                            FieldCount++; 
+                            $(contenedor).append('<tr class="add_factura"><td><input type="text" size="10" name="add_cont['+ FieldCount +'][0]"  placeholder="Codigo '+ FieldCount +'"/> </td><td><input type="text" name="add_cont['+ FieldCount +'][1]" size="30"  placeholder="Descripcion '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][2]" placeholder="Unidades '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][3]"  placeholder="Precio '+ FieldCount +'"/><a href="#" class="eliminar">&times;</a></td></tr>');
+                            $("#num_concepto").val(x);
+                            x++; 
+                     
+                return false;
+                });
+
+                $("body").on("click",".eliminar", function(e){ 
+                          if( x > 1 ) {
+                                  $(this).parent().parent().remove();
+                                  FieldCount--;
+                                  x--;
+
+                                  $("#num_concepto").val(x-1);
+                            
+                          }
+                  return false;
+                  });
+
+
+
 
  // calculamos el total de todos los grupos
 

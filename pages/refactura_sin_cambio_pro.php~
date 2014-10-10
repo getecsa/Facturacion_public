@@ -40,9 +40,197 @@ if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
       $id_usuario=$_SESSION['uid'];
 
 
- $query="INSERT INTO solicitudes (fecha_solicitud,reservada,area_idarea,tipo_cliente_idtipo_cliente,users_id_usuario,estado_actual) VALUES (now(),0,'".$id_area."','".$tipo_cliente."','".$id_usuario."',0)";
+$query="SELECT *
+          FROM flujo_trabajo
+         WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='$tipo_documento'";
+$result=$mysqli->query($query) or die(mysqli_error());
+$row=$result->fetch_array(MYSQLI_ASSOC);
+$area_inicial=$row['area_id_area'];
+
+ $query="INSERT INTO solicitudes (fecha_solicitud,
+                                  area_idarea,
+                                  tipo_cliente_idtipo_cliente,
+                                  users_id_usuario) 
+                          VALUES (now(),
+                                  '$id_area',
+                                  '$tipo_cliente',
+                                  '$id_usuario')";
+ $result=$mysqli->query($query) or die(mysqli_error());
+ $id_solicitud=$mysqli->insert_id;
+
+        if($result){
+          $query="INSERT INTO documento (id_codigo_cliente,
+                               motivos,
+                               leyenda_doc,
+                               dias_vencimiento,
+                               codigo_cliente_afectar,
+                               fecha_emision_nc,
+                               Moneda_idMoneda,
+                               IVA_idIVA,
+                               folio_fac_origen,
+                               folio_nc,
+                               fecha_emision_fac_or,
+                               razon_social,
+                               entrada,
+                               motivo_nc,
+                               monto_total_fac_orig,
+                               monto_afectar_nc,
+                               importe_total,
+                               tipo_documento_idtipo_doc,
+                               solicitudes_idSolicitudes,
+                               estado_actual,
+                               area_flujo,
+                               area_flujo_anterior,
+                               prioridad_flujo,
+                               subprioridad_flujo,
+                               usuario_reserva,
+                               reservada) 
+                        VALUES ('$cod_cliente',
+                                '$motivo_sol',
+                                '$leyenda_doc',
+                                '$dias_ven',
+                                '$codigo_cliente_afectar',
+                                '$fecha_emision_nc',
+                                '$moneda',
+                                '$iva',
+                                '$folio_fac_origen',
+                                '$folio_nc',
+                                '$fecha_emision_fac_or',
+                                '$razon_social',
+                                '$entrada',
+                                '$motivo_nc',
+                                '$mt_fac_orig',
+                                '$monto_afectar_nc',
+                                '$importe_total',
+                                '$tipo_documento',
+                                '$id_solicitud',
+                                 0,
+                                '$area_inicial', 
+                                '$id_area',
+                                 1,
+                                 0,
+                                '$id_usuario',
+                                 0)";
+                       
+
+                        $result1=$mysqli->query($query) or die(mysqli_error());
+                        $id_documento=$mysqli->insert_id;
+
+                        //guarda Historial
+                               $query="INSERT INTO historial_estados (fecha,
+                                                   estado_solicitud_idestado_solicitud,
+                                                   users_id_usuario,
+                                                   area_id_area,
+                                                   id_documento) 
+                                            VALUES (now(),
+                                                    0,
+                                                    '$id_usuario',
+                                                    '$id_area',
+                                                    '$id_documento')";
+                                $mysqli->query($query) or die(mysqli_error());
+
+
+                        //guarda Conceptos
+                          if($result1){
+                            for($i=1;$i<=$num_concepto;$i++){
+                              $id_concepto=$array_cont[$i][0];
+                              $tx_concepto=$array_cont[$i][1];
+                              $fac_unidades=$array_cont[$i][2];
+                              $fac_precio_uni=$array_cont[$i][3];
+                              $fac_descuento=$array_cont[$i][5];
+
+                                      if( ($id_concepto!='') || ($tx_concepto!='') || ($fac_unidades!='')){
+
+                                        $query="INSERT INTO conceptos_doc (id_codigo_concepto,tx_concepto,fac_unidades,fac_precio_uni,fac_descuento,documento_iddocumento) VALUES ('".$id_concepto."','".$tx_concepto."','".$fac_unidades."','".$fac_precio_uni."','".$fac_descuento."','".$id_documento."')";
+                                        $result2=$mysqli->query($query);
+                                                     if($result2){
+                                                                if($num_concepto==$i){
+                                                                  header('Location: homepage.php?id=solicitante');
+                                                                }
+                                                     } else { echo "no guardado" . $mysqli->error;}
+                                      } else { echo "no guardo conceptos";}
+                            }
+                          }
+                   
+
+                         //Guarda archivos
+
+                            $status = "";
+                            if ($_POST["action"] == "upload") {
+                            // obtenemos los datos del archivo 
+                            $tamano = $_FILES["archivo"]['size'];
+                            $tipo = $_FILES["archivo"]['type'];
+                            $archivo = $_FILES["archivo"]['name'];
+                            $prefijo = substr(md5(uniqid(rand())),0,6);
+                            
+                            if ($archivo != "") {
+                              // guardamos el archivo a la carpeta files
+                              $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
+                              if (copy($_FILES['archivo']['tmp_name'],$destino)) {
+                                $status = "Archivo subido: <b>".$archivo."</b>";
+                              } else {
+                                $status = "Error al subir el archivo";
+                              }
+                            } else {
+                              $status = "Error al subir archivo";
+                            }
+
+                          }
+                                
+                            if ($archivo != "")   {
+                                $ext_archivo = $id_solicitud.'-'.$archivo;
+                                $query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes, id_usuario) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario')";
+                                $result_adjunto = $mysqli->query($query_adjuntos);
+                            }      
+        }
+
+} 
+
+
+/*
+$query="SELECT *
+          FROM flujo_trabajo
+         WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='$tipo_documento'";
+$result=$mysqli->query($query);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+$area_inicial=$row['area_id_area'];
+
+ $query="INSERT INTO solicitudes (fecha_solicitud,reservada,area_idarea,tipo_cliente_idtipo_cliente,users_id_usuario,estado_actual,area_flujo,area_flujo_anterior,prioridad_flujo,subprioridad_flujo) VALUES (now(),0,'".$id_area."','".$tipo_cliente."','".$id_usuario."',0,'".$area_inicial."','".$id_area."',1,0)";
  $result=$mysqli->query($query);
  $id_solicitud=$mysqli->insert_id;
+
+
+$status = "";
+	if ($_POST["action"] == "upload") {
+	// obtenemos los datos del archivo 
+	$tamano = $_FILES["archivo"]['size'];
+	$tipo = $_FILES["archivo"]['type'];
+	$archivo = $_FILES["archivo"]['name'];
+	$prefijo = substr(md5(uniqid(rand())),0,6);
+	
+	if ($archivo != "") {
+		// guardamos el archivo a la carpeta files
+		$destino =  "Archivos/".$id_solicitud.'-'.$archivo;
+		if (copy($_FILES['archivo']['tmp_name'],$destino)) {
+			$status = "Archivo subido: <b>".$archivo."</b>";
+		} else {
+			$status = "Error al subir el archivo";
+		}
+	} else {
+		$status = "Error al subir archivo";
+	}
+	echo $status;
+
+}
+		
+		
+		
+if ($archivo != "") 	{
+		$ext_archivo = $id_solicitud.'-'.$archivo;
+		$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes) VALUE ('$ext_archivo', '$id_solicitud')";
+		$result_adjunto = $mysqli->query($query_adjuntos);
+}	
+
 
       if($result){
         
@@ -88,6 +276,7 @@ if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
             }
 
       }
+*/
 
 	if(isset($_POST["submit"])) {
       	

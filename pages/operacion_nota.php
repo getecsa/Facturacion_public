@@ -89,7 +89,8 @@
                 
             if ($archivo != "")   {
                 $ext_archivo = $id_solicitud.'-'.$archivo;
-                $query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
+                //$query_adjuntos="INSERT INTO adjuntos (nombre, id_documento, id_usuario) VALUE ('$ext_archivo', '$id_documento','$id_usuario')";
+                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
                 $result_adjunto = $mysqli->query($query_adjuntos);
             }   
 
