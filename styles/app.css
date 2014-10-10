@@ -358,6 +358,9 @@ p {
   text-align: center;
   vertical-align: middle;
 }
+.funciones_operador div div p {
+  text-align: left;
+}
 .verde {
   color: #4cb800;
 }

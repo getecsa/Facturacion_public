@@ -84,7 +84,7 @@ $id_usuario=$_SESSION['uid'];
 
                       <div class="column">      
                         <label for="razon_social">Razón Social:</label><input type="text" name="razon_social" id="razon_social" <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
-                        <label for="compa_fac">Compañia facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
+                        <label for="compa_fac">Compañía facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
                         <label for="moneda">Moneda:</label>
                         <select name="moneda">
                         	<option value="0">Seleccione Moneda</option>
@@ -109,8 +109,8 @@ $id_usuario=$_SESSION['uid'];
   <div id="detalles_factura">
   <table class="gridview" id="agregar_detalle">
     <tr>
-      <td>Codigo Concepto</td>
-      <td>Descripcion Concepto</td>
+      <td>Código Concepto</td>
+      <td>Descripción Concepto</td>
       <td>Unidades</td>
       <td>Precio Unitario</td>
       <td>Cargo</td>
@@ -138,7 +138,7 @@ $id_usuario=$_SESSION['uid'];
      <?php }  } else {?>
 
     <tr class="add_factura">
-      <td><input type="text" size="10" name="add_cont[1][0]" value="Cod" /> </td>
+      <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>
       <td><input type="text" size="10" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
       <td><input type="text" size="10" name="add_cont[1][3]" class="calcular_subtotal" /></td>

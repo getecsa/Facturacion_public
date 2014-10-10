@@ -8,7 +8,7 @@ FROM historial_estados hi
 INNER JOIN estado_solicitud es ON hi.estado_solicitud_idestado_solicitud = es.id_estado_solicitud
 INNER JOIN users us ON hi.users_id_usuario = us.id_usuario
 INNER JOIN area ar ON hi.area_id_area = ar.id_area
-WHERE  id_documento = '$id_documento'";
+WHERE  id_documento = '$id_documento' ORDER BY fecha";
 
 $result=$mysqli->query($sql);
 $result1=$mysqli->query($sql);

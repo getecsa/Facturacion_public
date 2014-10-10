@@ -2,7 +2,7 @@
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Validación Nota de credito</h1>
+                      <h1>Validación refactura con cambio</h1>
                   </div>
           <div class="content">
 <?php
@@ -17,6 +17,8 @@
     $id_solicitud=$_POST["id_solicitud"];    
     $observaciones=$_POST["observaciones"];
     $id_usuario=$_SESSION['uid'];
+    if(!isset($_POST['generacion_doc'])){$_POST['generacion_doc']="NO";}
+    $generacion_doc=$_POST['generacion_doc'];
 
     // Acciones por tipo de area
         if ($area_flujo==2){
@@ -39,14 +41,12 @@
            $oper5=$_POST["oper_sector"];
            $oper6=$_POST["oper_tipo"];
            $oper7=$_POST["oper_numero"];
+           //datos que modifica el area asignacion de condiciones
+           $motivo_sol=$_POST["motivo_sol"];
            $dias_ven=$_POST["dias_ven"];
-           $iva=$_POST["iva"];
-           $leyenda_mat=$_POST["leyenda_mat"];
-           $compa_fac=$_POST["compa_fac"];
-           $moneda=$_POST["moneda"];
-           $salida=$_POST["salida"];
-           $generar_nota=$_POST["generar_nota"];
-
+           $entrada=$_POST["entrada"];
+           $monto_afectar_nc=$_POST["monto_afectar_nc"];
+           $array_cont=$_POST['array_cont'];
 
         }
 
@@ -89,8 +89,8 @@
                 
             if ($archivo != "")   {
                 $ext_archivo = $id_solicitud.'-'.$archivo;
-                //$query_adjuntos="INSERT INTO adjuntos (nombre, id_documento, id_usuario) VALUE ('$ext_archivo', '$id_documento','$id_usuario')";
                 $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
+                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
                 $result_adjunto = $mysqli->query($query_adjuntos);
             }   
 
@@ -100,23 +100,139 @@
 // Liberado o finalizado
 
           if (($estado_actual=="3") || ($estado_actual=="7") ){
+                //envia a generacion nota de credito
+              if($generacion_doc==1){
 
-            $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
-                    FROM documento 
-                   WHERE id_documento='$id_documento'";
-            $result=$mysqli->query($sql);
-            $row=$result->fetch_array(MYSQLI_ASSOC);
-            $tipo_documento=$row['tipo_documento'];
-            $prioridad=$row['prioridad_flujo']+1;
+                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                          FROM documento 
+                         WHERE id_documento='$id_documento'";
+                  $result=$mysqli->query($sql);
+                  $row=$result->fetch_array(MYSQLI_ASSOC);
+                  $tipo_documento=$row['tipo_documento'];
+                  $prioridad=$row['prioridad_flujo']+1;
 
-            $query1="SELECT area_id_area
-                      FROM flujo_trabajo
-                     WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' LIMIT 1";
-            $result1=$mysqli->query($query1);
-            $row1=$result1->fetch_array(MYSQLI_ASSOC);
-            $area_inicial=$row1['area_id_area'];
-            $cont = $result1->num_rows;
+                  $query1="SELECT area_id_area
+                            FROM flujo_trabajo
+                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=1 LIMIT 1";
+                  $result1=$mysqli->query($query1);
+                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                  $area_inicial=$row1['area_id_area'];
+                  $cont = $result1->num_rows;
+
+                $sql="UPDATE documento
+                         SET subprioridad_flujo='1'
+                       WHERE id_documento='$id_documento'";
+                $mysqli->query($sql); 
+
+              }
+
+               //envia a generacion factura
+              if($generacion_doc==2){
+
+                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                          FROM documento 
+                         WHERE id_documento='$id_documento'";
+                  $result=$mysqli->query($sql);
+                  $row=$result->fetch_array(MYSQLI_ASSOC);
+                  $tipo_documento=$row['tipo_documento'];
+                  $prioridad=$row['prioridad_flujo']+1;
+
+                  $query1="SELECT area_id_area
+                            FROM flujo_trabajo
+                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=2 LIMIT 1";
+                  $result1=$mysqli->query($query1);
+                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                  $area_inicial=$row1['area_id_area'];
+                  $cont = $result1->num_rows;
+                  
+                $sql="UPDATE documento
+                         SET subprioridad_flujo='2'
+                       WHERE id_documento='$id_documento'";
+                $mysqli->query($sql); 
+
+              }
+
+               //envia a generacion factura y nota de credito
+              if($generacion_doc==3){
               
+              //genero copia del documento para nota de credito
+                  
+                       include("scripts/funciones.php");
+                       $resultado=mysql_clonar_registro("documento",$id_documento);
+                       $id_documento_nc=$resultado;  
+                                       
+              //generacion de factura
+
+                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                          FROM documento 
+                         WHERE id_documento='$id_documento'";
+                  $result=$mysqli->query($sql);
+                  $row=$result->fetch_array(MYSQLI_ASSOC);
+                  $tipo_documento=$row['tipo_documento'];
+                  $prioridad=$row['prioridad_flujo']+1;
+
+                  $query1="SELECT area_id_area
+                            FROM flujo_trabajo
+                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=2 LIMIT 1";
+                  $result1=$mysqli->query($query1);
+                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                  $area_inicial=$row1['area_id_area'];
+                  $cont = $result1->num_rows;
+                  
+                $sql="UPDATE documento
+                         SET subprioridad_flujo='2'
+                       WHERE id_documento='$id_documento'";
+                $mysqli->query($sql);  
+                
+                // generacion de nota de credito
+
+
+                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                          FROM documento 
+                         WHERE id_documento='$id_documento_nc'";
+                  $result=$mysqli->query($sql);
+                  $row=$result->fetch_array(MYSQLI_ASSOC);
+                  $tipo_documento=$row['tipo_documento'];
+                  $prioridad=$row['prioridad_flujo']+1;
+
+                  $query1="SELECT area_id_area
+                            FROM flujo_trabajo
+                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=1 LIMIT 1";
+                  $result1=$mysqli->query($query1);
+                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                  $area_inicial=$row1['area_id_area'];
+                  $cont = $result1->num_rows;
+
+                $sql="UPDATE documento
+                         SET subprioridad_flujo='1'
+                       WHERE id_documento='$resultado'";
+                $result=$mysqli->query($sql);       
+                               
+
+
+              }
+
+              if($generacion_doc=="NO")
+              {
+               
+                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                          FROM documento 
+                         WHERE id_documento='$id_documento'";
+                  $result=$mysqli->query($sql);
+                  $row=$result->fetch_array(MYSQLI_ASSOC);
+                  $tipo_documento=$row['tipo_documento'];
+                  $prioridad=$row['prioridad_flujo']+1;
+
+                  $query1="SELECT area_id_area
+                            FROM flujo_trabajo
+                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' LIMIT 1";
+                  $result1=$mysqli->query($query1);
+                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                  $area_inicial=$row1['area_id_area'];
+                  $cont = $result1->num_rows;
+
+              }
+
               if($cont==0){
 
                     $sql="UPDATE documento
@@ -134,11 +250,22 @@
               //if especial gestion flujo
                               if ($area_flujo==2){
                                   $sql="UPDATE documento
-                                           SET oper_plataforma='$oper1',oper_oficina='$oper2',oper_clase='$oper3',oper_canal='$oper4',oper_sector='$oper5',oper_tipo='$oper6',oper_numero='$oper7', fac_clasificacion='$clasificacion', dias_vencimiento='$dias_ven', IVA_idIVA='$iva',leyenda_mat='$leyenda_mat', compa_fac='$compa_fac',Moneda_idMoneda='$moneda', salida='$salida'
+                                           SET oper_plataforma='$oper1',
+                                               oper_oficina='$oper2',
+                                               oper_clase='$oper3',
+                                               oper_canal='$oper4',
+                                               oper_sector='$oper5',
+                                               oper_tipo='$oper6',
+                                               oper_numero='$oper7',
+                                               fac_clasificacion='$clasificacion',
+                                               dias_vencimiento='$dias_ven',
+                                               motivos='$motivo_sol',
+                                               entrada='$entrada',
+                                               monto_afectar_nc='$monto_afectar_nc'
                                          WHERE id_documento='$id_documento'";       
                                   $result=$mysqli->query($sql); 
 
-                                }
+                               }
 
                               if ($area_flujo==5){
                                   $sql="UPDATE documento
@@ -195,8 +322,19 @@
 
                           if ($area_flujo==2){
                               $sql="UPDATE documento
-                                       SET oper_plataforma='$oper1',oper_oficina='$oper2',oper_clase='$oper3',oper_canal='$oper4',oper_sector='$oper5',oper_tipo='$oper6',oper_numero='$oper7', fac_clasificacion='$clasificacion', dias_vencimiento='$dias_ven', IVA_idIVA='$iva',leyenda_mat='$leyenda_mat', compa_fac='$compa_fac',Moneda_idMoneda='$moneda', salida='$salida'
-                                     WHERE id_documento='$id_documento'";       
+                                           SET oper_plataforma='$oper1',
+                                               oper_oficina='$oper2',
+                                               oper_clase='$oper3',
+                                               oper_canal='$oper4',
+                                               oper_sector='$oper5',
+                                               oper_tipo='$oper6',
+                                               oper_numero='$oper7',
+                                               fac_clasificacion='$clasificacion',
+                                               dias_vencimiento='$dias_ven',
+                                               motivos='$motivo_sol',
+                                               entrada='$entrada',
+                                               monto_afectar_nc='$monto_afectar_nc'
+                                         WHERE id_documento='$id_documento'";       
                               $result=$mysqli->query($sql); 
                             }
 
@@ -255,8 +393,19 @@
 
                           if ($area_flujo==2){
                               $sql="UPDATE documento
-                                       SET oper_plataforma='$oper1',oper_oficina='$oper2',oper_clase='$oper3',oper_canal='$oper4',oper_sector='$oper5',oper_tipo='$oper6',oper_numero='$oper7', fac_clasificacion='$clasificacion', dias_vencimiento='$dias_ven', IVA_idIVA='$iva',leyenda_mat='$leyenda_mat', compa_fac='$compa_fac',Moneda_idMoneda='$moneda', salida='$salida'
-                                     WHERE id_documento='$id_documento'";       
+                                           SET oper_plataforma='$oper1',
+                                               oper_oficina='$oper2',
+                                               oper_clase='$oper3',
+                                               oper_canal='$oper4',
+                                               oper_sector='$oper5',
+                                               oper_tipo='$oper6',
+                                               oper_numero='$oper7',
+                                               fac_clasificacion='$clasificacion',
+                                               dias_vencimiento='$dias_ven',
+                                               motivos='$motivo_sol',
+                                               entrada='$entrada',
+                                               monto_afectar_nc='$monto_afectar_nc'
+                                         WHERE id_documento='$id_documento'";          
                               $result=$mysqli->query($sql); 
                             }
 
@@ -328,21 +477,26 @@
   $result=$mysqli->query($sql);
   $row=$result->fetch_array(MYSQLI_ASSOC);
 
-  $area_flujo=$row['area_flujo'];
-  $cod_cliente=$row['id_codigo_cliente'];
-  $motivo_sol=$row['motivos'];
-  $folio_fac_origen=$row['folio_fac_origen'];
-  $leyenda_doc=$row['leyenda_doc'];
-  $tipo_nc=$row['tipo_nc'];
-  $iva=$row["IVA_idIVA"];
-  $mt_fac_orig=$row['monto_total_fac_orig'];
-  $fecha_emision_nc=$row['fecha_emision_nc'];
-  $razon_social=$row['razon_social'];
-  $monto_afectar_nc=$row['monto_afectar_nc'];
-  $moneda=$row['Moneda_idMoneda'];
-  $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
-  $tipo_documento=$row['tipo_documento_idtipo_doc'];
-
+      $area_flujo=$row['area_flujo'];
+      $cod_cliente=$row['id_codigo_cliente'];
+      $motivo_sol=$row['motivos'];
+      $leyenda_doc=$row['leyenda_doc'];
+      $dias_ven=$row['dias_vencimiento'];
+      $codigo_cliente_afectar=$row['codigo_cliente_afectar'];
+      $fecha_emision_nc=$row['fecha_emision_nc'];
+      $moneda=$row['Moneda_idMoneda'];
+      $iva=$row["IVA_idIVA"];
+      $folio_fac_origen=$row['folio_fac_origen'];
+      $folio_nc=$row['folio_nc'];
+      $fecha_emision_fac_or=$row['fecha_emision_fac_or'];
+      $razon_social=$row['razon_social'];
+      $entrada=$row['entrada'];
+      $motivo_nc=$row['motivo_nc'];
+      $mt_fac_orig=$row['monto_total_fac_orig'];
+      $monto_afectar_nc=$row['monto_afectar_nc'];
+      $importe_total=$row['importe_total']; 
+      $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
+      $tipo_documento=$row['tipo_documento_idtipo_doc'];
 
   $sql="SELECT *
           FROM conceptos_doc
@@ -371,15 +525,24 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
 
 ?>
   <form class="formulario_n" action="#" method="post" enctype="multipart/form-data">
-                     <fieldset>
+                      <fieldset>
                       <div class="column">
                         <label for="cod_cliente">Código de cliente:</label><p><?php echo $cod_cliente;?></p>
-                        <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $motivo_sol;?></p>
+                        <label for="motivo_sol">Motivo de solicitud:</label><p><?php if ($area_flujo==2){?><input type="text" name="motivo_sol" id="motivo_sol" value="<?php echo $motivo_sol; ?>" /> <?php } else { echo $motivo_sol; }?></p>
                         <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $leyenda_doc;?></p>
-                        <label for="folio_fac_origen">Folio factura origen:</label><p><?php echo $folio_fac_origen;?></p>
+                        <label for="dias_ven">Dias de vencimiento:</label><p><?php if ($area_flujo==2){?><input type="text" name="dias_ven" id="dias_ven" value="<?php echo $dias_ven; ?>" /> <?php } else { echo $dias_ven; }?></p>
+                        <label for="codigo_cliente_afectar">Codigo C.(Fac. Afectar):</label><p><?php echo $codigo_cliente_afectar; ?></p>
+                        <label for="fecha_emision_nc">Fecha Emision NC:</label><p><?php echo $fecha_emision_nc;?></p>
                       </div>  
                       <div class="column bottom_nc">
-                      <label for="tipo_nc">Tipo Nota Crédito:</label><p><?php echo $tipo_nc;?></p>
+                      <label for="moneda">Moneda:</label>
+                        <?php 
+                            $sql_moneda="select * from moneda where id_moneda=$moneda";
+                            $result_moneda=mysql_db_query($db, $sql_moneda,$link);
+                            if($row=mysql_fetch_array($result_moneda)){
+                            echo "<p>",$row['moneda'],"</p>";
+                              }
+                          ?>
                       <label for="iva">IVA:</label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
@@ -389,24 +552,21 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
                           ?>
-                    <label for="mt_fac_orig">Monto Total (Fac Origen):</label><p><?php echo $mt_fac_orig;?></p>
+                      <label for="folio_fac_origen">Folio factura origen:</label><p><?php echo $folio_fac_origen; ?></p>
+                      <label for="folio_nc">Folio NC:</label><p><?php echo $folio_nc;?></p>
+                      <label for="fecha_emision_nc2">Fecha Emision Fac. Origen:</label><p><?php echo $fecha_emision_fac_or;?></p>
                       </div>
 
                       <div class="column">      
                         <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
-                        <label for="moneda">Moneda:</label>
-                        <?php 
-                            $sql_moneda="select * from moneda where id_moneda=$moneda";
-                            $result_moneda=mysql_db_query($db, $sql_moneda,$link);
-                            if($row=mysql_fetch_array($result_moneda)){
-                            echo "<p>",$row['moneda'],"</p>";
-                              }
-                          ?>
-
-                        <label for="fecha_emision_nc">Fecha Emisión:</label><p><?php echo $fecha_emision_nc;?></p>
-                        <label for="monto_afectar_nc">Monto Afectar con NC:</label><p><?php echo $monto_afectar_nc;?></p>
+                        <label for="entrada">Entrada:</label><p><?php if ($area_flujo==2){?><input type="text" name="entrada" id="entrada" value="<?php echo $entrada; ?>" /> <?php } else { echo $entrada; }?></p>
+                        <label for="motivo_nc">Motivo NC:</label><p><?php echo $motivo_nc;?></p>
+                        <label for="mt_fac_orig">Monto Total (Fac Origen):</label><p><?php echo $mt_fac_orig; ?></p>
+                        <label for="monto_afectar_nc">Monto Afectar con NC:</label><p><?php if ($area_flujo==2){?><input type="text" name="monto_afectar_nc" id="monto_afectar_nc" value="<?php echo $monto_afectar_nc; ?>" /> <?php } else { echo $monto_afectar_nc; }?></p>
+                        <label for="importe_total">Importe total:</label><p><?php echo $importe_total;?></p>
+                        
                       </div>
-                    
+
   <div id="detalles_factura">
   <table class="gridview" id="agregar_detalle">
     <tr>
@@ -424,25 +584,53 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
     $subtotal=$subtotal+$array_cont[$i][6];
     ?>
     <tr class="add_factura">
-      <td><?php echo $array_cont[$i][0]; ?>
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][0]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
-      <td><?php echo $array_cont[$i][1]; ?>
+      <?php } ?>
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /> 
+      <?php }  else{ ?>
+      <?php echo $array_cont[$i][1]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" />
+      <?php } ?>
       </td>
-      <td><?php echo $array_cont[$i][2]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" />
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][2]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" /></td>
+      <?php } ?>
       </td>
-      <td><?php echo $array_cont[$i][3]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][3]" value="<?php echo $array_cont[$i][3]; ?>" />
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][3]" value="<?php echo $array_cont[$i][3]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][3]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][3]" value="<?php echo $array_cont[$i][3]; ?>" /></td>
+      <?php } ?>
       </td>
-      <td><?php echo $array_cont[$i][4]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][4]" value="<?php echo $array_cont[$i][4]; ?>" />
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][4]" value="<?php echo $array_cont[$i][4]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][4]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][4]" value="<?php echo $array_cont[$i][4]; ?>" /></td>
+      <?php } ?>
       </td>
-      <td><?php echo $array_cont[$i][5]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][5]" value="<?php echo $array_cont[$i][5]; ?>" />
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][5]" value="<?php echo $array_cont[$i][5]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][5]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][5]" value="<?php echo $array_cont[$i][5]; ?>" /></td>
+      <?php } ?>
       </td>
-      <td><?php echo $array_cont[$i][6]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][6]" value="<?php echo $array_cont[$i][6]; ?>" />
+      <td><?php if ($area_operador==2){ ?>
+      <input  type="text" size="10" name="array_cont[<?php echo $i; ?>][6]" value="<?php echo $array_cont[$i][6]; ?>" /></td>
+           <?php }  else{ ?>
+      <?php echo $array_cont[$i][6]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][6]" value="<?php echo $array_cont[$i][6]; ?>" /></td>
+      <?php } ?>
       </td>
     </tr>
     <?php } ?>
@@ -548,7 +736,12 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
           if ($area_operador==2){
         ?>
       <div class="funciones_operador">
-      <div>Clasificacion: <input type="text" name="clasificacion"></div>
+     <!-- <div>Generar Nota de credito: <input type="checkbox" name="generar_nota" value="1" /></div> -->
+        <div>
+        <p><input type="radio" name="generacion_doc" checked value="2">Generar Factura</p>
+        <p><input type="radio" name="generacion_doc" value="1">Generar Nota de Credito</p>
+        <p><input type="radio" name="generacion_doc" value="3">Generar Factura y Nota de credito</p>
+          Clasificacion: <input type="text" name="clasificacion"></div>
       </div>
 
       <?php } ?>
@@ -571,7 +764,6 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
               <?php } ?>
                                   
               </select>
-
         </div>
         <?php
           if (($area_operador!=1) AND ($area_operador!=6) ){
@@ -600,7 +792,7 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
       <div>Numero de Folio: <input type="text" name="numero_folio"></div>
       </div>
       <?php } ?>
-        
+      
        <?php
           if ($area_operador==6){
                 $sql="SELECT *

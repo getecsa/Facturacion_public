@@ -165,7 +165,7 @@ $return=1;
     <td></td>
     <td></td>
    </tr> 
-   <tr>
+ <!--  <tr>
     <td colspan="3">&nbsp;</td>
     <td>SubTotal:</td>
     <td></td>
@@ -192,7 +192,7 @@ $return=1;
     <td></td>
     <td></td>
     <td>$200</td>
-   </tr>
+   </tr> -->
   </table>
     <div id="errorForm"></div> 
   

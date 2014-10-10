@@ -1,0 +1,11 @@
+gestion de solicitudes de facturacion
+gesofa
+
+http://appsmap.tecnologiatmm.com.mx/gesofa/
+
+usuario appsmap
+pass: apps,map
+
+
+El siguiente comando genera un fichero png (esquema.png) con el modelo ER a partir de un fichero SQL (MySQL) llamado ddl.sql
+sqlt-diagram -d=MySQL -o=esquema.png ddl.sql --color

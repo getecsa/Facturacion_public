@@ -49,7 +49,7 @@ $id_usuario=$_SESSION['uid'];
   <div class="contenedor">
               <div class="header">
                   <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                  <h1>Nueva nota de credito</h1>
+                  <h1>Nueva nota de crédito</h1>
               </div>
   <div class="content">
                   <form class="formulario_n" action="homepage.php?id=nueva_nota_pro" method="post" name="form1" id="form1">
@@ -113,45 +113,36 @@ $id_usuario=$_SESSION['uid'];
     <tr>
       <td>Código Concepto</td>
       <td>Descripción Concepto</td>
-      <td>Unidades</td>
-      <td>Precio Unitario</td>
-      <td>Cargo</td>
-      <td>Descuento</td>
-      <td>Subtotal</td>
+      <td>Importe Disponible</td>
+      <td>Monto Afectar</td>
     </tr>
       <?php
     if($return==1){
     $subtotal=0;
     for($i=1;$i<=$num_concepto;$i++){	
-    $subtotal=$subtotal+$array_cont[$i][6];
+    $subtotal=$subtotal+$array_cont[$i][3];
     ?>
   
     <tr class="add_factura">
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>"/> </td>
-      <td><input type="text" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /></td>
+      <td><input type="text" size="30" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][2]" class="calcular_subtotal total_unidades" value="<?php echo $array_cont[$i][2]; ?>" /></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal" value="<?php echo $array_cont[$i][3]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][5]" class="calcular_subtotal" value="<?php echo $array_cont[$i][5]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][6]" readonly class="suma_subtotal" value="<?php echo $array_cont[$i][6]; ?>" /></td>
     </tr>
     
      <?php }  } else {?>
 
     <tr class="add_factura">
       <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
-      <td><input type="text" name="add_cont[1][1]" /></td>
-      <td><input type="text" size="10" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
-      <td><input type="text" size="10" name="add_cont[1][3]" class="calcular_subtotal" /></td>
-      <td><input type="text" size="10" name="add_cont[1][4]" readonly="readonly" class="suma_cargo"/></td>
-      <td><input type="text" size="10" name="add_cont[1][5]" class="calcular_subtotal" /></td>
-      <td><input type="text" size="10" name="add_cont[1][6]" readonly="readonly" class="suma_subtotal" /></td>
+      <td><input type="text" size="30" name="add_cont[1][1]" /></td>
+      <td><input type="text" size="10" name="add_cont[1][2]" /></td>
+      <td><input type="text" size="10" name="add_cont[1][3]" /></td>
     </tr>
     <?php } ?>
     </table>
     <table class="gridview">
     <tr>
-    <td colspan="3"><a href="#" id="agregar_campo_fac"><div class="agregar_observacion botones">Agregar Concepto</div></a></td>
+    <td colspan="3"><a href="#" id="agregar_campo_nota"><div class="agregar_observacion botones">Agregar Concepto</div></a></td>
     <td></td>
     <td></td>
     <td></td>

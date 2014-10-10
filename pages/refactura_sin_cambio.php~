@@ -70,6 +70,7 @@ $return=1;
                       <div class="column bottom_nc">   
                       <label for="moneda">Moneda:</label>
                          <select name="moneda">
+                         <option value="0">Seleccione Moneda</option>
                           <?php 
                             while($row=mysql_fetch_array($result_moneda)){
                             echo "<option value='",$row['id_moneda'],"'";
@@ -86,6 +87,7 @@ $return=1;
 
                       <label for="iva">IVA:</label>
                       <select id="iva" name="iva">
+                      <option value="0">Seleccione IVA</option>
                       <?php 
                             while($row=mysql_fetch_array($result_iva)){
                             echo "<option value='",$row['id_iva'],"'";
@@ -163,7 +165,7 @@ $return=1;
     <td></td>
     <td></td>
    </tr> 
-   <tr>
+ <!--  <tr>
     <td colspan="3">&nbsp;</td>
     <td>SubTotal:</td>
     <td></td>
@@ -190,7 +192,7 @@ $return=1;
     <td></td>
     <td></td>
     <td>$200</td>
-   </tr>
+   </tr> -->
   </table> 
   <div id="errorForm"></div> 
   

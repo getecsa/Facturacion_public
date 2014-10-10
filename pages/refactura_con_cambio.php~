@@ -85,6 +85,7 @@ $return=1;
                         </select>
                       <label for="iva">IVA:</label>
                       <select id="iva" name="iva">
+                      <option value="0">Seleccione IVA</option>
                       <?php 
                             while($row=mysql_fetch_array($result_iva)){
                             echo "<option value='",$row['id_iva'],"'";

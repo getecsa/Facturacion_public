@@ -2,7 +2,7 @@
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Validación</h1>
+                      <h1>Validación Factura</h1>
                   </div>
           <div class="content">
 <?php

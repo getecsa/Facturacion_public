@@ -40,6 +40,8 @@ and estado = '0'
 <?php
 if($estado == '7' || $estado == '4'){
 
+($estado==7)?$estado='Aceptada':$estado='Rechazada';
+
 $sql_fecha = "SELECT * 
 FROM  `historial_estados` 
 WHERE id_documento = '$id'

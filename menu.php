@@ -16,7 +16,7 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 ?>
 <ul class="menu"> 
 	 	<li> <a href="homepage.php?id=operador">Inicio</a></li>
-        <li> <a href="buscar.php" >Busqueda</a></li>
+      <!--  <li> <a href="buscar.php" >Busqueda</a></li> -->
 </ul>
 <?php } ?>
 <div class="bienvenida">

@@ -283,6 +283,14 @@ console.log(tipo_documento);
       if(tipo_documento=="NOTA DE CREDITO"){
         $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_nota');
       }
+
+      if(tipo_documento=="REFACTURA CON CAMBIO"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_refactura_con_cambio');
+      }
+
+      if(tipo_documento=="REFACTURA SIN CAMBIO"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_refactura_sin_cambio');
+      }
 $("#valor_solicitud").val(id_solicitud);
 $("#id_documento").val(id_documento);
 $('#tomar_solicitud').submit();  

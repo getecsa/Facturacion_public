@@ -27,7 +27,6 @@ $result=$mysqli->query($sql);
 }
 	
 
-echo $id_area_op;
 if($accion==1){
     $sql="UPDATE documento
              SET reservada='1', estado_actual='1',area_flujo='$id_area',usuario_reserva='$id_user'
@@ -93,7 +92,7 @@ if($accion==2){
                             FROM historial_estados
                            WHERE estado_solicitud_idestado_solicitud=4 AND users_id_usuario=$id_user";
                     $result=$mysqli->query($sql);
-                    $num_liberados=$result->num_rows;
+                    $num_rechazado=$result->num_rows;
 
                   ?>
                   <div class="datos_totales">
@@ -145,7 +144,7 @@ if($accion==2){
                         <td ><font color="#fff">ID Solicitud</font></td>
                         <td ><font color="#fff">ID Documento</font></td>
                         <td ><font color="#fff">Solicitante</font></td>
-                        <td ><font color="#fff">Area</font></td>
+                        <td ><font color="#fff">Área</font></td>
                         <td ><font color="#fff">Tipo de solicitud</font></td>
                         <td ><font color="#fff">Fecha Ingreso</font></td>
                         <td ><font color="#fff">Estado</font></td>
@@ -156,7 +155,7 @@ if($accion==2){
 
 if ($id_estado_click==0){
 
-$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, do.subprioridad_flujo as doc, date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -164,11 +163,10 @@ $sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_
   INNER JOIN estado_solicitud es ON do.estado_actual=es.id_estado_solicitud
   INNER JOIN users us ON so.users_id_usuario=us.id_usuario
        WHERE area_flujo='$id_area_op' AND reservada=0 AND estado_actual='$id_estado_click' ORDER BY fecha DESC"  ;
-echo "entro aqui";
 }
 
 if ($id_estado_click==1){
-$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc,do.subprioridad_flujo as doc, date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -180,7 +178,7 @@ $sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_
 }
 
 if (($id_estado_click==2) || ($id_estado_click==5) || ($id_estado_click==6)){
-$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc,do.subprioridad_flujo as doc , date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -193,7 +191,7 @@ $sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_
 
 if ($id_estado_click==3){
 
-$sql="SELECT so.id_solicitudes, do.id_documento,us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT so.id_solicitudes, do.id_documento,us.username,ar.tx_area,td.tipo_doc,do.subprioridad_flujo as doc,  date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM historial_estados hi
   INNER JOIN documento do ON hi.id_documento=do.id_documento
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes      
@@ -209,7 +207,7 @@ $sql="SELECT so.id_solicitudes, do.id_documento,us.username,ar.tx_area,td.tipo_d
 }
 
 if ($id_estado_click==4){
-$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc,do.subprioridad_flujo as doc ,date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -222,7 +220,7 @@ $sql="SELECT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_
 
 if ($id_estado_click==7){
 
-$sql="SELECT DISTINCT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc, date(so.fecha_solicitud) as fecha, es.estado_sol
+$sql="SELECT DISTINCT so.id_solicitudes, do.id_documento, us.username,ar.tx_area,td.tipo_doc,do.subprioridad_flujo  as doc,  date(so.fecha_solicitud) as fecha, es.estado_sol
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN historial_estados hi ON do.id_documento=hi.id_documento 
@@ -245,55 +243,69 @@ $sql="SELECT DISTINCT so.id_solicitudes, do.id_documento, us.username,ar.tx_area
                         <td><?php echo $row['id_documento']; ?></td>
                         <td><?php echo $row['username']; ?></td>
                         <td><?php echo $row['tx_area']; ?></td>
-                        <td><?php echo $row['tipo_doc']; ?></td>
+                        <td><?php echo $row['tipo_doc']; if ($row['doc']==1){ echo "- NOTA DE CREDITO";} if ($row['doc']==2){ echo "- FACTURA";} ?></td>
                         <td><?php echo $row['fecha']; ?></td>
                         <td><?php echo $row['estado_sol']; ?></td>
                         <td>
                           <?php 
                           if ($id_estado_click==0){
                           ?>
-                          <a href="#" class="tomar_solicitud" id="<?php echo $row['id_documento']; ?>"><span class="icon-checkmark espacio"></span></a>
+                              <a href="#" class="tomar_solicitud" id="<?php echo $row['id_documento']; ?>"><span class="icon-checkmark espacio"></span></a>
                           <?php 
-                            } else {
-
-                              if(($id_estado_click==1) || ($id_estado_click==2) || ($id_estado_click==5) || ($id_estado_click==6)){
-                              
+                            } 
+                          if(($id_estado_click==1) || ($id_estado_click==2) || ($id_estado_click==5) || ($id_estado_click==6)){
                           ?>
-                          <a href="#" class="seguir_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="<?php echo $row['tipo_doc']; ?>"><span class="icon-eye espacio"></span></a>
-                           <?php
-                                }
-                              if (($id_estado_click==1) AND ($id_area_op==2)){
-                              ?>
-                          <a href="#" class="asignar_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
-
-                            <?php
-                                }
-                            if ($id_estado_click==1){
-                              ?>
-                          <a href="#" class="liberar_solicitud" id="<?php echo $row['id_documento']; ?>"><span class="icon-close espacio"></span></a>
-                            <?php } ?>
-                          <a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>
-                           <?php } 
-                          $id_documento=$row['id_documento'];
-                          $sql="SELECT *
-                                  FROM adjuntos
-                                 WHERE id_documento='$id_documento'";
-                          $result=$mysqli->query($sql);
-                          $cont = $result->num_rows;
-                          $row=$result->fetch_array(MYSQLI_ASSOC);
-                          if($cont>0){       
-                           ?>
-                          <a href="<?php echo "Archivos/",$row['nombre']; ?>" title="<?php echo $row['nombre']; ?>"><span class="icon-download espacio azul"></span></a>
+                              <a href="#" class="seguir_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="<?php echo $row['tipo_doc']; ?>"><span class="icon-eye espacio"></span></a>
                           <?php
                             }
-                           if ($id_area_op==6){ ?>
-                          <a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-download espacio verde"></span></a>
-                          <?php } ?>
+                          if (($id_estado_click==1) AND ($id_area_op==2)){
+                          ?>
+                           <!--   <a href="#" class="asignar_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a> -->
+                          <?php
+                            }
+                          if ($id_estado_click==1){
+                          ?>
+                              <a href="#" class="liberar_solicitud" id="<?php echo $row['id_documento']; ?>"><span class="icon-close espacio"></span></a>
+                          <?php 
+                             } ?>
+                              <a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>
+                           <?php 
+                          $id_documento=$row['id_documento'];
+                          $sql1="SELECT ad.nombre as nombre
+                                  FROM adjuntos ad
+                            INNER JOIN users us ON ad.id_usuario=us.id_usuario
+                            INNER JOIN area ar ON us.area_idarea=ar.id_area 
+                                 WHERE id_documento='$id_documento' AND ar.oper_sol=1";
+                          $result1=$mysqli->query($sql1);
+                          $cont = $result1->num_rows;
+                          $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                          if($cont>0){       
+                           ?>
+                          <a href="<?php echo "Archivos/",$row1['nombre']; ?>" title="<?php echo $row1['nombre']; ?>"><span class="icon-download espacio azul"></span></a>
+                          <?php
+                            }
+                           if ($id_area_op==6){
+
+                                  $id_documento=$row['id_documento'];
+                          $sql2="SELECT ad.nombre as nombre
+                                  FROM adjuntos ad
+                            INNER JOIN users us ON ad.id_usuario=us.id_usuario
+                            INNER JOIN area ar ON us.area_idarea=ar.id_area 
+                                 WHERE id_documento='$id_documento' AND ar.oper_sol=0";
+                                  $result2=$mysqli->query($sql2);
+                                  $cont = $result2->num_rows;
+                                  $row2=$result2->fetch_array(MYSQLI_ASSOC);
+                                  if($cont>0){       
+                           ?>
+                          <a href="<?php echo "Archivos/",$row2['nombre']; ?>" title="<?php echo $row2['nombre']; ?>"><span class="icon-download espacio verde"></span></a>
+                          <?php
+                              }
+                          }
+                            ?>
+
                         </td>
                     </tr>
-<?php }  
-
-?>
+<?php }  ?>
                             
             </table>
 

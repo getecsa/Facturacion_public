@@ -148,7 +148,7 @@ $id_usuario=$_SESSION['uid'];
     <td></td>
     <td></td>
    </tr> 
-   <tr>
+<!--   <tr>
     <td colspan="3">&nbsp;</td>
     <td>SubTotal:</td>
     <td></td>
@@ -175,7 +175,7 @@ $id_usuario=$_SESSION['uid'];
     <td></td>
     <td></td>
     <td>$200</td>
-   </tr>
+   </tr> -->
   </table> 
   <div id="errorForm"></div>
         </fieldset>

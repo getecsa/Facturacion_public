@@ -23,7 +23,7 @@ $id = $_GET['id'];
 session_start();
  $id_user = $_SESSION['uid'];
 $estado = $_GET['estado'];
-echo $estado;
+
 $sql = "SELECT fecha_observacion as fecha, observacion 
 FROM `observaciones` WHERE `id_documento` = '$id'
 and estado = '0'
@@ -40,7 +40,7 @@ and estado = '0'
 <?php
 if($estado == '7' || $estado == '4'){
 
-($estado==7)?$estado='Aceptada':'Rechazada';
+($estado==7)?$estado='Aceptada':$estado='Rechazada';
 
 $sql_fecha = "SELECT * 
 FROM  `historial_estados` 
