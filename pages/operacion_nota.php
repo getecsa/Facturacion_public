@@ -540,7 +540,7 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
 
       <div class="funciones_operador">
         <div class="observaciones">
-          <p>Observaciones:</p><textarea name="observaciones" COLS=30 ROWS=6></textarea>
+          <p>Observaciones:</p><textarea name="observaciones" COLS=40 ROWS=3></textarea>
         </div>
         <div class="estado">
 
@@ -573,6 +573,7 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
               </select>
 
         </div>
+        
         <?php
           if (($area_operador!=1) AND ($area_operador!=6) ){
         ?>

@@ -296,6 +296,23 @@ $("#id_documento").val(id_documento);
 $('#tomar_solicitud').submit();  
 });
 
+//funcion para gen_fac_not que aparezca mas parametros.
+
+    $("#gen_fac_not").click(function(){
+      $('#operador_nc').show("slow");
+      $('#operador_fac').show("fast");
+      });
+
+    $("#gen_fac").click(function(){
+      $('#operador_nc').hide("fast");
+      $('#operador_fac').show("fast");
+      });
+
+    $("#gen_not").click(function(){
+      $('#operador_fac').hide("fast");
+       $('#operador_nc').show("slow");
+      });
+
 
 }); 
 

@@ -367,3 +367,6 @@ p {
 .azul {
   color: #0b8cff;
 }
+#operador_nc {
+  display: none;
+}

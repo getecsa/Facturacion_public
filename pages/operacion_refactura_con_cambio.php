@@ -23,24 +23,33 @@
     // Acciones por tipo de area
         if ($area_flujo==2){
           
-        if(!isset($_POST['oper_plataforma'])){$_POST['oper_plataforma']="";}
-        if(!isset($_POST['oper_oficina'])){$_POST['oper_oficina']="";}
-        if(!isset($_POST['oper_clase'])){$_POST['oper_clase']="";}
-        if(!isset($_POST['oper_canal'])){$_POST['oper_canal']="";}
-        if(!isset($_POST['oper_sector'])){$_POST['oper_sector']="";}
-        if(!isset($_POST['oper_tipo'])){$_POST['oper_tipo']="";}
-        if(!isset($_POST['oper_numero'])){$_POST['oper_numero']="";}
+        if(!isset($_POST['oper_plataforma_fac'])){$_POST['oper_plataforma_fac']="";}
+        if(!isset($_POST['oper_oficina_fac'])){$_POST['oper_oficina_fac']="";}
+        if(!isset($_POST['oper_clase_fac'])){$_POST['oper_clase_fac']="";}
+        if(!isset($_POST['oper_canal_fac'])){$_POST['oper_canal_fac']="";}
+        if(!isset($_POST['oper_sector_fac'])){$_POST['oper_sector_fac']="";}
+        if(!isset($_POST['oper_tipo_fac'])){$_POST['oper_tipo_fac']="";}
+        if(!isset($_POST['oper_numero_fac'])){$_POST['oper_numero_fac']="";}
+
+        if(!isset($_POST['oper_plataforma_nc'])){$_POST['oper_plataforma_nc']="";}
+        if(!isset($_POST['oper_oficina_nc'])){$_POST['oper_oficina_nc']="";}
+        if(!isset($_POST['oper_clase_nc'])){$_POST['oper_clase_nc']="";}
+        if(!isset($_POST['oper_canal_nc'])){$_POST['oper_canal_nc']="";}
+        if(!isset($_POST['oper_sector_nc'])){$_POST['oper_sector_nc']="";}
+        if(!isset($_POST['oper_tipo_nc'])){$_POST['oper_tipo_nc']="";}
+        if(!isset($_POST['oper_numero_nc'])){$_POST['oper_numero_nc']="";}
+
         if(!isset($_POST['clasificacion'])){$_POST['clasificacion']="";}
         
            $justificacion=$_POST["justificacion"];
            $clasificacion=$_POST["clasificacion"];
-           $oper1=$_POST["oper_plataforma"];
-           $oper2=$_POST["oper_oficina"];
-           $oper3=$_POST["oper_clase"];
-           $oper4=$_POST["oper_canal"];
-           $oper5=$_POST["oper_sector"];
-           $oper6=$_POST["oper_tipo"];
-           $oper7=$_POST["oper_numero"];
+           $oper1_fac=$_POST["oper_plataforma_fac"];
+           $oper2_fac=$_POST["oper_oficina_fac"];
+           $oper3_fac=$_POST["oper_clase_fac"];
+           $oper4_fac=$_POST["oper_canal_fac"];
+           $oper5_fac=$_POST["oper_sector_fac"];
+           $oper6_fac=$_POST["oper_tipo_fac"];
+           $oper7_fac=$_POST["oper_numero_fac"];
            //datos que modifica el area asignacion de condiciones
            $motivo_sol=$_POST["motivo_sol"];
            $dias_ven=$_POST["dias_ven"];
@@ -669,7 +678,8 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
        if ($area_operador==2){
      ?>
       <br>
-    <table class="gridview" class="formulario_operador">
+    <table class="gridview" class="formulario_operador" id="operador_fac">
+    <td colspan="7"><p><h2>Factura</h2></p></td>
     <tr bgcolor="#00517A">
     <td><font color="#ffffff">PLATAFORMA</font></td>
     <td><font color="#ffffff">OFICINA,SOCIEDAD,REFERENCIA SAP,SUCURSAL,PROGRAMACION</font></td>
@@ -680,13 +690,35 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
     <td><font color="#ffffff">NUMERO DE CUENTA DE PAGO</font></td>
     </tr>
     <tr>
-      <td><input type="text" size="10" name="oper_plataforma"></td>
-      <td><input type="text" size="25" name="oper_oficina"></td>
-      <td><input type="text" size="25" name="oper_clase"></td>
-      <td><input type="text" size="10" name="oper_canal"></td>
-      <td><input type="text" size="10" name="oper_sector"></td>
-      <td><input type="text" size="10" name="oper_tipo"></td>
-      <td><input type="text" size="10" name="oper_numero"></td>
+      <td><input type="text" size="10" name="oper_plataforma_fac"></td>
+      <td><input type="text" size="25" name="oper_oficina_fac"></td>
+      <td><input type="text" size="25" name="oper_clase_fac"></td>
+      <td><input type="text" size="10" name="oper_canal_fac"></td>
+      <td><input type="text" size="10" name="oper_sector_fac"></td>
+      <td><input type="text" size="10" name="oper_tipo_fac"></td>
+      <td><input type="text" size="10" name="oper_numero_fac"></td>
+    </tr>
+    </table>
+
+    <table class="gridview" class="formulario_operador" id="operador_nc">
+    <td colspan="7"><p><h2>Nota de credito</h2></p></td>
+    <tr bgcolor="#00517A">
+    <td><font color="#ffffff">PLATAFORMA</font></td>
+    <td><font color="#ffffff">OFICINA,SOCIEDAD,REFERENCIA SAP,SUCURSAL,PROGRAMACION</font></td>
+    <td><font color="#ffffff">CLASE DE PEDIDO, FOLIO FISCAL NC, UNIDAD DE MEDIDA</font></td>
+    <td><font color="#ffffff">CANAL, PEFIJO-SERIE</font></td>
+    <td><font color="#ffffff">SECTOR, METODO DE PAGO</font></td>
+    <td><font color="#ffffff">TIPO DE CAMBIO</font></td>
+    <td><font color="#ffffff">NUMERO DE CUENTA DE PAGO</font></td>
+    </tr>
+    <tr>
+      <td><input type="text" size="10" name="oper_plataforma_nc"></td>
+      <td><input type="text" size="25" name="oper_oficina_nc"></td>
+      <td><input type="text" size="25" name="oper_clase_nc"></td>
+      <td><input type="text" size="10" name="oper_canal_nc"></td>
+      <td><input type="text" size="10" name="oper_sector_nc"></td>
+      <td><input type="text" size="10" name="oper_tipo_nc"></td>
+      <td><input type="text" size="10" name="oper_numero_nc"></td>
     </tr>
     </table>
     <?php } ?>
@@ -728,7 +760,7 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
 
       <div class="funciones_operador">
         <div class="observaciones">
-          <p>Observaciones:</p><textarea name="observaciones" COLS=30 ROWS=6></textarea>
+          <p>Observaciones:</p><textarea name="observaciones" COLS=40 ROWS=3></textarea>
         </div>
         <div class="estado">
 
@@ -738,9 +770,9 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
       <div class="funciones_operador">
      <!-- <div>Generar Nota de credito: <input type="checkbox" name="generar_nota" value="1" /></div> -->
         <div>
-        <p><input type="radio" name="generacion_doc" checked value="2">Generar Factura</p>
-        <p><input type="radio" name="generacion_doc" value="1">Generar Nota de Credito</p>
-        <p><input type="radio" name="generacion_doc" value="3">Generar Factura y Nota de credito</p>
+        <p><input type="radio" name="generacion_doc" id="gen_fac" checked value="2">Generar Factura</p>
+        <p><input type="radio" name="generacion_doc" id="gen_not" value="1">Generar Nota de Credito</p>
+        <p><input type="radio" name="generacion_doc" id="gen_fac_not" value="3">Generar Factura y Nota de credito</p>
           Clasificacion: <input type="text" name="clasificacion"></div>
       </div>
 
@@ -765,6 +797,7 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
                                   
               </select>
         </div>
+        
         <?php
           if (($area_operador!=1) AND ($area_operador!=6) ){
         ?>

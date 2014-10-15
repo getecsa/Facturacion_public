@@ -2,7 +2,7 @@
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Validación</h1>
+                      <h1>Validación Factura</h1>
                   </div>
           <div class="content">
 <?php
@@ -89,7 +89,8 @@
                 
             if ($archivo != "")   {
                 $ext_archivo = $id_solicitud.'-'.$archivo;
-                $query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
+                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
+                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
                 $result_adjunto = $mysqli->query($query_adjuntos);
             }   
 
@@ -599,9 +600,11 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
 
       <div class="funciones_operador">
         <div class="observaciones">
-          <p>Observaciones:</p><textarea name="observaciones" COLS=30 ROWS=6></textarea>
+          <p>Observaciones:</p><textarea name="observaciones" COLS=40 ROWS=3></textarea>
         </div>
+
         <div class="estado">
+
 
        <?php
           if ($area_operador==2){
@@ -633,6 +636,12 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
               </select>
 
         </div>
+         <div class="custom-input-file botones">
+            <input type="file" class="input-file" name="archivo" />
+            Adjuntar Archivos
+            <div class="archivo">...</div>
+            <input name="action" type="hidden" value="upload" /> 
+            </div>
         <?php
           if (($area_operador!=1) AND ($area_operador!=6) ){
         ?>
