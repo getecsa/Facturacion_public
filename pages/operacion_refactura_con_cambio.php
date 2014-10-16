@@ -50,6 +50,13 @@
            $oper5_fac=$_POST["oper_sector_fac"];
            $oper6_fac=$_POST["oper_tipo_fac"];
            $oper7_fac=$_POST["oper_numero_fac"];
+           $oper1_nc=$_POST["oper_plataforma_nc"];
+           $oper2_nc=$_POST["oper_oficina_nc"];
+           $oper3_nc=$_POST["oper_clase_nc"];
+           $oper4_nc=$_POST["oper_canal_nc"];
+           $oper5_nc=$_POST["oper_sector_nc"];
+           $oper6_nc=$_POST["oper_tipo_nc"];
+           $oper7_nc=$_POST["oper_numero_nc"];
            //datos que modifica el area asignacion de condiciones
            $motivo_sol=$_POST["motivo_sol"];
            $dias_ven=$_POST["dias_ven"];
@@ -136,7 +143,7 @@
               }
 
                //envia a generacion factura
-              if($generacion_doc==2){
+              if($generacion_doc==2) || ($generacion_doc==3){
 
                   $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
                           FROM documento 
@@ -160,6 +167,8 @@
                 $mysqli->query($sql); 
 
               }
+
+              /*
 
                //envia a generacion factura y nota de credito
               if($generacion_doc==3){
@@ -220,6 +229,7 @@
 
 
               }
+              */
 
               if($generacion_doc=="NO")
               {
@@ -463,10 +473,6 @@
                                     }
 
           }        
-
-
-
-
 
 
 

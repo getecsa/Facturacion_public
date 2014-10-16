@@ -267,6 +267,13 @@
 
                           if ($area_flujo==1){
                             echo "direccionamiento";
+									//Query Daniel Irineo Rechazo, se quedá igual a como se venia trabajando	                              
+                           	$sql="UPDATE documento
+                              			SET  estado_actual='$estado_actual'
+                             			 WHERE id_documento='$id_documento'";       
+					
+                     		 $result=$mysqli->query($sql); 
+                            
                             }
 
                           if ($area_flujo==2){
@@ -274,6 +281,12 @@
                                        SET oper_plataforma='$oper1',oper_oficina='$oper2',oper_clase='$oper3',oper_canal='$oper4',oper_sector='$oper5',oper_tipo='$oper6',oper_numero='$oper7', fac_clasificacion='$clasificacion', dias_vencimiento='$dias_ven', IVA_idIVA='$iva',leyenda_mat='$leyenda_mat', compa_fac='$compa_fac',Moneda_idMoneda='$moneda', salida='$salida'
                                      WHERE id_documento='$id_documento'";       
                               $result=$mysqli->query($sql); 
+									//Query Daniel Irineo Rechazo		                              
+                           	$sql="UPDATE documento
+                              			SET  estado_actual='0', area_flujo = '1', area_flujo_anterior = '20', prioridad_flujo = '1', usuario_reserva = '1', reservada = '0'
+                             			WHERE id_documento='$id_documento'";       
+					
+                     		 $result=$mysqli->query($sql); 
                             }
 
                           if ($area_flujo==5){
@@ -281,17 +294,38 @@
                                        SET fac_proceso='$proceso', fac_numero_folio='$numero_folio'
                                      WHERE id_documento='$id_documento'";       
                               $result=$mysqli->query($sql); 
+									//Query Daniel Irineo Rechazo		                              
+                           	$sql="UPDATE documento
+                              			SET  estado_actual='0', area_flujo = '2', area_flujo_anterior = '1', prioridad_flujo = '2', usuario_reserva = '0', reservada = '0'
+                             			WHERE id_documento='$id_documento'";       
+					
+                     		 $result=$mysqli->query($sql);                              
+                              
+                              
+                              
                             }          
 
                           if ($area_flujo==6){
                             echo "Entrega documentos";
+                            
+												//Query Daniel Irineo Rechazo		                              
+                           	$sql="UPDATE documento
+                              			SET  estado_actual='0', area_flujo = '5', area_flujo_anterior = '2', prioridad_flujo = '3', usuario_reserva = '0', reservada = '0'
+                             			WHERE id_documento='$id_documento'";       
+					
+                     		 $result=$mysqli->query($sql);                              
+                                               
+                            
+                            
                             }
 
+					/* Query Daniel 				
                       $sql="UPDATE documento
                                SET  estado_actual='$estado_actual'
                              WHERE id_documento='$id_documento'";       
-
+					
                       $result=$mysqli->query($sql); 
+             */
 
                      if(!empty(trim($justificacion))) {  
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
