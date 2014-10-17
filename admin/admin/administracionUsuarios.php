@@ -18,6 +18,7 @@ if(true){
 				$tpl->assign('nombre',$item['nombre']);
 				$tpl->assign('usuario',$item['usuario']);
 				$tpl->assign('area',utf8_encode($item['area']));
+				$tpl->assign('email',$item['email']);
 				$estatus = $user->consultaEstatus($item['estatus']);
 				$tpl->assign('estatus',$estatus['strEstatus']);
 				if($item['estatus'] == 1){

@@ -1,9 +1,12 @@
 <?php
 //Versión 1.0 Oct-14
 $user = new Usuario();
-if($user->checkSession($_SESSION['usuario']['nombre'])){
-	if($user->checkValidUser($_SESSION['usuario']['id'])){
-		if($user->checkAccessUser($_SESSION['usuario']['id'])){
+if(true){
+//if($user->checkSession((isset($_SESSION['usuario']['nombre'])) ? $_SESSION['usuario']['nombre'] : NULL)){
+	//if($user->checkValidUser($_SESSION['usuario']['id'])){
+	if(true){
+		if(true){
+		//if($user->checkAccessUser($_SESSION['usuario']['id'])){
 			$tpl = new TemplatePower('template/admin/administracionUsuariosForm.inc');
 			$tpl->prepare();
 			$tpl->assign('acc',$acc);
@@ -11,7 +14,7 @@ if($user->checkSession($_SESSION['usuario']['nombre'])){
 				$tpl->assign('tituloPagina','Editar Usuario');
 				$tpl->assign('idUser',$_POST['iduser_' . $_GET['row']]);
 				$datosUsuario = $user->consultaUsuario($_POST['iduser_' . $_GET['row']]);
-				switch($datosUsuario['perfil']){
+				/*switch($datosUsuario['perfil']){
 					case 1:
 						$tpl->assign('selectedAdmin','selected');
 						break;
@@ -26,7 +29,7 @@ if($user->checkSession($_SESSION['usuario']['nombre'])){
 						break;
 					default:
 						break;
-				}
+				}*/
 				$tpl->assign('nombre',$datosUsuario['nombre']);
 				$tpl->assign('usuario',$datosUsuario['usuario']);
 				$tpl->assign('readOnlyUser','readOnly');
@@ -37,4 +40,12 @@ if($user->checkSession($_SESSION['usuario']['nombre'])){
 			$tpl->printToScreen();
 		}
 	}
+	// Se imprime el footer de la Página. *
+	$tpl = new TemplatePower('inc/footer.inc');
+	$tpl->prepare();
+	$tpl->assign('nombreProyecto',PROJECT_NAME);
+	$tpl->assign('yearDevelop',YEAR_DEVELOP);
+	$tpl->assign('resolucionMinima',MIN_RESOLUTION);
+	$tpl->printToScreen();
+	//
 }

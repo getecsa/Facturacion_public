@@ -1,5 +1,5 @@
 <!--administracionUsuariosForm.inc Plantilla que muestra el formulario para crear o editar un Usuario. -->
-                    <h1>Administración de Usuarios</h1>
+                    <h1></h1>
                 </div> <!-- header -->
                 <div class='content'>
                     <h2>{tituloPagina}</h2>
@@ -9,7 +9,7 @@
                     <br>
                     <table class='gridview' id='tabla-contenido'>
                         <tr>
-                            <th style='width:180px;'>Perfil: </th>
+                            <!--<th style='width:180px;'>Perfil: </th>
                             <td>
                                 <select name='perfilSel' style='width:200px;'>
                                     <option value='0'>Seleccione...</option>
@@ -18,7 +18,7 @@
                                     <option value='3' {selectedDf}>Exportaciones D.F.</option>
                                     <option value='4' {selectedMty}>Exportaciones Mty.</option>
                                 </select>
-                            </td>
+                            </td>-->
                         </tr>
                         <tr>
                             <th>Nombre:</th><td><input type='text' name='nombre' maxlength='30' value='{nombre}' 
@@ -27,7 +27,22 @@
                         <tr>
                             <th>Usuario:</th><td><input type='text' name='usuario' maxlength='15' value='{usuario}' 
                             style='width:190px;text-transform:uppercase;' {readOnlyUser} 
-                            placeholder = 'Escribir el Usuario (MRT)'></td>
+                            placeholder = 'Escribir Usuario'></td>
+                        </tr>
+                        <tr>
+                            <th>Área:</th>
+                            <td>
+                                <select name='areaSel' style='width:200px;'>
+                                    <option value='0'>Seleccione...</option>
+                                    <!-- START BLOCK : areas -->
+                                    <option value='{areaVal}' {selectedArea}>{nombreArea}</option>
+                                    <!-- END BLOCK : areas -->
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Correo Electrónico:</th><td><input type='text' name='email' maxlength='30' value='{email}' 
+                            placeholder = 'Escribir E-mail' style='width:190px;'></td>
                         </tr>
                         <tr>
                             <th>Contraseña:</th><td><input type='password' name='pass' maxlength='10' 
@@ -46,24 +61,14 @@
                     <input type='button' name='btnGuardar' value='Guardar' onclick='return validarUsuarioForm();' 
                     style='margin-left:20px;'>
                 </div> <!-- content -->
-            </div> <!-- contenedor -->
-            <div class="footer">
-                <p>
-                    Gestor de Exportaciones y Reversiones. Todos los Derechos Reservados &copy;<br>
-                    Resolución Mínima 1280 x 800px
-                </p>
-            </div> <!-- footer -->
-        </form>
-        <script language='javascript'>
-            $(document).on({
-                ajaxStart: function(){
-                    $("body").addClass("loading");
-                },
-                ajaxStop: function(){
-                    $("body").removeClass("loading");
-                }
-            });
-        </script>
-        <div class="modal"></div>
-    </body>
-</html>
+                <script language='javascript'>
+                    $(document).on({
+                        ajaxStart: function(){
+                            $("body").addClass("loading");
+                        },
+                        ajaxStop: function(){
+                            $("body").removeClass("loading");
+                        }
+                    });
+                </script>
+                <div class="modal"></div>

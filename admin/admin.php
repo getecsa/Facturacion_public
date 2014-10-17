@@ -43,15 +43,15 @@ if(true){
 			}
 			//
 			switch($mod){
-				// Reasignación de Folios *
-				case 'reasigna':
-					$menu->verMenu($mod);
+				// Catálogo de Áreas *
+				case 'areas':
+					$menu->verMenu($mod,'Catálogos - Áreas - Telefónica Movistar');
 					switch($acc){
 						case 'form':
 							include_once 'admin/adminFolio.php';
 							break;
 						case 'con':
-							include_once 'admin/consultaFolio.php';
+							include_once 'admin/adminAreas.php';
 							break;
 						case 'guardar':
 							include_once 'admin/folioAction.php';

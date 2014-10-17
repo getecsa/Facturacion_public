@@ -126,8 +126,9 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
     margin-top: 75px;
 }
 
-.header img.logotipo {
-    margin-left: 790px;
+.header img.logotipo{
+    display:block;
+    margin-left:auto;
 }
 
 .contenedor {
@@ -147,7 +148,7 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
     padding-right: 28px;
     color: #00517A;
     font-size: 16px;
-    min-height: 330px;
+    min-height: 300px;
     width: 933px;
     position:relative;
 }
@@ -333,7 +334,7 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
 }
 #msg-notif-form{
     position: absolute;
-    max-width: 1030px;
+    max-width: 910px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;

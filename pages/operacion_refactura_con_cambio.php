@@ -23,33 +23,35 @@
     // Acciones por tipo de area
         if ($area_flujo==2){
           
-        if(!isset($_POST['oper_plataforma_fac'])){$_POST['oper_plataforma_fac']="";}
-        if(!isset($_POST['oper_oficina_fac'])){$_POST['oper_oficina_fac']="";}
-        if(!isset($_POST['oper_clase_fac'])){$_POST['oper_clase_fac']="";}
-        if(!isset($_POST['oper_canal_fac'])){$_POST['oper_canal_fac']="";}
-        if(!isset($_POST['oper_sector_fac'])){$_POST['oper_sector_fac']="";}
-        if(!isset($_POST['oper_tipo_fac'])){$_POST['oper_tipo_fac']="";}
-        if(!isset($_POST['oper_numero_fac'])){$_POST['oper_numero_fac']="";}
-
-        if(!isset($_POST['oper_plataforma_nc'])){$_POST['oper_plataforma_nc']="";}
-        if(!isset($_POST['oper_oficina_nc'])){$_POST['oper_oficina_nc']="";}
-        if(!isset($_POST['oper_clase_nc'])){$_POST['oper_clase_nc']="";}
-        if(!isset($_POST['oper_canal_nc'])){$_POST['oper_canal_nc']="";}
-        if(!isset($_POST['oper_sector_nc'])){$_POST['oper_sector_nc']="";}
-        if(!isset($_POST['oper_tipo_nc'])){$_POST['oper_tipo_nc']="";}
-        if(!isset($_POST['oper_numero_nc'])){$_POST['oper_numero_nc']="";}
+        if(!isset($_POST['oper_plataforma'])){$_POST['oper_plataforma']="";}
+        if(!isset($_POST['oper_oficina'])){$_POST['oper_oficina']="";}
+        if(!isset($_POST['oper_clase'])){$_POST['oper_clase']="";}
+        if(!isset($_POST['oper_canal'])){$_POST['oper_canal']="";}
+        if(!isset($_POST['oper_sector'])){$_POST['oper_sector']="";}
+        if(!isset($_POST['oper_tipo'])){$_POST['oper_tipo']="";}
+        if(!isset($_POST['oper_numero'])){$_POST['oper_numero']="";}
 
         if(!isset($_POST['clasificacion'])){$_POST['clasificacion']="";}
         
            $justificacion=$_POST["justificacion"];
            $clasificacion=$_POST["clasificacion"];
-           $oper1_fac=$_POST["oper_plataforma_fac"];
-           $oper2_fac=$_POST["oper_oficina_fac"];
-           $oper3_fac=$_POST["oper_clase_fac"];
-           $oper4_fac=$_POST["oper_canal_fac"];
-           $oper5_fac=$_POST["oper_sector_fac"];
-           $oper6_fac=$_POST["oper_tipo_fac"];
-           $oper7_fac=$_POST["oper_numero_fac"];
+           $oper1=$_POST["oper_plataforma"];
+           $oper2=$_POST["oper_oficina"];
+           $oper3=$_POST["oper_clase"];
+           $oper4=$_POST["oper_canal"];
+           $oper5=$_POST["oper_sector"];
+           $oper6=$_POST["oper_tipo"];
+           $oper7=$_POST["oper_numero"];
+
+
+          if(!isset($_POST['oper_plataforma_nc'])){$_POST['oper_plataforma_nc']="";}
+          if(!isset($_POST['oper_oficina_nc'])){$_POST['oper_oficina_nc']="";}
+          if(!isset($_POST['oper_clase_nc'])){$_POST['oper_clase_nc']="";}
+          if(!isset($_POST['oper_canal_nc'])){$_POST['oper_canal_nc']="";}
+          if(!isset($_POST['oper_sector_nc'])){$_POST['oper_sector_nc']="";}
+          if(!isset($_POST['oper_tipo_nc'])){$_POST['oper_tipo_nc']="";}
+          if(!isset($_POST['oper_numero_nc'])){$_POST['oper_numero_nc']="";}
+
            $oper1_nc=$_POST["oper_plataforma_nc"];
            $oper2_nc=$_POST["oper_oficina_nc"];
            $oper3_nc=$_POST["oper_clase_nc"];
@@ -143,7 +145,7 @@
               }
 
                //envia a generacion factura
-              if($generacion_doc==2) || ($generacion_doc==3){
+              if($generacion_doc==2){
 
                   $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
                           FROM documento 
@@ -168,20 +170,11 @@
 
               }
 
-              /*
-
                //envia a generacion factura y nota de credito
               if($generacion_doc==3){
-              
-              //genero copia del documento para nota de credito
-                  
-                       include("scripts/funciones.php");
-                       $resultado=mysql_clonar_registro("documento",$id_documento);
-                       $id_documento_nc=$resultado;  
-                                       
-              //generacion de factura
+              //se genera primero la factura y ya despues se genera una copia de registros para generar la NC
 
-                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
+                $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
                           FROM documento 
                          WHERE id_documento='$id_documento'";
                   $result=$mysqli->query($sql);
@@ -196,40 +189,13 @@
                   $row1=$result1->fetch_array(MYSQLI_ASSOC);
                   $area_inicial=$row1['area_id_area'];
                   $cont = $result1->num_rows;
-                  
+
                 $sql="UPDATE documento
                          SET subprioridad_flujo='2'
                        WHERE id_documento='$id_documento'";
-                $mysqli->query($sql);  
-                
-                // generacion de nota de credito
-
-
-                  $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
-                          FROM documento 
-                         WHERE id_documento='$id_documento_nc'";
-                  $result=$mysqli->query($sql);
-                  $row=$result->fetch_array(MYSQLI_ASSOC);
-                  $tipo_documento=$row['tipo_documento'];
-                  $prioridad=$row['prioridad_flujo']+1;
-
-                  $query1="SELECT area_id_area
-                            FROM flujo_trabajo
-                           WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=1 LIMIT 1";
-                  $result1=$mysqli->query($query1);
-                  $row1=$result1->fetch_array(MYSQLI_ASSOC);
-                  $area_inicial=$row1['area_id_area'];
-                  $cont = $result1->num_rows;
-
-                $sql="UPDATE documento
-                         SET subprioridad_flujo='1'
-                       WHERE id_documento='$resultado'";
-                $result=$mysqli->query($sql);       
-                               
-
+                $mysqli->query($sql); 
 
               }
-              */
 
               if($generacion_doc=="NO")
               {
@@ -284,7 +250,7 @@
                                          WHERE id_documento='$id_documento'";       
                                   $result=$mysqli->query($sql); 
 
-                               }
+                              }
 
                               if ($area_flujo==5){
                                   $sql="UPDATE documento
@@ -300,25 +266,98 @@
 
                               $result=$mysqli->query($sql); 
 
+                                 //si selecciono generar factura realizo la duplicidad NC
+                                  if ($generacion_doc==3){
+                                  //genero copia del documento para nota de credito
+                                 include("scripts/funciones.php");
+                                 $resultado=mysql_clonar_registro("documento",$id_documento);
+                                 $id_documento_nc=$resultado;
+
+/*
+                                 $query1="SELECT area_id_area
+                                           FROM flujo_trabajo
+                                          WHERE tipo_documento_id_tipo_doc='$tipo_documento' AND prioridad='$prioridad' AND sub_prioridad=1  LIMIT 1";
+                                 $result1=$mysqli->query($query1);
+                                 $row1=$result1->fetch_array(MYSQLI_ASSOC);
+                                 $area_inicial=$row1['area_id_area'];
+                                 $cont = $result1->num_rows;
+*/
+
+                                 $sql="UPDATE documento
+                                          SET  subprioridad_flujo=1,
+                                               oper_plataforma='$oper1_nc',
+                                               oper_oficina='$oper2_nc',
+                                               oper_clase='$oper3_nc',
+                                               oper_canal='$oper4_nc',
+                                               oper_sector='$oper5_nc',
+                                               oper_tipo='$oper6_nc',
+                                               oper_numero='$oper7_nc'
+                                               area_flujo_='4'
+                                        WHERE id_documento='$id_documento_nc'";
+                                 $mysqli->query($sql);  
+                                 echo "Error". $mysqli->error;
+
+
+                                  }
+
       }
 
                                if(!empty(trim($justificacion))) {  
                                   $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                                   $result=$mysqli->query($query);
+                                  $id_observaciones_j=$mysqli->insert_id;
+
+                                  if ($generacion_doc==3){
+                                  //genero copia del documento para nota de credito
+                                 $resultado=mysql_clonar_registro("observaciones",$id_observaciones_j);
+                                 $id_observaciones_n=$resultado;
+
+                                 $sql="UPDATE observaciones
+                                          SET id_documento='$id_documento_nc'
+                                        WHERE id_observaciones='$id_observaciones_n'";
+                                 $mysqli->query($sql);  
+                                 echo "Error". $mysqli->error;
+                                  }
+
                                 }
 
                                if(!empty(trim($observaciones))) {  
                                    $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                                    $result=$mysqli->query($query);
+                                   $id_observaciones=$mysqli->insert_id;
+
+                                    if ($generacion_doc==3){
+                                  //genero copia del documento para nota de credito
+                                 $resultado=mysql_clonar_registro("observaciones",$id_observaciones);
+                                 $id_observaciones_n=$resultado;
+
+                                 $sql="UPDATE observaciones
+                                          SET id_documento='$id_documento_nc'
+                                        WHERE id_observaciones='$id_observaciones_n'";
+                                 $mysqli->query($sql);  
+                                  }
+
                                 }
 
                                   if($result){
                                     
                                         $query="INSERT INTO historial_estados (fecha,estado_solicitud_idestado_solicitud,users_id_usuario,area_id_area,id_documento) VALUES (now(),'$estado_actual','$id_usuario','$area_flujo','$id_documento')";
                                         $result0=$mysqli->query($query);
+                                        $id_historial=$mysqli->insert_id;
+                                              if ($generacion_doc==3){
+                                                    //genero copia del documento para nota de credito
+                                                 
+                                                   $resultado=mysql_clonar_registro("historial_estados",$id_historial);
+                                                   $id_historial_n=$resultado;
+
+                                                   $sql="UPDATE historial_estados
+                                                            SET id_documento='$id_documento_nc'
+                                                          WHERE id_historial='$id_historial_n'";
+                                                   $mysqli->query($sql);  
+                                                    }
 
                                                  if($result0){
-                                                 header('Location: homepage.php?id=operador');
+                                              //   header('Location: homepage.php?id=operador');
                                                   echo "entro a if de liberado";
                                                       } else {
                                                         echo "Error: No guardado 0" . $mysqli->error;
@@ -473,6 +512,10 @@
                                     }
 
           }        
+
+
+
+
 
 
 
@@ -696,13 +739,13 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
     <td><font color="#ffffff">NUMERO DE CUENTA DE PAGO</font></td>
     </tr>
     <tr>
-      <td><input type="text" size="10" name="oper_plataforma_fac"></td>
-      <td><input type="text" size="25" name="oper_oficina_fac"></td>
-      <td><input type="text" size="25" name="oper_clase_fac"></td>
-      <td><input type="text" size="10" name="oper_canal_fac"></td>
-      <td><input type="text" size="10" name="oper_sector_fac"></td>
-      <td><input type="text" size="10" name="oper_tipo_fac"></td>
-      <td><input type="text" size="10" name="oper_numero_fac"></td>
+      <td><input type="text" size="10" name="oper_plataforma"></td>
+      <td><input type="text" size="25" name="oper_oficina"></td>
+      <td><input type="text" size="25" name="oper_clase"></td>
+      <td><input type="text" size="10" name="oper_canal"></td>
+      <td><input type="text" size="10" name="oper_sector"></td>
+      <td><input type="text" size="10" name="oper_tipo"></td>
+      <td><input type="text" size="10" name="oper_numero"></td>
     </tr>
     </table>
 
@@ -856,7 +899,9 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
                     <input type="submit" id="submit" name="submit" value="Enviar" >
      </form>
 
-<?php } ?>
+<?php }
+
+ini_set('error_reporting', E_ALL); ?>
           </div>
         </div>
  </div>   	

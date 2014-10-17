@@ -313,7 +313,7 @@ class Usuario extends DB_Connection
 		try{
 			if($this->db){
 				$stmt = $this->db->stmt_init();
-		        $sql = "SELECT id_usuario,username,nombre,n_paterno,n_materno,
+		        $sql = "SELECT id_usuario,username,nombre,n_paterno,n_materno,mail,
 		        		 (SELECT tx_area FROM area WHERE id_area = area_idarea) AS nombreArea,suspendido
 		        		  FROM users
 		        	  ORDER BY nombre ASC";
@@ -321,12 +321,13 @@ class Usuario extends DB_Connection
 			    	if(!$stmt->execute()){
 			    		throw new Exception('FALLÓ EJECUCIÓN');
 			    	}
-			    	$stmt->bind_result($id,$userName,$nombre,$apPaterno,$apMaterno,$nombreArea,$estatus);
+			    	$stmt->bind_result($id,$userName,$nombre,$apPaterno,$apMaterno,$correoEle,$nombreArea,$estatus);
 			    	while($stmt->fetch()){
 			    		$item =array("id"      => $id,
 			    					 "nombre"  => $nombre . ' ' . $apPaterno . ' ' . $apMaterno,
 			    					 "usuario" => $userName,
 			    					 "area"    => $nombreArea,
+			    					 "email"   => $correoEle,
 			    					 "estatus" => $estatus);
 			    		array_push($datos,$item);
 				    }
@@ -354,7 +355,9 @@ class Usuario extends DB_Connection
 		try{
 			if($this->db){
 				$stmt = $this->db->stmt_init();
-		        $sql = "SELECT id,nombre,usuario,perfil,estatus FROM usuarios WHERE id = ?";
+		        $sql = "SELECT id_usuario,username,nombre,n_paterno,n_materno,area_idarea,suspendido 
+		        		  FROM users 
+		        		 WHERE id_usuario = ?";
 			    if($stmt->prepare($sql)){
 			    	if(!$stmt->bind_param('i',$idUsuario)){
 			    		throw new Exception('FALLÓ BIND_PARAM');
@@ -362,12 +365,12 @@ class Usuario extends DB_Connection
 			    	if(!$stmt->execute()){
 			    		throw new Exception('FALLÓ EJECUCIÓN');
 			    	}
-			    	$stmt->bind_result($id,$nombre,$usuario,$perfil,$estatus);
+			    	$stmt->bind_result($id,$userName,$nombre,$apPaterno,$apMaterno,$area,$estatus);
 			    	if($stmt->fetch()){
 			    		$datos =array("id"      => $id,
-			    					  "nombre"  => $nombre,
-			    					  "usuario" => $usuario,
-			    					  "perfil"  => $perfil,
+			    					  "nombre"  => $nombre . ' ' . $apPaterno . ' ' . $apMaterno,
+			    					  "usuario" => $userName,
+			    					  "areaId"  => $area,
 			    					  "estatus" => $estatus);
 				    }
 			    }else{
