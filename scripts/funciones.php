@@ -4,7 +4,7 @@
 //funcion para clonar un registro de mysql
       function mysql_clonar_registro ( $tabla, $clave ) {
 
-        include_once("configuracion.php");
+        include("configuracion.php");
 
          // limpieza parámetros
          $tabla = $mysqli->real_escape_string($tabla);

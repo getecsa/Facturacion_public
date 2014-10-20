@@ -291,12 +291,44 @@
                                                oper_canal='$oper4_nc',
                                                oper_sector='$oper5_nc',
                                                oper_tipo='$oper6_nc',
-                                               oper_numero='$oper7_nc'
-                                               area_flujo_='4'
+                                               oper_numero='$oper7_nc',
+                                               area_flujo='4'
                                         WHERE id_documento='$id_documento_nc'";
                                  $mysqli->query($sql);  
-                                 echo "Error". $mysqli->error;
+                                
+                                $sql_con1="SELECT *
+                                           FROM conceptos_doc
+                                           WHERE documento_iddocumento='$id_documento'";
+                                $result_con1=$mysqli->query($sql_con1);
+                                    while($row=$result_con1->fetch_array(MYSQLI_ASSOC)){
+                                      $campo1=$row['id_codigo_concepto'];
+                                      $campo2=$row['tx_concepto'];
+                                      $campo3=$row['fac_unidades'];
+                                      $campo4=$row['fac_precio_uni'];
+                                      $campo5=$row['fac_descuento'];
+                                      $campo6=$row['not_importe_dispo'];
+                                      $campo7=$row['not_monto_afec'];
+                           
+                                    $sql_ip="INSERT INTO conceptos_doc ( id_codigo_concepto,
+                                                                         tx_concepto,
+                                                                         fac_unidades,
+                                                                         fac_precio_uni,
+                                                                         fac_descuento,
+                                                                         not_importe_dispo,
+                                                                         not_monto_afec,
+                                                                         documento_iddocumento)
+                                                             VALUES ('$campo1',
+                                                                     '$campo2',
+                                                                     '$campo3',
+                                                                     '$campo4',
+                                                                     '$campo5',
+                                                                     '$campo6',
+                                                                     '$campo7',
+                                                                     '$id_documento_nc') 
+";
+                                    $mysqli->query($sql_ip);
 
+                                    }
 
                                   }
 
@@ -316,7 +348,7 @@
                                           SET id_documento='$id_documento_nc'
                                         WHERE id_observaciones='$id_observaciones_n'";
                                  $mysqli->query($sql);  
-                                 echo "Error". $mysqli->error;
+      
                                   }
 
                                 }
