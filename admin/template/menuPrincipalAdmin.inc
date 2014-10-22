@@ -7,7 +7,7 @@
                 <div class='menu'>
                     <ul>
                         <li>
-                            <a href='menu.php'>
+                            <a href='admin.php'>
                                 <img src='images/homeIcon.png' border='0' alt='Inicio' title='Inicio'>
                             </a>
                         </li>
@@ -52,7 +52,7 @@
                                     title='Alta de Documentos'>Alta de Documentos</a>
                                 </li>
                                 <li>
-                                    <a href='admin.php?mod=docs&acc=permisos' alt='Permisos de Documentos' 
+                                    <a href='admin.php?mod=docs&acc=permisos&opc=sel' alt='Permisos de Documentos' 
                                     title='Permisos de Documentos'>Permisos de Documentos</a>
                                 </li>
                             </ul>

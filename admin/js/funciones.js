@@ -36,96 +36,253 @@ function validarInicioSesion(){
     });
 }
 //
-// Función para validar la Forma de Reasignación,Desbloqueo y Consulta Histórico de un Folio ABD *
-function validarEnviar(mod){
+// Función para validar el Perfil Seleccionado en la Ventana de Permisos Documentos. *
+function validarPerfilSel(){
     var formulario=document.form1;
-    if(formulario.folio.value.length == 0){
-        showError('Debe escribir un Folio ABD.');
-        formulario.folio.focus();
-        return false;
-    }else{
-        if(isNaN(formulario.folio.value)){
-            showError('El número del Folio ABD es inválido.');
-            formulario.folio.focus();
-            return false;
-        }else{
-            $.ajax({
-                type: "POST",
-                url: "admin/validarFolio.php",
-                data: {folioAbd : formulario.folio.value,modCon : mod,acc : 'guardar'},
-                success: function(response){
-                    if(response == 1){
-                        formulario.action = 'admin.php?mod=' + mod + '&acc=con';
-                        formulario.method = 'POST';
-                        formulario.submit();
-                    }else{
-                        showError(response);
-                        return false;
-                    }
-                },
-                error: function(xhr,status,trn){
-                    if(status == 'error'){
-                        showError('Error al realizar la Consulta. Error Name: ' + trn);
-                    }else if(status == 'timeout'){
-                        showError('Error al realizar la Consulta Tiempo Excedido. Error Name: ' + trn);
-                    }
+    if(formulario.perfilSel.value != 0){
+        formulario.action = 'admin.php?opc=view';
+        formulario.method = 'POST';
+        formulario.submit();
+        /*$.ajax({
+            type: "POST",
+            url: "admin/adminDocsPermisos.php",
+            data: {mod : 'docs',opc : 'view'},
+            success: function(response){
+                if(response == 1){
+                    formulario.action = 'admin.php?mod=' + mod + '&acc=con';
+                    formulario.method = 'POST';
+                    formulario.submit();
+                }else{
+                    showError(response);
                     return false;
                 }
-            });
-        }
+            },
+            error: function(xhr,status,trn){
+                if(status == 'error'){
+                    showError('Error al realizar la Consulta. Error Name: ' + trn);
+                }else if(status == 'timeout'){
+                    showError('Error al realizar la Consulta Tiempo Excedido. Error Name: ' + trn);
+                }
+                return false;
+            }
+        });*/
+    }else{
+        showError('Seleccione un Perfil.');
+        return false;
     }
 }
 //
-// Función para validar la Reasignación de un Folio *
-function validarReasigna(btn,mod,folio){
+// Función para validar el Formulario de Áreas. *
+function validarAreasForm(){
     var formulario=document.form1;
-    var perfilSel  = 0;
-    var bandejaSel = 0;
-    if(btn == 'reasigna'){
-        if(formulario.perfilSel.value == 0 && formulario.bandejaSel.value == 0){
-            showError('Seleccione el Perfil Destino o Seleccione la Bandeja Destino');
-            return false;
-        }
-        if($('#perfilSel').val() == 0){
-            perfilSel = 0;
-        }else{
-            perfilSel = $('#perfilSel').val();
-        }
-        if($('#bandejaSel').val() == 0){
-            bandejaSel = 0;
-        }else{
-            bandejaSel = $('#bandejaSel').val();
-        }
-        if(confirm('¿Está seguro de reasignar el Folio ABD ' + folio + '?')){
-            $.ajax({
-                type: "POST",
-                url: "admin/adminReasignaAction.php",
-                data: {folioAbd : folio,perfilDestino : perfilSel,bandejaDestino : bandejaSel,
-                ultimaBandeja : $('#ultimaBandejaVal').val(),acc : 'guardar'},
-                success: function(response){
-                    if(response == 1){
-                        alert('Se reasignó el Folio con éxito.');
-                        location.href = 'admin.php?mod=' + mod + '&acc=form';
-                    }else{
-                        showError(response);
-                        return false;
-                    }
-                },
-                error: function(xhr,status,trn){
-                    if(status == 'error'){
-                        showError('Error al realizar la Reasignación. Error Name: ' + trn);
-                    }else if(status == 'timeout'){
-                        showError('Error al realizar la Reasignación Tiempo Excedido. Error Name: ' + trn);
-                    }
-                    return false;
-                }
-            });
-        }else{
-            return false;
-        }
-    }else{
-        location.href = 'admin.php?mod=' + mod + '&acc=form';
+    if(formulario.nombreArea.value.length == 0){
+        showError('Escribir un Nombre de Área.');
+        formulario.nombreArea.focus();
+        return false;
     }
+    if(formulario.tipoArea.value == -1){
+        showError('Seleccionar el Tipo de Área.');
+        formulario.tipoArea.focus();
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "admin/adminAreasAction.php",
+        data: {idArea : $('#idArea').val(),nombreArea : $('#nombreArea').val(),tipoArea : $('#tipoArea').val(),
+        acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se guardó el registro exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al guardar los cambios. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al guardar los cambios Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
+}
+//
+// Función para seleccionar una fila para editar la Área. *
+function editarArea(num)
+{
+    var formulario = document.form1;
+    formulario.action = 'admin.php?mod=areas&acc=form&opc=edit&row=' + num;
+    formulario.method = 'POST';
+    formulario.submit();
+}
+//
+// Función para realizar el cambio de estatus de una Área. *
+function cambioEstatusArea(estatus,num){
+    $.ajax({
+        type: "POST",
+        url: "admin/adminEstatusAreasAction.php",
+        data: {idArea : $('#idarea_' + num).val(),estatusArea : estatus,acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se cambió el estatus exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al cambiar el estatus del Área. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al cambiar el estatus del Área Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
+}
+//
+// Función para validar el Formulario de las Tasas. *
+function validarTasasForm(){
+    var formulario=document.form1;
+    if(formulario.nombreTasa.value.length == 0){
+        showError('Escribir un Nombre de una Tasa.');
+        formulario.nombreTasa.focus();
+        return false;
+    }
+    if(formulario.valorTasa.value <= 0){
+        showError('Escribir un Valor de una Tasa.');
+        formulario.valorTasa.focus();
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "admin/adminIvaAction.php",
+        data: {idIva : $('#idIva').val(),nombreTasa : $('#nombreTasa').val(),valorTasa : $('#valorTasa').val(),
+        acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se guardó el registro exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al guardar los cambios. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al guardar los cambios Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
+}
+//
+// Función para seleccionar una fila para editar la Tasa. *
+function editarTasa(num)
+{
+    var formulario = document.form1;
+    formulario.action = 'admin.php?mod=iva&acc=form&opc=edit&row=' + num;
+    formulario.method = 'POST';
+    formulario.submit();
+}
+//
+// Función para realizar el cambio de estatus de una Tasa. *
+function cambioEstatusTasa(estatus,num){
+    $.ajax({
+        type: "POST",
+        url: "admin/adminEstatusIvaAction.php",
+        data: {idIva : $('#idiva_' + num).val(),estatusTasa : estatus,acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se cambió el estatus exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al cambiar el estatus de la Tasa. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al cambiar el estatus de la Tasa Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
+}
+//
+// Función para validar el Formulario de las Monedas *
+function validarMonedasForm(){
+    var formulario=document.form1;
+    if(formulario.nombreTasa.value.length == 0){
+        showError('Escribir un Nombre de una Moneda.');
+        formulario.nombreTasa.focus();
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "admin/adminMonedaAction.php",
+        data: {idMoneda : $('#idMoneda').val(),nombreMoneda : $('#nombreMoneda').val(),acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se guardó el registro exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al guardar los cambios. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al guardar los cambios Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
+}
+//
+// Función para seleccionar una fila para editar la Moneda. *
+function editarMoneda(num)
+{
+    var formulario = document.form1;
+    formulario.action = 'admin.php?mod=iva&acc=form&opc=edit&row=' + num;
+    formulario.method = 'POST';
+    formulario.submit();
+}
+//
+// Función para realizar el cambio de estatus de una Moneda. *
+function cambioEstatusMoneda(estatus,num){
+    $.ajax({
+        type: "POST",
+        url: "admin/adminEstatusMonedaAction.php",
+        data: {idMoneda : $('#idmoneda_' + num).val(),estatusMoneda : estatus,acc : 'guardar'},
+        success: function(response){
+            if(response == 1){
+                alert('Se cambió el estatus exitosamente.');
+                location.href = 'admin.php?mod=' + $('#mod').val() + '&acc=con';
+            }else{
+                showError(response);
+                return false;
+            }
+        },
+        error: function(xhr,status,trn){
+            if(status == 'error'){
+                showError('Error al cambiar el estatus de la Moneda. Error Name: ' + trn);
+            }else if(status == 'timeout'){
+                showError('Error al cambiar el estatus de la Moneda Tiempo Excedido. Error Name: ' + trn);
+            }
+            return false;
+        }
+    });
 }
 //
 // Función para validar la Bandeja Seleccionada en el Formulario de la Reasignación de un Folio. *

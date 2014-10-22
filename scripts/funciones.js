@@ -259,6 +259,16 @@ $("#accion").val(1);
 $('#tomar_solicitud').submit();  
 });
 
+//funcion para tomar solicitud
+
+$('.asignar_solicitud').click(function(){
+var id_documento = $(this).attr("id");
+$('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
+$("#id_documento").val(id_documento);
+$("#accion").val(3);
+$('#tomar_solicitud').submit();  
+});
+
 //funcion para liberar solicitud
 
 $('.liberar_solicitud').click(function(){

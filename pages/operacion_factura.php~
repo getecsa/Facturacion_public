@@ -18,6 +18,39 @@
     $observaciones=$_POST["observaciones"];
     $id_usuario=$_SESSION['uid'];
 
+				 $status = "";
+              if ($_POST["action"] == "upload") {
+              // obtenemos los datos del archivo 
+              $tamano = $_FILES["archivo"]['size'];
+              $tipo = $_FILES["archivo"]['type'];
+              $archivo = $_FILES["archivo"]['name'];
+              $prefijo = substr(md5(uniqid(rand())),0,6);
+              
+              if ($archivo != "") {
+                // guardamos el archivo a la carpeta files
+                $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
+                if (copy($_FILES['archivo']['tmp_name'],$destino)) {
+                  $status = "Archivo subido: <b>".$archivo."</b>";
+                } else {
+                  $status = "Error al subir el archivo";
+                }
+              } else {
+                $status = "Error al subir archivo";
+              }
+
+            }            
+                
+            if ($archivo != "")   {
+                $ext_archivo = $id_solicitud.'-'.$archivo;
+                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
+                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
+                $result_adjunto = $mysqli->query($query_adjuntos);
+            }   
+
+
+
+
+
     // Acciones por tipo de area
         if ($area_flujo==2){
           
@@ -65,41 +98,17 @@
         }
 
        if ($area_flujo==6){
-                  $status = "";
-              if ($_POST["action"] == "upload") {
-              // obtenemos los datos del archivo 
-              $tamano = $_FILES["archivo"]['size'];
-              $tipo = $_FILES["archivo"]['type'];
-              $archivo = $_FILES["archivo"]['name'];
-              $prefijo = substr(md5(uniqid(rand())),0,6);
               
-              if ($archivo != "") {
-                // guardamos el archivo a la carpeta files
-                $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
-                if (copy($_FILES['archivo']['tmp_name'],$destino)) {
-                  $status = "Archivo subido: <b>".$archivo."</b>";
-                } else {
-                  $status = "Error al subir el archivo";
-                }
-              } else {
-                $status = "Error al subir archivo";
-              }
-
-            }            
-                
-            if ($archivo != "")   {
-                $ext_archivo = $id_solicitud.'-'.$archivo;
-                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
-                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
-                $result_adjunto = $mysqli->query($query_adjuntos);
-            }   
-
+              
         }
 
 
 // Liberado o finalizado
 
           if (($estado_actual=="3") || ($estado_actual=="7") ){
+
+
+
 
             $sql="SELECT prioridad_flujo, area_flujo, tipo_documento_idtipo_doc as tipo_documento
                     FROM documento 
@@ -307,6 +316,16 @@
 
                           if ($area_flujo==6){
                             echo "Entrega documentos";
+                            
+												//Query Daniel Irineo Rechazo		                              
+                           	$sql="UPDATE documento
+                              			SET  estado_actual='0', area_flujo = '5', area_flujo_anterior = '2', prioridad_flujo = '3', usuario_reserva = '0', reservada = '0'
+                             			WHERE id_documento='$id_documento'";       
+					
+                     		 $result=$mysqli->query($sql);                              
+                                               
+                            
+                            
                             }
 
 					/* Query Daniel 				
@@ -665,18 +684,13 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
           if (($area_operador!=1) AND ($area_operador!=6) ){
         ?>
         <div class="justificacion">
-          <p>Justificacion:</p><textarea name="justificacion" COLS=30 ROWS=6></textarea>
+          <p>Justificacion:</p><textarea name="justificacion" COLS=40 ROWS=3></textarea>
         </div>
         <?php 
           }
          if ($area_operador==6){
         ?>
-            <div class="custom-input-file botones">
-            <input type="file" class="input-file" name="archivo" />
-            Adjuntar Archivos
-            <div class="archivo">...</div>
-            <input name="action" type="hidden" value="upload" /> 
-            </div>
+            
           <?php } ?>
       </div>
         <?php
@@ -704,8 +718,32 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
       </div>
       <?php } ?>     
 
-
+ <div class="custom-input-file botones">
+            <input type="file" class="input-file" name="archivo" />
+            Adjuntar Archivos
+            <div class="archivo">...</div>
+            <input name="action" type="hidden" value="upload" /> 
+            </div>
         </fieldset>
+<?php
+               echo 'Descargar Archivos:<br>';
+                $sql_archivos="SELECT nombre, area, tx_area
+						FROM adjuntos
+						LEFT JOIN area ON adjuntos.area = area.id_area
+						WHERE adjuntos.id_documento  = '$id_documento'";
+
+                  $result=$mysqli->query($sql_archivos);
+                  while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+							if($row['tx_area'] == NULL) {
+								echo 'SOLICITANTE: <a href="Archivos/'.$row['nombre'].'">'.$row['nombre'].'</a><br>';
+							}	                 
+							else { 	
+                  	 echo $row['tx_area'].': <a href="Archivos/'.$row['nombre'].'">'.$row['nombre'].'</a><br>';
+                  } 
+?>
+               
+                                      
+              <?php } ?>      
                    <div class="boton_envio">                           
                     <input type="hidden" name="area_flujo" id="area_flujo" value="<?php echo $area_flujo; ?>">
                     <input type="hidden" name="id_documento" value="<?php echo $id_documento; ?>">

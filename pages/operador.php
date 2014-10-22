@@ -59,6 +59,28 @@ if($accion==2){
       }
 }
 
+
+if($accion==3){
+  $id_area=3;
+
+    $sql="SELECT *
+           FROM documento
+          WHERE id_documento='$id_documento'";
+    $result=$mysqli->query($sql);
+    $row=$result->fetch_array(MYSQLI_ASSOC);
+
+    $sql="UPDATE documento
+             SET reservada='0', estado_actual='0',area_flujo='$id_area',area_flujo_anterior='$id_area_op',usuario_reserva=''
+           WHERE id_documento='$id_documento'";
+    $result=$mysqli->query($sql); 
+      if($result){
+        $sql1="INSERT INTO historial_estados (fecha,estado_solicitud_idestado_solicitud,id_documento,users_id_usuario,area_id_area) 
+                   VALUES (now(),0,'".$id_documento."', '".$id_user."','".$id_area."' )";
+        $result1=$mysqli->query($sql1);
+      }
+}
+
+
     
 ?>
 <div class="contenedor">
@@ -260,7 +282,7 @@ $sql="SELECT DISTINCT so.id_solicitudes, do.id_documento, us.username,ar.tx_area
                             }
                           if (($id_estado_click==1) AND ($id_area_op==2)){
                           ?>
-                           <!--   <a href="#" class="asignar_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a> -->
+                            <a href="#" class="asignar_solicitud" id="<?php echo $row['id_solicitudes']; ?>" rel="<?php echo $row['id_documento']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
                           <?php
                             }
                           if ($id_estado_click==1){

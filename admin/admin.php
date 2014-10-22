@@ -48,13 +48,30 @@ if(true){
 					$menu->verMenu($mod,'Catálogos - Áreas - Telefónica Movistar');
 					switch($acc){
 						case 'form':
-							include_once 'admin/adminFolio.php';
+							include_once 'admin/adminAreasForm.php';
 							break;
 						case 'con':
 							include_once 'admin/adminAreas.php';
 							break;
-						case 'guardar':
-							include_once 'admin/folioAction.php';
+						//
+						default:
+							$tpl = new TemplatePower('template/errorRequest.inc');
+							$tpl->prepare();
+							$tpl->assign('mensaje','Error al Procesar la Solicitud');
+							$tpl->printToScreen();
+							break;
+					}
+					break;
+				//
+				// Catálogo de IVA. *
+				case 'iva':
+					$menu->verMenu($mod,'Catálogos - I.V.A. - Telefónica Movistar');
+					switch($acc){
+						case 'form':
+							include_once 'admin/adminIvaForm.php';
+							break;
+						case 'con':
+							include_once 'admin/adminIva.php';
 							break;
 						//
 						default:
@@ -66,18 +83,35 @@ if(true){
 					}
 					break;
 				//
-				// Desbloqueo de Folios. *
-				case 'desbloqueo':
-					$menu->verMenu($mod);
+				// Catálogo de Monedas. *
+				case 'monedas':
+					$menu->verMenu($mod,'Catálogos - Monedas - Telefónica Movistar');
+					switch($acc){
+						case 'form':
+							include_once 'admin/adminMonedasForm.php';
+							break;
+						case 'con':
+							include_once 'admin/adminMonedas.php';
+							break;
+						//
+						default:
+							$tpl = new TemplatePower('template/errorRequest.inc');
+							$tpl->prepare();
+							$tpl->assign('mensaje','Error al Procesar la Solicitud');
+							$tpl->printToScreen();
+							break;
+					}
+					break;
+				//
+				// Catálogo de CFDI. *
+				case 'cfdi':
+					$menu->verMenu($mod,'Catálogos - CFDI - Telefónica Movistar');
 					switch($acc){
 						case 'form':
 							include_once 'admin/adminFolio.php';
 							break;
 						case 'con':
-							include_once 'admin/consultaFolio.php';
-							break;
-						case 'guardar':
-							include_once 'clientes/registroClientesAction.php';
+							include_once 'admin/adminCfdi.php';
 							break;
 						//
 						default:
@@ -89,39 +123,18 @@ if(true){
 					}
 					break;
 				//
-				// Generar Reporte. *
-				case 'reporte':
-					$menu->verMenu($mod);
-					switch($acc){
-						case 'form':
-						case 'edit':
-							include_once 'clientes/registroClientes.php';
-							break;
-						case 'con':
-							include_once 'reportes/consultaReporte.php';
-							break;
-						case 'guardar':
-							include_once 'clientes/registroClientesAction.php';
-							break;
-						//
-						default:
-							$tpl = new TemplatePower('template/errorRequest.inc');
-							$tpl->prepare();
-							$tpl->assign('mensaje','Error al Procesar la Solicitud');
-							$tpl->printToScreen();
-							break;
-					}
-					break;
-				//
-				// Consulta Histórico del Folio. *
-				case 'folio':
-					$menu->verMenu($mod);
+				// Catálogo de Documentos. *
+				case 'docs':
+					$menu->verMenu($mod,'Catálogos - Documentos - Telefónica Movistar');
 					switch($acc){
 						case 'form':
 							include_once 'admin/adminFolio.php';
 							break;
-						case 'con':
-							include_once 'consultas/consultaHistoricoFolio.php';
+						case 'alta':
+							include_once 'admin/adminDocs.php';
+							break;
+						case 'permisos':
+							include_once 'admin/adminDocsPermisos.php';
 							break;
 						//
 						default:
@@ -132,7 +145,7 @@ if(true){
 							break;
 					}
 					break;
-				//
+				//	
 				// Administración de Usuarios. *
 				case 'users':
 					$menu->verMenu($mod,'Administración - Usuarios - Telefónica Movistar');
@@ -154,35 +167,19 @@ if(true){
 					}
 					break;
 				//	
-				// Administración de las Plantillas de los Correos Automáticos. *
-				case 'tplcorreo':
-					switch($acc){
-						case 'con':
-							$menu->verMenu($mod);
-							include_once 'admin/adminPlantillasCorreo.php';
-							break;
-						case 'form':
-						case 'edit':
-							$menu->verInicioSesion();
-							include_once 'admin/adminPlantillas.php';
-							break;
-						//
-						default:
-							$menu->verMenu($mod);
-							$tpl = new TemplatePower('template/errorRequest.inc');
-							$tpl->prepare();
-							$tpl->assign('mensaje','Error al Procesar la Solicitud');
-							$tpl->printToScreen();
-							break;
-					}
-					break;
-				//	
 				default:
-					$menu->verMenu($mod);
-					$tpl = new TemplatePower('template/errorRequest.inc');
+					$menu->verMenu($mod,'Administracíon - Menú Principal - Telefónica Movistar');
+					$tpl = new TemplatePower('template/menu.inc');
 					$tpl->prepare();
-					$tpl->assign('mensaje','No se encontró la opción solicitada.');
 					$tpl->printToScreen();
+					// Se imprime el footer de la Página. *
+					$tpl = new TemplatePower('inc/footer.inc');
+					$tpl->prepare();
+					$tpl->assign('nombreProyecto',PROJECT_NAME);
+					$tpl->assign('yearDevelop',YEAR_DEVELOP);
+					$tpl->assign('resolucionMinima',MIN_RESOLUTION);
+					$tpl->printToScreen();
+					//
 					break;
 			}
 		}else{

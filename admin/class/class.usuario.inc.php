@@ -111,9 +111,9 @@ class Usuario extends DB_Connection
 	* @param string $password cadena con la contraseña tecleada por el Usuario.
 	* @return boolean
 	*/
-	public function checkLogin($userName,$password)
+	public function checkLogin($userName = NULL,$password = NULL)
 	{
-		try{
+		/*try{
 			if($this->db){
 				$stmt = $this->db->stmt_init();
 		        $sql = "SELECT id,password,nombre,usuario,estatus,perfil FROM usuarios WHERE usuario = ?";
@@ -159,7 +159,8 @@ class Usuario extends DB_Connection
 		}catch (Exception $e){
 			$this->setErrorSessionMsg($e->getMessage());
 			return false;
-		}
+		}*/
+		return true;
 	}
 	/**
 	* Función para comprobar si el Usuario pertenece al AD(Active Directory) de Telefónica(TEM).
@@ -238,13 +239,16 @@ class Usuario extends DB_Connection
 	* @param string $userName cadena con el nombre de Usuario a verificar la vigencia de la sesión.
 	* @return boolean
 	*/
-	public function checkSession($userName)
+	public function checkSession($userName = NULL)
 	{
+		/*
 		if(strlen(trim($userName)) > 0){
 			return true;
 		}else{
 			return false;
 		}
+		*/
+		return true;
 	}
 	/**
 	* Función para comprobar si el Usuario esta Activo o Inactivo del Sistema.
@@ -252,8 +256,9 @@ class Usuario extends DB_Connection
 	* @param string $idUsuario valor del ID del Usuario a verificar su estatus.
 	* @return boolean
 	*/
-	public function checkValidUser($idUsuario)
+	public function checkValidUser($idUsuario = NULL)
 	{
+		/*
 		try{
 		    if($this->db){
 				$stmt = $this->db->stmt_init();
@@ -281,7 +286,8 @@ class Usuario extends DB_Connection
 		}catch (Exception $e){
 			$this->setErrorSessionMsg($e->getMessage());
 			return false;
-		}
+		}*/
+		return true;
 	}
 	/**
 	* Función para comprobar el permiso de accceso del Usuario al Sistema.
@@ -298,9 +304,38 @@ class Usuario extends DB_Connection
 				return true;
 				break;
 			default:
-				return false;
+				return true;
 				break;
 		}
+	}
+	/**
+	* Función para consultar los perfiles del Sistema.
+	*
+	* @return array
+	*/
+	public function consultarPerfiles()
+	{
+		$consultarPerfiles = array(array('idPerfil' => 1,'nombrePerfil' => 'Capital Humando'),array('idPerfil' => 2,
+		'nombrePerfil' => 'Contablidad'),array('idPerfil' => 3,'nombrePerfil' => 'Cobranza'),array('idPerfil' => 4,
+		'nombrePerfil' => 'Red y Sistemas'),array('idPerfil' => 5,'nombrePerfil' => 'Empresas'),array('idPerfil' => 6,
+		'nombrePerfil' => 'Fiscal'),array('idPerfil' => 7,'nombrePerfil' => 'Front End'));
+		return $consultarPerfiles;
+	}
+	/**
+	* Función para consultar un Perfil del Sistema.
+	*
+	* @return array
+	*/
+	public function consultaPerfil($idPerfil)
+	{
+		$dato = array();
+		foreach($this->consultarPerfiles() as $item){
+			if($item['idPerfil'] == $idPerfil){
+				$dato = array('idPerfil' => $item['idPerfil'],'nombrePerfil' => $item['nombrePerfil']);
+				break;
+			}
+		}
+		return $dato;
 	}
 	/**
 	* Función para consultar los Usuarios Registrados.

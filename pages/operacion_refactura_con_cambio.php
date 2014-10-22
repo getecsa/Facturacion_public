@@ -20,6 +20,36 @@
     if(!isset($_POST['generacion_doc'])){$_POST['generacion_doc']="NO";}
     $generacion_doc=$_POST['generacion_doc'];
 
+						 $status = "";
+              if ($_POST["action"] == "upload") {
+              // obtenemos los datos del archivo 
+              $tamano = $_FILES["archivo"]['size'];
+              $tipo = $_FILES["archivo"]['type'];
+              $archivo = $_FILES["archivo"]['name'];
+              $prefijo = substr(md5(uniqid(rand())),0,6);
+              
+              if ($archivo != "") {
+                // guardamos el archivo a la carpeta files
+                $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
+                if (copy($_FILES['archivo']['tmp_name'],$destino)) {
+                  $status = "Archivo subido: <b>".$archivo."</b>";
+                } else {
+                  $status = "Error al subir el archivo";
+                }
+              } else {
+                $status = "Error al subir archivo";
+              }
+
+            }            
+                
+            if ($archivo != "")   {
+                $ext_archivo = $id_solicitud.'-'.$archivo;
+                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
+                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
+                $result_adjunto = $mysqli->query($query_adjuntos);
+            }   
+
+
     // Acciones por tipo de area
         if ($area_flujo==2){
           
@@ -30,7 +60,6 @@
         if(!isset($_POST['oper_sector'])){$_POST['oper_sector']="";}
         if(!isset($_POST['oper_tipo'])){$_POST['oper_tipo']="";}
         if(!isset($_POST['oper_numero'])){$_POST['oper_numero']="";}
-
         if(!isset($_POST['clasificacion'])){$_POST['clasificacion']="";}
         
            $justificacion=$_POST["justificacion"];
@@ -83,34 +112,7 @@
         }
 
        if ($area_flujo==6){
-                  $status = "";
-              if ($_POST["action"] == "upload") {
-              // obtenemos los datos del archivo 
-              $tamano = $_FILES["archivo"]['size'];
-              $tipo = $_FILES["archivo"]['type'];
-              $archivo = $_FILES["archivo"]['name'];
-              $prefijo = substr(md5(uniqid(rand())),0,6);
-              
-              if ($archivo != "") {
-                // guardamos el archivo a la carpeta files
-                $destino =  "Archivos/".$id_solicitud.'-'.$archivo;
-                if (copy($_FILES['archivo']['tmp_name'],$destino)) {
-                  $status = "Archivo subido: <b>".$archivo."</b>";
-                } else {
-                  $status = "Error al subir el archivo";
-                }
-              } else {
-                $status = "Error al subir archivo";
-              }
-
-            }            
                 
-            if ($archivo != "")   {
-                $ext_archivo = $id_solicitud.'-'.$archivo;
-                $query_adjuntos="INSERT INTO adjuntos (nombre, id_documento,id_usuario,area) VALUE ('$ext_archivo', '$id_documento','$id_usuario','$area_flujo')";
-                //$query_adjuntos="INSERT INTO adjuntos (nombre, solicitudes_id_solicitudes,id_usuario,area) VALUE ('$ext_archivo', '$id_solicitud','$id_usuario','$area_flujo')";
-                $result_adjunto = $mysqli->query($query_adjuntos);
-            }   
 
         }
 
@@ -389,7 +391,7 @@
                                                     }
 
                                                  if($result0){
-                                              //   header('Location: homepage.php?id=operador');
+                                                 header('Location: homepage.php?id=operador');
                                                   echo "entro a if de liberado";
                                                       } else {
                                                         echo "Error: No guardado 0" . $mysqli->error;
@@ -479,6 +481,11 @@
 
                           if ($area_flujo==1){
                             echo "direccionamiento";
+                              $sql="UPDATE documento
+                              SET  estado_actual='$estado_actual'
+                             	WHERE id_documento='$id_documento'";       
+
+                      			$result=$mysqli->query($sql);
                             }
 
                           if ($area_flujo==2){
@@ -497,24 +504,60 @@
                                                monto_afectar_nc='$monto_afectar_nc'
                                          WHERE id_documento='$id_documento'";          
                               $result=$mysqli->query($sql); 
+                              
+                               //Query Daniel Irineo
+                             	$sql="UPDATE documento
+                              	SET  estado_actual='0', 
+                              	area_flujo = '1', 
+                              	area_flujo_anterior = '20', 
+                              	prioridad_flujo = '1', 
+                              	usuario_reserva = '1', 
+                              	reservada = '0'
+                             	WHERE id_documento='$id_documento'";       
+
+                      			$result=$mysqli->query($sql);
                             }
 
-                          if ($area_flujo==5){
+                          if ($area_flujo==4 || $area_flujo==5){
                               $sql="UPDATE documento
                                        SET fac_proceso='$proceso', fac_numero_folio='$numero_folio'
                                      WHERE id_documento='$id_documento'";       
                               $result=$mysqli->query($sql); 
+                              
+ 										$sql="UPDATE documento
+                              	SET  estado_actual='0', 
+                              	area_flujo = '2', 
+                              	area_flujo_anterior = '1',
+                              	prioridad_flujo = '2', 
+                              	usuario_reserva = '0', 
+                              	reservada = '0'
+                             	WHERE id_documento='$id_documento'";       
+
+                      			$result=$mysqli->query($sql);
+                              
                             }          
 
                           if ($area_flujo==6){
                             echo "Entrega documentos";
-                            }
+                             //Query Daniel Irineo
+                             	$sql="UPDATE documento
+                              	SET  estado_actual='0', 
+                              	area_flujo = '5', 
+                              	area_flujo_anterior = '2', 
+                              	prioridad_flujo = '3', 
+                              	usuario_reserva = '0', 
+                              	reservada = '0'
+                             	WHERE id_documento='$id_documento'";       
 
+                      			$result=$mysqli->query($sql);
+
+                            }
+/*
                       $sql="UPDATE documento
                                SET  estado_actual='$estado_actual'
                              WHERE id_documento='$id_documento'";       
 
-                      $result=$mysqli->query($sql); 
+                      $result=$mysqli->query($sql); */
 
                      if(!empty(trim($justificacion))) {  
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
@@ -923,7 +966,31 @@ $result_moneda=mysql_db_query($db, $sql_moneda,$link);
       <?php } ?>     
 
 
+    <div class="custom-input-file botones">
+            <input type="file" class="input-file" name="archivo" />
+            Adjuntar Archivos
+            <div class="archivo">...</div>
+            <input name="action" type="hidden" value="upload" /> 
+            </div>
         </fieldset>
+<?php
+               echo 'Descargar Archivos:<br>';
+                $sql_archivos="SELECT nombre, area, tx_area
+						FROM adjuntos
+						LEFT JOIN area ON adjuntos.area = area.id_area
+						WHERE adjuntos.id_documento  = '$id_documento'";
+
+                  $result=$mysqli->query($sql_archivos);
+                  while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+							if($row['tx_area'] == NULL) {
+								echo 'SOLICITANTE: <a href="Archivos/'.$row['nombre'].'">'.$row['nombre'].'</a><br>';
+							}	                 
+							else { 	
+                  	 echo $row['tx_area'].': <a href="Archivos/'.$row['nombre'].'">'.$row['nombre'].'</a><br>';
+                  } 
+                 }
+?>
+ 
                    <div class="boton_envio">                           
                     <input type="hidden" name="area_flujo" id="area_flujo" value="<?php echo $area_flujo; ?>">
                     <input type="hidden" name="id_documento" value="<?php echo $id_documento; ?>">
