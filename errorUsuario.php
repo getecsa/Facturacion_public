@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 /*if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE"))
 {
     /*
@@ -87,5 +87,6 @@
 <meta http-equiv="refresh" content="1.5;url=index.php">
 
 <?php 
+ob_end_flush();
 ?>
 

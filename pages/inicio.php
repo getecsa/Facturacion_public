@@ -1,10 +1,12 @@
 <?php
+ob_start();
+
 if (isset($_POST['txtUsuario'])){
    
    $usuario = $_POST['txtUsuario'];
    $pass = $_POST['txtContraseña'];
  
-    include("config.php");
+    include("configuracion.php");
      
     $sql ="SELECT   id_usuario, username, nombre, n_paterno, n_materno,
                     users.area_idarea as id_area, area.tx_area as tx_area, area.oper_sol as oper_sol
@@ -13,12 +15,11 @@ if (isset($_POST['txtUsuario'])){
                ON   users.area_idarea = area.id_area
             WHERE   username =  '$usuario'
               AND   pass = '$pass'";
-
-     $result=mysql_db_query($db, $sql, $link); 
+     $result=$mysqli->query($sql);
 
     $uid = "";
-     
-    if( $fila=mysql_fetch_array($result) )
+    //$fila=mysql_fetch_array($result);
+    if( $fila=$result->fetch_array(MYSQLI_ASSOC))
        {       
         
                 $uid = $fila['id_usuario'];

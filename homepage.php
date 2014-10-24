@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
  //Validar que el usuario este logueado y exista un UID
 if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
@@ -79,4 +80,6 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 <?php
 } else {
       header('Location: errorUsuario.php?Error=4');
-} ?>
+} 
+ob_end_flush();
+?>

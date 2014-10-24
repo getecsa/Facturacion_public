@@ -90,6 +90,7 @@ $(document).ready(function(){
                 var AddButton       = $("#agregar_campo_fac"); 
                
                 var x = $("#agregar_detalle").length + 1;
+                console.log(x);
                 var FieldCount = x-1;
                 var y = $("#num_return").val();
                 
@@ -105,15 +106,15 @@ $(document).ready(function(){
                             $(contenedor).append('<tr class="add_factura"><td><input type="text" size="10" name="add_cont['+ FieldCount +'][0]"  placeholder="Codigo '+ FieldCount +'"/> </td><td><input type="text" name="add_cont['+ FieldCount +'][1]"  placeholder="Descripcion '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][2]" class="calcular_subtotal total_unidades"  placeholder="Unidades '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][3]" class="calcular_subtotal" placeholder="Precio '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][4]" readonly="readonly" class="suma_cargo"  placeholder="Cargo '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][5]" class="calcular_subtotal" placeholder="Descuento '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][6]"  readonly="readonly" class="suma_subtotal" placeholder="Subtotal '+ FieldCount +'"/><a href="#" class="eliminar">&times;</a></td></tr>');
                             $("#num_concepto").val(x);
                             x++; 
-                     
                 return false;
+
                 });
 
                 $("body").on("click",".eliminar", function(e){ 
                           if( x > 1 ) {
                                   $(this).parent().parent().remove();
                                   FieldCount--;
-                                  x--;
+                               
 
                                   $("#num_concepto").val(x-1);
                             

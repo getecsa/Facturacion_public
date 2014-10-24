@@ -7,13 +7,20 @@ error_reporting(E_ALL ^ E_NOTICE);
         
         if(isset($_POST['form_1']))
                 {
-                        $id = $_POST['id'];
+                        $id_doc = $_POST['id_doc'];
+                        $id_sol = $_POST['id_sol'];
+                        
                         $comentario = $_POST['comentario'];
 
 
-                        $insert = "INSERT INTO observaciones(  `observacion` ,  `fecha_observacion` ,  `users_id_usuario` ,  `solicitudes_id_solicitudes` )
-                                VALUES ( '$comentario', now(), '$id_user', '$id')";
-
+ $insert = "INSERT INTO observaciones(  `observacion` ,  
+ `fecha_observacion` ,  `users_id_usuario` ,  `solicitudes_id_solicitudes` )
+ VALUES ( '$comentario', now(), '$id_user', '$id')";
+ 
+/* 
+ observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) 
+ VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)
+*/
                         mysqli_query($con, $insert);
                 }   
 
@@ -67,7 +74,7 @@ location = location.pathname + '?id=solicitante&param=' + valor;
 //Si el estado esta en proceso para el solicitante
 
 if ($param=='Pendientes'){
-$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento, do.subprioridad_flujo  as doc
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -78,7 +85,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
 }
 
 if ($param=='Rechazadas'){
-$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento, do.subprioridad_flujo  as doc
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -88,7 +95,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
 }
 
 if ($param=='Aceptadas'){
-$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento
+$sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.estado_actual as estado, do.id_documento, do.subprioridad_flujo  as doc
         FROM documento do
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
@@ -105,10 +112,10 @@ while ($fila = mysqli_fetch_assoc($rs)) {
 
                     <tr>
             
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
-								<td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
+								<td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); if ($fila['doc']==1){ echo "- NOTA DE CREDITO";} if ($fila['doc']==2){ echo "- FACTURA";} ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
                        
                     </tr>
 <?php }
@@ -136,7 +143,7 @@ while ($fila = mysqli_fetch_assoc($rs)) {
 
 					$sql_aclaraciones="SELECT * 
 					FROM  `aclaracion_queja` 
-					WHERE estatus = '$param' ORDER BY fecha_recep DESC";
+					WHERE estatus = '$param'";
 
 
 if ($rs_aclaraciones = mysqli_query($con, $sql_aclaraciones)) {

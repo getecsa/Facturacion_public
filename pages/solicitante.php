@@ -1,20 +1,27 @@
 <?php 
 error_reporting(E_ALL ^ E_NOTICE);  
-    include("conectar_bd.php");
+    include("configuracion.php");
     session_start();
     $id_user = $_SESSION['uid'];
     
         
         if(isset($_POST['form_1']))
                 {
-                        $id = $_POST['id'];
+                        $id_doc = $_POST['id_doc'];
+                        $id_sol = $_POST['id_sol'];
+                        
                         $comentario = $_POST['comentario'];
 
 
-                        $insert = "INSERT INTO observaciones(  `observacion` ,  `fecha_observacion` ,  `users_id_usuario` ,  `solicitudes_id_solicitudes` )
-                                VALUES ( '$comentario', now(), '$id_user', '$id')";
-
-                        mysqli_query($con, $insert);
+ $insert = "INSERT INTO observaciones( observacion,fecha_observacion,users_id_usuario,
+ id_documento,solicitudes_id_solicitudes )
+ VALUES ( '$comentario', now(), '$id_user', '$id_doc', '$id_sol')";
+ 
+/* 
+ observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) 
+ VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)
+*/
+                        $mysqli->query($insert);
                 }   
 
         if($_GET['param'] == '')
@@ -97,18 +104,19 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
 
 }
 
-if ($rs = mysqli_query($con, $sql)) {
+if ($rs = $mysqli->query($sql)) {
     /* fetch array asociativo*/
-while ($fila = mysqli_fetch_assoc($rs)) {
+//while ($fila = mysqli_fetch_assoc($rs)) {
+while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
         
 ?>
 
                     <tr>
             
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
-								        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); if ($fila['doc']==1){ echo "- NOTA DE CREDITO";} if ($fila['doc']==2){ echo "- FACTURA";} ?></a></td>
-                        <td><a href="ver_folio.php?id=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
+								<td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo utf8_encode($fila["tipo_doc"]); if ($fila['doc']==1){ echo "- NOTA DE CREDITO";} if ($fila['doc']==2){ echo "- FACTURA";} ?></a></td>
+                        <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"> <?php echo $fila["fecha"]; ?></a></td>
                        
                     </tr>
 <?php }
@@ -139,9 +147,11 @@ while ($fila = mysqli_fetch_assoc($rs)) {
 					WHERE estatus = '$param'";
 
 
-if ($rs_aclaraciones = mysqli_query($con, $sql_aclaraciones)) {
+if ($rs_aclaraciones = $mysqli->query($sql_aclaraciones)) {
     /* fetch array asociativo*/
-while ($fila = mysqli_fetch_assoc($rs_aclaraciones)) {
+//while ($fila =  mysqli_fetch_assoc($rs_aclaraciones)) {
+while ($fila = $rs_aclaraciones->fetch_array(MYSQLI_ASSOC)) {
+   
         
 
 

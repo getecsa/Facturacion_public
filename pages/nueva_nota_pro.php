@@ -43,11 +43,9 @@ $area_inicial=$row['area_id_area'];
 
  $query="INSERT INTO solicitudes (fecha_solicitud,
                                   area_idarea,
-                                  tipo_cliente_idtipo_cliente,
                                   users_id_usuario) 
                           VALUES (now(),
                                   '$id_area',
-                                  '$tipo_cliente',
                                   '$id_usuario')";
  $result=$mysqli->query($query) or die(mysqli_error());
  $id_solicitud=$mysqli->insert_id;
@@ -71,7 +69,8 @@ $area_inicial=$row['area_id_area'];
                                          prioridad_flujo,
                                          subprioridad_flujo,
                                          usuario_reserva,
-                                         reservada) 
+                                         reservada,
+                                         tipo_cliente) 
                                 VALUES ('$cod_cliente',
                                         '$tipo_nc',
                                         '$leyenda_doc',
@@ -91,7 +90,8 @@ $area_inicial=$row['area_id_area'];
                                          1,
                                          0,
                                         '$id_usuario',
-                                         0)";
+                                         0,
+                                        '$tipo_cliente')";
                        
 
                         $result1=$mysqli->query($query) or die(mysqli_error());

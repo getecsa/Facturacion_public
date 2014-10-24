@@ -7,13 +7,12 @@
   <div class="content">
 
 <?php
-include("config.php");
-
+include("configuracion.php");
 $sql_iva="select * from iva";
-$result_iva=mysql_db_query($db, $sql_iva,$link);
+$result_iva=$mysqli->query($sql_iva);
 
 $sql_moneda="select * from moneda";
-$result_moneda=mysql_db_query($db, $sql_moneda,$link);
+$result_moneda=$mysqli->query($sql_moneda);
 
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
@@ -21,6 +20,14 @@ if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 }
 
 $tipo_cliente=$_POST["tipo_cliente"];
+
+  $sql_t="select conexion from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+  $result_t=$mysqli->query($sql_t);
+  $row_t=$result_t->fetch_array(MYSQLI_ASSOC);
+  $conexion=$row_t['conexion'];
+
+ // RFC="SELECT COD_CLIENTE, NOM_CLIENTE ||' ' || NOM_APECLIEN1||' '|| NOM_APECLIEN2 FROM FA_HISTCLIE_19010102"
+
 $tipo_documento=$_POST["tipo_documento"];
 $return=0;
 $num_return=0;
@@ -67,7 +74,7 @@ $id_usuario=$_SESSION['uid'];
                       <select id="iva" name="iva">
                       		<option value="0">Seleccione IVA</option>
                       <?php 
-                            while($row=mysql_fetch_array($result_iva)){
+                            while($row=$result_iva->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_iva'],"'";
                               if($return==1){ 
                                 if($row['id_iva']==$iva)
@@ -89,7 +96,7 @@ $id_usuario=$_SESSION['uid'];
                         <select name="moneda">
                         	<option value="0">Seleccione Moneda</option>
                           <?php 
-                            while($row=mysql_fetch_array($result_moneda)){
+                            while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_moneda'],"'";
                               if($return==1){ 
                                 if($row['id_moneda']==$moneda)
@@ -135,11 +142,31 @@ $id_usuario=$_SESSION['uid'];
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][6]" readonly class="suma_subtotal" value="<?php echo $array_cont[$i][6]; ?>" /></td>
     </tr>
     
-     <?php }  } else {?>
-
+     <?php }  } else {      ?>
     <tr class="add_factura">
+      <?php 
+        //validar conexiones para 0 ninguna 1 SCL 2 SAP 
+          if($conexion==1){
+
+            $scl=ConectaGuio();
+            $q="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
+            $qp=OCIParse($scl,$q);
+            OCIExecute($qp,OCI_DEFAULT);
+      ?>
+              <td><select size="10" name="add_cont[1][0]">
+              <?php  while (($row = oci_fetch_array($qp, OCI_ASSOC)) != false) { ?>
+              <option><?php echo $row["codigo"];?></option>
+              <?php } ?>
+              </select></td>
+              <td><select size="10" name="add_cont[1][1]">
+              <?php  while(OCIFetchInto ($qp, $row, OCI_ASSOC)){ ?>
+              <option><?php echo $row["descripcion"];?></option>
+              <?php } ?>
+              </select></td>
+        <?php  } else {?>
       <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>
+        <?php } ?>
       <td><input type="text" size="10" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
       <td><input type="text" size="10" name="add_cont[1][3]" class="calcular_subtotal" /></td>
       <td><input type="text" size="10" name="add_cont[1][4]" readonly class="suma_cargo"/></td>

@@ -3,7 +3,7 @@ function validarUsuarioForm()
     var formulario = document.form1;
     var msgError   = '';
     var flagError  = true;
-    if(formulario.motivo_sol.value == 0){
+    if(formulario.motivo_sol.value == /^[0-9]$/){
         msgError  = 'Ingresar motivo de solicitud';
         showError(msgError);
         flagError = false;
@@ -18,7 +18,7 @@ function validarUsuarioForm()
         return false;
     }
         else if(formulario.leyenda_doc.value == 0){
-        msgError  = 'Ingresar leyenda d	e documento';
+        msgError  = 'Ingresar leyenda de documento';
         showError(msgError);
         flagError = false;
         formulario.leyenda_doc.focus();

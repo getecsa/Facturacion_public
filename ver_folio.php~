@@ -19,13 +19,14 @@ function Ocultar(clase,id_b)
 </script>
 <?php 
 	include("conectar_bd.php");
-$id = $_GET['id'];
+$id_doc = $_GET['id_doc'];
+$id_sol = $_GET['id_sol'];
 session_start();
  $id_user = $_SESSION['uid'];
 $estado = $_GET['estado'];
-echo $estado;
+
 $sql = "SELECT fecha_observacion as fecha, observacion 
-FROM `observaciones` WHERE `id_documento` = '$id'
+FROM `observaciones` WHERE `id_documento` = '$id_doc'
 and estado = '0'
 ";
 
@@ -44,11 +45,14 @@ if($estado == '7' || $estado == '4'){
 
 $sql_fecha = "SELECT * 
 FROM  `historial_estados` 
-WHERE id_documento = '$id'
+WHERE id_documento = '$id_doc'
 AND (
 `estado_solicitud_idestado_solicitud` =7
 OR  `estado_solicitud_idestado_solicitud` =4
-)";
+) 
+ORDER BY `historial_estados`.`fecha` DESC
+limit 0,1
+";
 			
 	echo		'<table class="gridview">
 				 <tr bgcolor="00517A">
@@ -117,7 +121,8 @@ while ($fila = mysqli_fetch_assoc($rs)) {
 <div class="ventana_ocultar" id="add_observaciones">
 Comentarios:
 <input type="hidden" name="form_1" value="bandera_comentario">
-<input type="hidden" name="id" value="<?php echo $id;?>">
+<input type="hidden" name="id_doc" value="<?php echo $id_doc;?>">
+<input type="hidden" name="id_sol" value="<?php echo $id_sol;?>">
 <textarea rows="5" cols="60" name="comentario"></textarea>
 <table border="0">
 <td><input type="submit" value="Guardar"> </td>

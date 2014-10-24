@@ -15,7 +15,7 @@
     $conexion = mysql_connect($elServer, $elUsr , $elPw) or die (mysql_error());
      
 */
-include("config.php");
+include("configuracion.php");
 
     $clientes = array();  
     $sql="SELECT DISTINCT  tipo_cliente.tx_tipo_cliente as tipo_cliente, permisos.id_tipo_cliente as id_tipo_cliente
@@ -24,9 +24,12 @@ include("config.php");
                        ON   permisos.id_tipo_cliente = tipo_cliente.id_tipo_cliente
                     WHERE   id_area ='$id_area' and permiso=1";
   //  $result = mysql_query($sql,$conexion); 
-         $result=mysql_db_query($db, $sql, $link);
+         $result=$mysqli->query($sql);           
+         //$result=mysql_db_query($db, $sql, $link);
 
-        while($row = mysql_fetch_array($result)){
+        while($row = $result->fetch_array(MYSQLI_ASSOC)){
+       
+       // while($row = mysql_fetch_array($result)){
             $cliente = new cliente($row['id_tipo_cliente'], $row['tipo_cliente']);
             array_push($clientes, $cliente);
         }

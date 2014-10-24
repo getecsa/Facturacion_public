@@ -14,7 +14,7 @@ function ConectaGuio()
 }
 $conn=ConectaGuio();
 echo "ejecutando query";
-$q="SELECT * FROM FA_CONCEPTOS WHERE COD_CONCEPTO=610";
+$q="SELECT * FROM FA_HISTCONC_19010102";
 $qp=OCIParse($conn,$q);
 OCIExecute($qp,OCI_DEFAULT);
 OCIFetchInto ($qp, $rtmp, OCI_ASSOC);

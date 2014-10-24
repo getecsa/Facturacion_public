@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /*
 if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE"))
 {
@@ -54,4 +55,5 @@ if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE"))
 <script src="scripts/main.js"></script>
 </body>
 </html>
-<?php  ?>
+<?php 
+ob_end_flush();?>
