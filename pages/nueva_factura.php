@@ -135,7 +135,7 @@ $id_usuario=$_SESSION['uid'];
     <tr class="add_factura">
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>"/> </td>
       <td><input type="text" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][2]" class="calcular_subtotal total_unidades" value="<?php echo $array_cont[$i][2]; ?>" /></td>
+      <td><input type="text" size="5" name="add_cont[<?php echo $i; ?>][2]" class="calcular_subtotal total_unidades" value="<?php echo $array_cont[$i][2]; ?>" /></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal" value="<?php echo $array_cont[$i][3]; ?>" /></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][5]" class="calcular_subtotal" value="<?php echo $array_cont[$i][5]; ?>" /></td>
@@ -147,27 +147,45 @@ $id_usuario=$_SESSION['uid'];
       <?php 
         //validar conexiones para 0 ninguna 1 SCL 2 SAP 
           if($conexion==1){
-
+/*
             $scl=ConectaGuio();
             $q="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
             $qp=OCIParse($scl,$q);
             OCIExecute($qp,OCI_DEFAULT);
+  
+*/        
+          $oracle=ConexionSCL();
+          $query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS ORDER BY DES_CONCEPTO";
+          //$query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
+          $result = oci_parse($oracle, $query);
+          $result2 = oci_parse($oracle, $query);
+          oci_execute($result);
+          oci_execute($result2);
+          
+          /*
+         while (($row = oci_fetch_array($result, OCI_BOTH)) != false) {
+            // Usar nombres de columna en mayúsculas para los índices del array asociativo
+              echo $row[0] . "<br>\n";
+              echo $row[1] . "<br>\n";
+            }
+          */
+
       ?>
-              <td><select size="10" name="add_cont[1][0]">
-              <?php  while (($row = oci_fetch_array($qp, OCI_ASSOC)) != false) { ?>
-              <option><?php echo $row["codigo"];?></option>
+              <td><select id="cod_datos_factura" name="add_cont[1][0]" >
+              <?php   while (($row = oci_fetch_array($result, OCI_ASSOC)) != false) { ?>
+              <option><?php echo $row['CODIGO'];?></option>
               <?php } ?>
               </select></td>
-              <td><select size="10" name="add_cont[1][1]">
-              <?php  while(OCIFetchInto ($qp, $row, OCI_ASSOC)){ ?>
-              <option><?php echo $row["descripcion"];?></option>
-              <?php } ?>
+              <td><select name="add_cont[1][1]" class="descripcion_concepto">
+              <?php   while (($row2 = oci_fetch_array($result2, OCI_ASSOC)) != false) { ?>
+              <option><?php echo $row2['DESCRIPCION'];?></option>
+              <?php }  oci_free_statement($result); oci_close($oracle); ?>
               </select></td>
         <?php  } else {?>
       <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>
         <?php } ?>
-      <td><input type="text" size="10" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
+      <td><input type="text" size="5" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
       <td><input type="text" size="10" name="add_cont[1][3]" class="calcular_subtotal" /></td>
       <td><input type="text" size="10" name="add_cont[1][4]" readonly class="suma_cargo"/></td>
       <td><input type="text" size="10" name="add_cont[1][5]" class="calcular_subtotal" value="0"/></td>

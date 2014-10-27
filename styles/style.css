@@ -189,7 +189,7 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
 }
 
 .gridview {
-    width: 100%;
+    width: 100%; 
     background-color: #fff;
     border-collapse: collapse;
     font-size: small;

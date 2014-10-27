@@ -1,11 +1,11 @@
 <?php
-include("config.php");
+include("configuracion.php");
 
 $sql_iva="select * from iva";
-$result_iva=mysql_db_query($db, $sql_iva,$link);
+$result_iva=$mysqli->query($sql_iva);
 
 $sql_moneda="select * from moneda";
-$result_moneda=mysql_db_query($db, $sql_moneda,$link);
+$result_moneda=$mysqli->query($sql_moneda);
 
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
@@ -71,7 +71,8 @@ $id_usuario=$_SESSION['uid'];
                       <select id="iva" name="iva">
                       <option value="0">Seleccione IVA</option>
                       <?php 
-                            while($row=mysql_fetch_array($result_iva)){
+                            //while($row=mysql_fetch_array($result_iva)){
+                            while($row=$result_iva->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_iva'],"'";
                               if($return==1){ 
                                 if($row['id_iva']==$iva)
@@ -92,7 +93,7 @@ $id_usuario=$_SESSION['uid'];
                         <select name="moneda">
                         <option value="0">Seleccione Moneda</option>
                           <?php 
-                            while($row=mysql_fetch_array($result_moneda)){
+                            while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_moneda'],"'";
                               if($return==1){ 
                                 if($row['id_moneda']==$moneda)
