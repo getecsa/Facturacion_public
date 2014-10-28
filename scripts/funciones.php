@@ -1,10 +1,15 @@
 <?php
+/*
+ * Configuración
+ */
+include("../configuracion.php");
+
+ob_start();
+session_start();
 
 //funcion para clonar un registro de mysql
       function mysql_clonar_registro ( $tabla, $clave ) {
-
-        include("configuracion.php");
-
+       
          // limpieza parámetros
          $tabla = $mysqli->real_escape_string($tabla);
          $clave = $mysqli->real_escape_string($clave);
@@ -46,32 +51,17 @@ if(isset($_POST['request'])) {
     switch ($_POST['request']) {
 
     case 'getConceptosdoc':
-        if (isset($_SESSION['usuario']) && isset($_POST['id'])) {
-            $sql = "SELECT
-                    CONCAT_WS(\" \", a.tipo, a.nombre) as '1',
-                    a.asignacion as '2',
-                    a.metros_cuadrados_local as '3',
-                    a.capacidad as '4',
-                    DATE(a.apertura) as '5',
-                    a.telefono as '6',
-                    a.latitud as '7',
-                    a.longitud as '8',
-                    a.direccion as '9',
-                    CONCAT_WS(\" \",f.tipo, b.colonia) as '10',
-                    c.municipio as '11',
-                    d.estado as '12',
-                    a.cp as '13',
-                    g.ciudad as '14'
-                FROM inmuebles a
-                    LEFT JOIN codigos_postales e on a.cp = e.id
-                    LEFT JOIN colonias b on e.colonia = b.id
-                    LEFT JOIN tipo_colonia f ON e.tipo_colonia = f.id
-                    LEFT JOIN municipios c ON e.municipio = c.id
-                    LEFT JOIN estados d on e.estado = d.id
-                    LEFT JOIN ciudades g ON e.ciudad = g.id
-                    WHERE a.id = ?";
-            $res = $pdo->query_all($sql,array($_POST['id']));
-            echo json_encode($res);
+        if (isset($_SESSION['username'])) {
+            $sql = "select * from users";
+            $result = $mysqli->query($sql);
+            $conceptos= array();
+            $i=0;
+            while($row=$result->fetch_array(MYSQLI_ASSOC)){
+            $conceptos[$i]=$row;
+            $i++;
+            }
+            echo json_encode($conceptos);
+
         } else {
             if (!isset($_SESSION['usuario'])) {
                 header('Forbidden',true,403);

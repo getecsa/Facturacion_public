@@ -112,7 +112,7 @@ $id_usuario=$_SESSION['uid'];
 
                         <label for="salida">Salida:</label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
                       </div>
-                    
+                    <select id="conceptos"></select>
   <div id="detalles_factura">
   <table class="gridview" id="agregar_detalle">
     <tr>

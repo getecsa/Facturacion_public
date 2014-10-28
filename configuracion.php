@@ -11,6 +11,8 @@ $dbuser="sisgesofa";
 $dbpass="g3s0fa"; 
 */
 
+require_once 'scripts/mysql_db.php';
+
 $mysqli = new mysqli($server, $dbuser, $dbpass, $db);
 $acentos = $mysqli->query("SET NAMES 'utf8'");
 

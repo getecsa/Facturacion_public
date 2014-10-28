@@ -6,7 +6,7 @@
 
 <body>
 <!-- FORMULARIO PARA SOICITAR LA CARGA DEL EXCEL -->
-Selecciona el archivo a importar:
+Selecciona el archivo:
 <form name="importa" method="post" action="#" enctype="multipart/form-data" >
 <input type="file" name="excel" />
 <input type='submit' name='enviar'  value="Importar"  />
@@ -38,6 +38,8 @@ $objFecha = new PHPExcel_Shared_Date();
 // Asignar hoja de excel activa
 $objPHPExcel->setActiveSheetIndex(0);
 
+
+
 //conectamos con la base de datos 
 $cn = mysql_connect ("localhost","root","getecsa") or die ("ERROR EN LA CONEXION");
 $db = mysql_select_db ("sis_fac",$cn) or die ("ERROR AL CONECTAR A LA BD");
@@ -45,11 +47,7 @@ $db = mysql_select_db ("sis_fac",$cn) or die ("ERROR AL CONECTAR A LA BD");
 include("config.php");
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
-echo '<br>';
-echo $id_area;
-echo '<br>';
-echo $id_usuario;
-echo '<br>';
+
 
 $query="SELECT *
          FROM flujo_trabajo
@@ -58,11 +56,10 @@ $result=$mysqli->query($query) or die(mysqli_error());
 $row=$result->fetch_array(MYSQLI_ASSOC);
 $area_inicial=$row['area_id_area'];
 
-echo $area_inicial;
 
 
         // Llenamos el arreglo con los datos  del archivo xlsx
-for ($i=2;$i<=6;$i++){
+for ($i=2;$i<=300;$i++){
 	$_DATOS_EXCEL[$i]['num_solicitud'] = $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['tipo_cte'] = $objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['comp_fact']= $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue();
@@ -84,8 +81,10 @@ for ($i=2;$i<=6;$i++){
 	$_DATOS_EXCEL[$i]['ley_mat'] = $objPHPExcel->getActiveSheet()->getCell('S'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['observaciones'] = $objPHPExcel->getActiveSheet()->getCell('T'.$i)->getCalculatedValue();
 	
+	if($_DATOS_EXCEL[$i]['num_solicitud'] == '' ){echo $i.'-no hago nada<br>';}
+	else {
 			if($_DATOS_EXCEL[$i]['num_solicitud']<>$_DATOS_EXCEL[$i-1]['num_solicitud']){
-					echo 'Haria insert de solic';	
+					echo $i.'-Haria insert<br>';	
 					$query="INSERT INTO solicitudes (fecha_solicitud,
                                   area_idarea,
                                   users_id_usuario) 
@@ -94,22 +93,49 @@ for ($i=2;$i<=6;$i++){
                                   '$id_usuario')";
 					 $result=$mysqli->query($query) or die(mysqli_error());
  					 $id_solicitud=$mysqli->insert_id;	
- 					 $query1="INSERT INTO `sis_fac`.`documento` 
- 					 				(`id_documento`, `id_codigo_cliente`, `tipo_nc`, `dias_vencimiento`, 
- 					 				 `leyenda_doc`, `compa_fac`, `refac_folio`, `IVA_idIVA`, `Moneda_idMoneda`, 
- 					 				 `tipo_documento_idtipo_doc`, `solicitudes_idSolicitudes`, `razon_social`, 
- 					 				 `leyenda_mat`, `salida`, `entrada`, `motivos`, `folio_fac_origen`, 
- 					 				 `monto_total_fac_orig`, `monto_afectar_nc`, `fecha_emision_nc`, `folio_nc`,
- 					 				 `fecha_emision_fac_or`, `importe_total`, `codigo_cliente_afectar`, `motivo_nc`,
- 					 				 `oper_plataforma`, `oper_oficina`, `oper_clase`, `oper_canal`, `oper_sector`, 
- 					 				 `oper_tipo`, `oper_numero`, `fac_clasificacion`, `fac_proceso`, 
- 					 				 `fac_numero_folio`, `estado_actual`, `area_flujo`, `area_flujo_anterior`, 
- 					 				 `prioridad_flujo`, `subprioridad_flujo`, `usuario_reserva`, `reservada`, 
- 					 				 `tipo_cliente`) 
- 					 				VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', '1', '2',
- 					 				 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
- 					 				 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
- 					 				 NULL, NULL, NULL, NULL, '0', NULL, NULL, '1')";
+ 					 $query1="INSERT INTO `sis_fac`.`documento`(
+ 					 				id_codigo_cliente,
+ 					 				dias_vencimiento,
+ 					 				leyenda_doc,
+ 					 				compa_fac,
+ 					 				IVA_idIVA, 
+ 					 				Moneda_idMoneda,
+      							tipo_documento_idtipo_doc, 
+      							solicitudes_idSolicitudes, 
+      							razon_social, 
+      							leyenda_mat, 
+      							salida,
+									motivos, 
+									estado_actual, 
+									area_flujo, 
+									area_flujo_anterior, 
+									prioridad_flujo, 
+									subprioridad_flujo, 
+									usuario_reserva, 
+									reservada, 
+									tipo_cliente) 
+ 					 				VALUES (
+ 					 				'".$_DATOS_EXCEL[$i]['cod_cte']."', 
+ 					 				'".$_DATOS_EXCEL[$i]['dias_venc']."',
+									'".$_DATOS_EXCEL[$i]['ley_doc']."',
+									'".$_DATOS_EXCEL[$i]['comp_fact']."',
+									'1', 
+									'1',
+									'1', 
+									'$id_solicitud', 
+									'".$_DATOS_EXCEL[$i]['razon_soc']."', 
+									'".$_DATOS_EXCEL[$i]['ley_mat']."', 
+									'".$_DATOS_EXCEL[$i]['salida_extra']."',
+									'".$_DATOS_EXCEL[$i]['motivo_sol']."', 
+									'0', 
+									'$area_inicial', 
+									'$id_area',
+                           1,
+                           0,
+									'$id_usuario',
+                           0, 
+                           '1'
+                           )";
 
                         $result1=$mysqli->query($query1) or die(mysqli_error());
                         $id_documento=$mysqli->insert_id;
@@ -148,18 +174,16 @@ for ($i=2;$i<=6;$i++){
                                         $result2=$mysqli->query($query);
 					
 			}
-			echo $_DATOS_EXCEL[$i]['num_solicitud'];
 			
-}		
+			 
+}		}
 }
 //si por algo no cargo el archivo bak_ 
 else{echo "Necesitas primero importar el archivo";}
 $errores=0;
 ;
 
-echo '<br>';
-echo $_DATOS_EXCEL[2]['observaciones'];
-echo '<br>';
+
 //recorremos el arreglo multidimensional 
 //para ir recuperando los datos obtenidos
 //del excel e ir insertandolos en la BD
@@ -184,7 +208,7 @@ foreach($_DATOS_EXCEL as $campo => $valor){
 }	
 /////////////////////////////////////////////////////////////////////////
 
-echo "<strong><center>ARCHIVO IMPORTADO CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
+echo "<strong><center> IMPORTAD CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
 //una vez terminado el proceso borramos el 
 //archivo que esta en el servidor el bak_
 unlink($destino);

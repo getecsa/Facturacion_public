@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+  //lista conceptos facturas
+  listaConceptos();
+
     // funcion para cambio de select en solicitud 
     $("#cboClientes").change(function() {
         // obtenemos el valor seleccionado
@@ -90,7 +93,7 @@ $(document).ready(function(){
                 var AddButton       = $("#agregar_campo_fac"); 
                
                 var x = $("#agregar_detalle").length + 1;
-                console.log(x);
+                //console.log(x);
                 var FieldCount = x-1;
                 var y = $("#num_return").val();
                 
@@ -286,7 +289,7 @@ $('.seguir_solicitud').click(function(){
 var id_solicitud = $(this).attr("id");
 var id_documento = $(this).attr("rel");
 var tipo_documento = $(this).attr("title");
-console.log(tipo_documento);
+// console.log(tipo_documento);
       if(tipo_documento=="FACTURA"){
         $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_factura');
       }
@@ -338,30 +341,26 @@ $(function(){
     });
 });
 
+//
 
-function cambiaInmueble(inmueble) {
-  var datos_inmueble_actual;
+function listaConceptos() {
   $.ajax({
-    url : "ws.php",
-    type : "POST",
-    data : { request : "getDatosInmueble", id : inmueble.value }
-  }).done(function(dat_in) {
-    datos_inmueble_actual=dat_in;
-    $('#direcciones_div').show("slow");
-    for(i=1;i<=Object.size(dat_in[0]);i++) {
-      if (i<14) {
-        if (i===2 && dat_in[0][i] === '1') {
-          $('#dir_'+i).html('TeMM');
-        } else if (i===2 && dat_in[0][i] === '0') {
-          $('#dir_'+i).html('Distribuidor');
-        } else {
-          $('#dir_'+i).html(dat_in[0][i]);
-        }
-      } else {
-        $('#dir_'+i).val(dat_in[0][i]);
+    url: "scripts/funciones.php",
+    data: { request: "getConceptosdoc" },
+    type: "POST",
+  }).done(function(data) {
+    if (data.length > 0) {
+      console.log(data.length);
+      for (i=0;i<data.length;i++) {
+        $('#conceptos').append(new Option(data[i]['id_usuario'],data[i]['username']));
       }
+    } else {
+      $('#conceptos').children().each(function() {
+        $(this).remove();
+      });
+      alert ("No existen conceptos");
     }
   }).fail(function() {
-    alert("No se pudo contactar al servidor para obtener los datos del inmueble");
+      alert("No se pudo contactar al servidor");
   });
-}
+};
