@@ -47,11 +47,7 @@ $db = mysql_select_db ("sis_fac",$cn) or die ("ERROR AL CONECTAR A LA BD");
 include("config.php");
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
-echo '<br>';
-echo $id_area;
-echo '<br>';
-echo $id_usuario;
-echo '<br>';
+
 
 $query="SELECT *
          FROM flujo_trabajo
@@ -178,7 +174,7 @@ for ($i=2;$i<=300;$i++){
                                         $result2=$mysqli->query($query);
 					
 			}
-			echo $_DATOS_EXCEL[$i]['num_solicitud'];
+			
 			 
 }		}
 }
@@ -187,9 +183,7 @@ else{echo "Necesitas primero importar el archivo";}
 $errores=0;
 ;
 
-echo '<br>iouiyiuy';
-echo $_DATOS_EXCEL[2]['cod_cte'];
-echo '<br>';
+
 //recorremos el arreglo multidimensional 
 //para ir recuperando los datos obtenidos
 //del excel e ir insertandolos en la BD

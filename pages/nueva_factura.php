@@ -72,7 +72,7 @@ $id_usuario=$_SESSION['uid'];
                       <div class="column bottom">   
                       <label for="iva">IVA:</label>
                       <select id="iva" name="iva">
-                      		<option value="0">Seleccione IVA</option>
+                          <option value="0">Seleccione IVA</option>
                       <?php 
                             while($row=$result_iva->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_iva'],"'";
@@ -94,7 +94,7 @@ $id_usuario=$_SESSION['uid'];
                         <label for="compa_fac">Compañía facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
                         <label for="moneda">Moneda:</label>
                         <select name="moneda">
-                        	<option value="0">Seleccione Moneda</option>
+                          <option value="0">Seleccione Moneda</option>
                           <?php 
                             while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_moneda'],"'";
@@ -112,7 +112,7 @@ $id_usuario=$_SESSION['uid'];
 
                         <label for="salida">Salida:</label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
                       </div>
-                    <select id="conceptos"></select>
+
   <div id="detalles_factura">
   <table class="gridview" id="agregar_detalle">
     <tr>
@@ -153,7 +153,7 @@ $id_usuario=$_SESSION['uid'];
             $qp=OCIParse($scl,$q);
             OCIExecute($qp,OCI_DEFAULT);
   
-*/        
+*/        /*
           $oracle=ConexionSCL();
           $query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS ORDER BY DES_CONCEPTO";
           //$query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
@@ -161,6 +161,7 @@ $id_usuario=$_SESSION['uid'];
           $result2 = oci_parse($oracle, $query);
           oci_execute($result);
           oci_execute($result2);
+          */
           
           /*
          while (($row = oci_fetch_array($result, OCI_BOTH)) != false) {
@@ -170,17 +171,11 @@ $id_usuario=$_SESSION['uid'];
             }
           */
 
-      ?>
-              <td><select id="cod_datos_factura" name="add_cont[1][0]" >
-              <?php   while (($row = oci_fetch_array($result, OCI_ASSOC)) != false) { ?>
-              <option><?php echo $row['CODIGO'];?></option>
-              <?php } ?>
-              </select></td>
-              <td><select name="add_cont[1][1]" class="descripcion_concepto">
-              <?php   while (($row2 = oci_fetch_array($result2, OCI_ASSOC)) != false) { ?>
-              <option><?php echo $row2['DESCRIPCION'];?></option>
-              <?php }  oci_free_statement($result); oci_close($oracle); ?>
-              </select></td>
+      ?>    
+
+    
+              <td><select id="cod_datos_conceptos" name="add_cont[1][0]" class="descripcion_concepto"></select></td>
+              <td><select id="des_datos_conceptos" name="add_cont[1][1]" class="descripcion_concepto"></select></td>
         <?php  } else {?>
       <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>

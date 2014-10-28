@@ -51,6 +51,34 @@ if(isset($_POST['request'])) {
     switch ($_POST['request']) {
 
     case 'getConceptosdoc':
+          $oracle=ConexionSCL();
+        if (isset($_SESSION['username'])) {
+            $query = "SELECT COD_CONCEPTO as codigo, 
+                           DES_CONCEPTO as descripcion 
+                      FROM FA_CONCEPTOS 
+                  ORDER BY DES_CONCEPTO";
+            $result = oci_parse($oracle, $query);
+            oci_execute($result);      
+            $conceptos= array();
+            $i=0;
+            while (($row = oci_fetch_array($result, OCI_ASSOC)) != false) { 
+            $conceptos[$i]=$row;
+            $i++;
+            }
+            echo json_encode($conceptos);
+
+        } else {
+            if (!isset($_SESSION['usuario'])) {
+                header('Forbidden',true,403);
+            } else {
+                echo json_encode(array());
+            }
+            echo json_encode(array());
+        }
+        break;
+
+        /*
+ case 'getConceptosdoc':
         if (isset($_SESSION['username'])) {
             $sql = "select * from users";
             $result = $mysqli->query($sql);
@@ -71,6 +99,8 @@ if(isset($_POST['request'])) {
             echo json_encode(array());
         }
         break;
+
+        */
 
     default:
         break;

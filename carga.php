@@ -189,14 +189,14 @@ $errores=0;
 //del excel e ir insertandolos en la BD
 
 
-
+/*	
 
 foreach($_DATOS_EXCEL as $campo => $valor){
 
 
 
 
-/*	
+
 	$sql = "INSERT INTO alumnos VALUES ('";
 	foreach ($valor as $campo2 => $valor2){
 		$campo2 == "sexo" ? $sql.= $valor2."');" : $sql.= $valor2."','";
@@ -204,8 +204,8 @@ foreach($_DATOS_EXCEL as $campo => $valor){
 	$result = mysql_query($sql);
 	if (!$result){ echo "Error al insertar registro ".$campo;$errores+=1;}
 	
-	*/
-}	
+	
+}	*/
 /////////////////////////////////////////////////////////////////////////
 
 echo "<strong><center> IMPORTAD CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
