@@ -150,14 +150,6 @@ for ($i=2;$i<=300;$i++){
                                 $mysqli->query($query) or die(mysqli_error());
 
 
-							$query="INSERT INTO conceptos_doc (id_codigo_concepto,tx_concepto,fac_unidades,
-								fac_precio_uni,fac_descuento,documento_iddocumento) 
-								VALUES (NULL,'".$_DATOS_EXCEL[$i]['desc_conc']."',
-								'".$_DATOS_EXCEL[$i]['cantidad']."',
-										'".$_DATOS_EXCEL[$i]['prec_unit']."',
-										'".$_DATOS_EXCEL[$i]['descuento']."',
-										'".$id_documento."')";
-                                        $result2=$mysqli->query($query);
                                         
                       $query="INSERT INTO conceptos_doc (
                                                                            tx_concepto,

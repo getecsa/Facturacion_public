@@ -63,18 +63,18 @@ for ($i=2;$i<=300;$i++){
 	$_DATOS_EXCEL[$i]['num_solicitud'] = $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['tipo_cte'] = $objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['tipo_NC']= $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue();
-	$_DATOS_EXCEL[$i]['motivo_sol'] = $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['cod_cte'] = $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue();
-	$_DATOS_EXCEL[$i]['razon_soc'] = $objPHPExcel->getActiveSheet()->getCell('H'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['ley_doc'] = $objPHPExcel->getActiveSheet()->getCell('I'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['entrada_extra'] = $objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['desc_conc'] = $objPHPExcel->getActiveSheet()->getCell('L'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['total_concep'] = $objPHPExcel->getActiveSheet()->getCell('Q'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['folio_fac_orig']= $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue();	
-	$_DATOS_EXCEL[$i]['mont_total_fac_orig'] = $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue();
-	$_DATOS_EXCEL[$i]['monto_afec_NC'] = $objPHPExcel->getActiveSheet()->getCell('J'.$i)->getCalculatedValue();
-	$_DATOS_EXCEL[$i]['fecha_emis_fact'] = $objPHPExcel->getActiveSheet()->getCell('M'.$i)->getCalculatedValue();
-	$_DATOS_EXCEL[$i]['observaciones'] = $objPHPExcel->getActiveSheet()->getCell('T'.$i)->getCalculatedValue();
+	$_DATOS_EXCEL[$i]['motivo_sol'] = $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['cod_cte'] = $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue();
+	$_DATOS_EXCEL[$i]['razon_soc'] = $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['ley_doc'] = $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['entrada_extra'] = $objPHPExcel->getActiveSheet()->getCell('H'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['desc_conc'] = $objPHPExcel->getActiveSheet()->getCell('I'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['total_concep'] = $objPHPExcel->getActiveSheet()->getCell('J'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['folio_fac_orig']= $objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue();	
+	$_DATOS_EXCEL[$i]['mont_total_fac_orig'] = $objPHPExcel->getActiveSheet()->getCell('L'.$i)->getCalculatedValue();
+	$_DATOS_EXCEL[$i]['monto_afec_NC'] = $objPHPExcel->getActiveSheet()->getCell('M'.$i)->getCalculatedValue();
+	$_DATOS_EXCEL[$i]['fecha_emis_fact'] = $objPHPExcel->getActiveSheet()->getCell('N'.$i)->getCalculatedValue();
+	$_DATOS_EXCEL[$i]['observaciones'] = $objPHPExcel->getActiveSheet()->getCell('O'.$i)->getCalculatedValue();
 	
 	if($_DATOS_EXCEL[$i]['num_solicitud'] == '' ){echo $i.'-no hago nada<br>';}
 	else {
