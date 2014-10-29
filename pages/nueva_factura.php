@@ -6,8 +6,12 @@
               </div>
   <div class="content">
 
+
 <?php
+
 include("configuracion.php");
+// listaConceptos();
+
 $sql_iva="select * from iva";
 $result_iva=$mysqli->query($sql_iva);
 

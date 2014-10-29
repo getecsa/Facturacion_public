@@ -80,7 +80,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
          AND do.estado_actual=0 || do.estado_actual=1 || do.estado_actual=2 || do.estado_actual=3 ||
-             do.estado_actual=5 || do.estado_actual=6 ORDER BY fecha DESC";
+             do.estado_actual=5 || do.estado_actual=6 ORDER BY fecha ASC";
 
 }
 
@@ -90,7 +90,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual= 4 ORDER BY fecha DESC";
+         AND do.estado_actual= 4 ORDER BY fecha ASC";
 
 }
 
@@ -100,7 +100,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual= 7 ORDER BY fecha DESC";
+         AND do.estado_actual= 7 ORDER BY fecha ASC";
 
 }
 

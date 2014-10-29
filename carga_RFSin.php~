@@ -2,6 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>:: Importar de Excel a la Base de Datos ::</title>
+<link href="styles/app.css" rel="stylesheet" rev="stylesheet" type="text/css" />
+<script src="scripts/jquery-1.8.0.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -9,7 +11,7 @@
 Selecciona el archivo:
 <form name="importa" method="post" action="#" enctype="multipart/form-data" >
 <input type="file" name="excel" />
-<input type='submit' name='enviar'  value="Importar"  />
+<input type='button' name='enviar'  value="Importar"  onclick="$('body').addClass('loading');document.importa.submit();"/>
 <input type="hidden" value="upload" name="action" />
 </form>
 <!-- CARGA LA MISMA PAGINA MANDANDO LA VARIABLE upload -->
@@ -39,11 +41,6 @@ $objFecha = new PHPExcel_Shared_Date();
 $objPHPExcel->setActiveSheetIndex(0);
 
 
-
-//conectamos con la base de datos 
-$cn = mysql_connect ("localhost","root","getecsa") or die ("ERROR EN LA CONEXION");
-$db = mysql_select_db ("sis_fac",$cn) or die ("ERROR AL CONECTAR A LA BD");
-
 include("config.php");
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
@@ -51,7 +48,7 @@ $id_usuario=$_SESSION['uid'];
 
 $query="SELECT *
           FROM flujo_trabajo
-         WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='3'";
+         WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='4'";
 $result=$mysqli->query($query) or die(mysqli_error());
 $row=$result->fetch_array(MYSQLI_ASSOC);
 $area_inicial=$row['area_id_area'];
@@ -86,7 +83,7 @@ for ($i=2;$i<=300;$i++){
 	$_DATOS_EXCEL[$i]['importe_total'] = $objPHPExcel->getActiveSheet()->getCell('Y'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['motivo_nc'] = $objPHPExcel->getActiveSheet()->getCell('Z'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['observaciones'] = $objPHPExcel->getActiveSheet()->getCell('AA'.$i)->getCalculatedValue();
-	
+
 	if($_DATOS_EXCEL[$i]['num_solicitud'] == '' ){echo $i.'-no hago nada<br>';}
 	else {
 			if($_DATOS_EXCEL[$i]['num_solicitud']<>$_DATOS_EXCEL[$i-1]['num_solicitud']){
@@ -145,7 +142,7 @@ for ($i=2;$i<=300;$i++){
 									'".$_DATOS_EXCEL[$i]['monto_total_fact_orig']."',
 									'',	
 									'".$_DATOS_EXCEL[$i]['importe_total']."',
-									'3',
+									'4',
 									'$id_solicitud', 
 									 0,
                                 '$area_inicial', 
@@ -180,9 +177,9 @@ echo $query1;
 										'".$_DATOS_EXCEL[$i]['descuento']."',
 										'".$id_documento."')";
                                         $result2=$mysqli->query($query);
-                    
-                    
-                    $query = "INSERT INTO observaciones( 
+                                        
+                                        
+                     $query = "INSERT INTO observaciones( 
                       								observacion,fecha_observacion,users_id_usuario,
  															id_documento,solicitudes_id_solicitudes )
  							VALUES ( '".$_DATOS_EXCEL[$i]['observaciones']."', now(), '$id_usuario', 
@@ -190,6 +187,7 @@ echo $query1;
  							
  							$result3=$mysqli->query($query);
                 
+                                        
                                         
 
 			
@@ -205,7 +203,7 @@ echo $query1;
 										'".$id_documento."')";
                                         $result2=$mysqli->query($query);
                                         
-              $query = "INSERT INTO observaciones( 
+                $query = "INSERT INTO observaciones( 
                       								observacion,fecha_observacion,users_id_usuario,
  															id_documento,solicitudes_id_solicitudes )
  							VALUES ( '".$_DATOS_EXCEL[$i]['observaciones']."', now(), '$id_usuario', 
@@ -249,12 +247,15 @@ foreach($_DATOS_EXCEL as $campo => $valor){
 }	*/
 /////////////////////////////////////////////////////////////////////////
 
-echo "<strong><center> IMPORTAD CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
+echo "
+<script>$('body').removeClass('loading');</script>
+<strong><center> IMPORTAD CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
 //una vez terminado el proceso borramos el 
 //archivo que esta en el servidor el bak_
 unlink($destino);
 }
 
 ?>
+<div class='modal'></div>
 </body>
 </html>

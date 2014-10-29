@@ -340,7 +340,9 @@ $(function(){
 });
 
 //
-listaConceptos();
+var arreglo_conceptos = array();
+
+//funcion para llegar el arreglo con los conceptos
 function listaConceptos() {
   $.ajax({
     url: "scripts/funciones.php",
@@ -348,10 +350,12 @@ function listaConceptos() {
     type: "POST",
   }).done(function(data) {
     if (data.length > 0) {
-      console.log(data.length);
       for (i=0;i<data.length;i++) {
-        $('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
-        $('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
+          arreglo_conceptos[i]['CODIGO'] = data[i]['CODIGO'];
+          arreglo_conceptos[i]['DESCRIPCION'] = data[i]['DESCRIPCION'];
+          //$('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
+         //$('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
+
       }
     } else {
       $('#cod_datos_conceptos').children().each(function() {

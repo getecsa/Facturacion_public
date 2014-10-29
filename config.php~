@@ -5,27 +5,15 @@ $db="sis_fac";
 $dbuser="root"; 
 $dbpass="getecsa"; 
  
-$link=mysql_connect($server,$dbuser,$dbpass);
-mysql_query("SET NAMES 'utf8'");
+//$link=mysql_connect($server,$dbuser,$dbpass);
+//mysql_query("SET NAMES 'utf8'");
 
-//mysqli
-    //Función que nos retornara una conexión con mysqli
-    function crearConexion(){
-        //Datos para la conexión con el servidor
-        $servidor   = “localhost”;
-        $nombreBD   = “sis_fac”;
-        $usuario    = “root”;
-        $contrasena = “getecsa”;
-        //Creando la conexión, nuevo objeto mysqli
-        $conexion = new mysqli($servidor,$usuario,$contrasena,$nombreBD);
-        //Si sucede algún error la función muere e imprimir el error
-        if($conexion->connect_error){
-            die(“Error en la conexion : “.$conexion->connect_errno.
-                                      “-“.$conexion->connect_error);
-        }
-        //Si nada sucede retornamos la conexión
-        return $conexion;
-    }
+$mysqli = new mysqli($server, $dbuser, $dbpass, $db);
+$mysqli->set_charset("utf8");
 
+if (mysqli_connect_errno()) {
+    printf("Error de conexión: %s\n", mysqli_connect_error());
+    exit();
+}
 
 ?>

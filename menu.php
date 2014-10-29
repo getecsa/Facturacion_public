@@ -10,7 +10,14 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
         <li> <a href="homepage.php?id=nueva_solicitud">Nueva Solicitud</a></li>
         <li> <a href="homepage.php?id=aclaracion_queja">Aclaración o Queja</a></li>
         <li> <a href="homepage.php?id=buscar" >Buscar Solicitud</a></li>
-        <li> <a href="homepage.php?id=carga_masiva">Carga Masiva</a>
+        <li> <a href="#">Carga Masiva</a>
+				<ul>
+    				<li><a href="homepage.php?id=carga">Facturación</a></li>    
+        			<li><a href="homepage.php?id=carga_NC">Nota de Crédito</a></li>
+        			<li><a href="homepage.php?id=carga_RFCon">Re Factura Con Cambio</a></li>
+        			<li><a href="homepage.php?id=carga_RFSin">Re Factura Sin Cambio</a></li>    
+    			</ul>        
+       </li>
 </ul>
 <?php }
 	if($_SESSION['oper_sol'] == 0){

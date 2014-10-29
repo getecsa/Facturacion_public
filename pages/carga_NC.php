@@ -1,17 +1,23 @@
+<?php 
+ error_reporting (0);
+?>
+        <div class="contenedor">
+            <div class="header">
+                 <h1 class="h1_header">
+                   Nota de Crédito
+                </h1>
+            
+            </div>
+                <div class="content">
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>:: Importar de Excel a la Base de Datos ::</title>
-</head>
-
-<body>
 <!-- FORMULARIO PARA SOICITAR LA CARGA DEL EXCEL -->
 Selecciona el archivo:
 <form name="importa" method="post" action="#" enctype="multipart/form-data" >
 <input type="file" name="excel" />
-<input type='submit' name='enviar'  value="Importar"  />
+<input type='button' name='enviar'  value="Importar"  onclick="$('body').addClass('loading');document.importa.submit();"/>
 <input type="hidden" value="upload" name="action" />
 </form>
+<div class='modal'></div>
 <!-- CARGA LA MISMA PAGINA MANDANDO LA VARIABLE upload -->
 
 <?php 
@@ -22,13 +28,13 @@ if ($action == "upload"){
 	$archivo = $_FILES['excel']['name'];
 	$tipo = $_FILES['excel']['type'];
 	$destino = "Archivos/bak_".$archivo;
-	if (copy($_FILES['excel']['tmp_name'],$destino)) echo "Archivo Cargado Con Éxito";
+	if (copy($_FILES['excel']['tmp_name'],$destino)) echo '<center><h1 class="h1_header">Archivo Cargado Con Éxito</h1></center>';
 	else echo "Error Al Cargar el Archivo";
 ////////////////////////////////////////////////////////
 if (file_exists ("Archivos/bak_".$archivo)){ 
 /** Clases necesarias */
-require_once('PHPExcel.php');
-require_once('PHPExcel/Reader/Excel2007.php');
+require_once('pages/PHPExcel.php');
+require_once('pages/PHPExcel/Reader/Excel2007.php');
 session_start();
 // Cargando la hoja de cálculo
 $objReader = new PHPExcel_Reader_Excel2007();
@@ -39,10 +45,6 @@ $objFecha = new PHPExcel_Shared_Date();
 $objPHPExcel->setActiveSheetIndex(0);
 
 
-
-//conectamos con la base de datos 
-$cn = mysql_connect ("localhost","root","getecsa") or die ("ERROR EN LA CONEXION");
-$db = mysql_select_db ("sis_fac",$cn) or die ("ERROR AL CONECTAR A LA BD");
 
 include("config.php");
 $id_area=$_SESSION['area'];
@@ -77,10 +79,10 @@ for ($i=2;$i<=300;$i++){
 	$_DATOS_EXCEL[$i]['fecha_emis_fact'] = $objPHPExcel->getActiveSheet()->getCell('O'.$i)->getCalculatedValue();
 	$_DATOS_EXCEL[$i]['observaciones'] = $objPHPExcel->getActiveSheet()->getCell('P'.$i)->getCalculatedValue();
 	
-	if($_DATOS_EXCEL[$i]['num_solicitud'] == '' ){echo $i.'-no hago nada<br>';}
+	if($_DATOS_EXCEL[$i]['num_solicitud'] == '' ){}
 	else {
 			if($_DATOS_EXCEL[$i]['num_solicitud']<>$_DATOS_EXCEL[$i-1]['num_solicitud']){
-					echo $i.'-Haria insert<br>';	
+						
 					$query="INSERT INTO solicitudes (fecha_solicitud,
                                   area_idarea,
                                   users_id_usuario) 
@@ -175,7 +177,7 @@ for ($i=2;$i<=300;$i++){
 			
 			}
 			else {
-					echo 'No haria Insert de solic';	
+						
 					$query="INSERT INTO conceptos_doc (									id_codigo_concepto,
                                                                            tx_concepto,
                                                                            not_importe_dispo,
@@ -232,12 +234,15 @@ foreach($_DATOS_EXCEL as $campo => $valor){
 }		*/
 /////////////////////////////////////////////////////////////////////////
 
-echo "<strong><center> IMPORTAD CON EXITO, EN TOTAL $campo REGISTROS Y $errores ERRORES</center></strong>";
+echo "
+<script>$('body').removeClass('loading');</script>
+";
 //una vez terminado el proceso borramos el 
 //archivo que esta en el servidor el bak_
 unlink($destino);
 }
 
 ?>
-</body>
-</html>
+</div>
+ 
+</div>

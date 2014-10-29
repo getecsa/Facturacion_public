@@ -8,14 +8,23 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 <ul class="menu"> 
 	 	<li> <a href="homepage.php?id=solicitante">Inicio</a></li>
         <li> <a href="homepage.php?id=nueva_solicitud">Nueva Solicitud</a></li>
+        <li> <a href="homepage.php?id=aclaracion_queja">Aclaración o Queja</a></li>
         <li> <a href="homepage.php?id=buscar" >Buscar Solicitud</a></li>
+        <li> <a href="#">Carga Masiva</a>
+				<ul>
+    				<li><a href="homepage.php?id=carga">Facturación</a></li>    
+        			<li><a href="homepage.php?id=carga_NC">Nota de Crédito</a></li>
+        			<li><a href="homepage.php?id=carga_RFCon">Re Factura Con Cambio</a></li>
+        			<li><a href="#">Re Factura Sin Cambio</a></li>    
+    			</ul>        
+       </li>
 </ul>
 <?php }
 	if($_SESSION['oper_sol'] == 0){
 ?>
 <ul class="menu"> 
 	 	<li> <a href="homepage.php?id=operador">Inicio</a></li>
-        <li> <a href="buscar.php" >Busqueda</a></li>
+      <!--  <li> <a href="buscar.php" >Busqueda</a></li> -->
 </ul>
 <?php } ?>
 <div class="bienvenida">

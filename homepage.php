@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start();
+require 'config_ini.php';
  //Validar que el usuario este logueado y exista un UID
 if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 {
