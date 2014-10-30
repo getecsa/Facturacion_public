@@ -6,7 +6,7 @@ $id_usuario=$_SESSION['uid'];
 
 
 if(isset($_POST['bandera'])) {
-	echo 'viene del form';
+	
 
 $tipo_sol=$_POST['tipo_sol'];
 $detalle_solic=$_POST['detalle_solic'];
@@ -20,6 +20,8 @@ $result = $mysqli->query($query);
 
 	
 }
+
+echo $query;
 
 ?>
         <div class="contenedor">

@@ -6,12 +6,10 @@
                   </div>
           <div class="content">
 <?php
- include("config.php");
+ include("configuracion.php");
 
 
-
-
-if(isset($_POST["submit_pro"])) {    
+if(isset($_POST["submit_pro"])) {
 
       if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
 
@@ -95,7 +93,7 @@ $area_inicial=$row['area_id_area'];
                                                     0,
                                                   '$tipo_cliente')";
 
-                        $result1=$mysqli->query($query) or die(mysqli_error());
+                        $result1=$mysqli->query($query) or die($mysqli->error);
                         $id_documento=$mysqli->insert_id;
 
                         //guarda Historial
@@ -109,7 +107,7 @@ $area_inicial=$row['area_id_area'];
                                                     '$id_usuario',
                                                     '$id_area',
                                                     '$id_documento')";
-                                $mysqli->query($query) or die(mysqli_error());
+                                $mysqli->query($query) or die($mysqli->error);
 
 
                         //guarda Conceptos
@@ -205,8 +203,8 @@ $area_inicial=$row['area_id_area'];
                       <label for="iva">IVA:</label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
-                            $result_iva=mysql_db_query($db, $sql_iva,$link);
-                            if($row=mysql_fetch_array($result_iva)){
+                            $result_iva=$mysqli->query($sql_iva);
+                            if($row=$result_iva->fetch_array(MYSQLI_ASSOC)){
                             $id_iva=$row['id_iva'];
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
@@ -220,8 +218,8 @@ $area_inicial=$row['area_id_area'];
                         <label for="moneda">Moneda:</label>
                         <?php 
                             $sql_moneda="select * from moneda where id_moneda=$moneda";
-                            $result_moneda=mysql_db_query($db, $sql_moneda,$link);
-                            if($row=mysql_fetch_array($result_moneda)){
+                            $result_moneda=$mysqli->query($sql_moneda);
+                            if($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
                             echo "<p>",$row['moneda'],"</p>";
                               }
                           ?>
@@ -301,8 +299,8 @@ Adjuntar Archivos
     <td></td>
     <td><?php
     $sql="select * from iva where id_iva=$iva";
-    $result=mysql_db_query($db,$sql,$link);
-    $row=mysql_fetch_array($result);
+    $result=$mysqli->query($sql);
+    $row=$result->fetch_array(MYSQLI_ASSOC);
     $iva=$row['valor_int']*$subtotal;
     echo $iva; ?></td>
    </tr>   

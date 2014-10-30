@@ -1,6 +1,6 @@
 
 <?php
-include("config.php");
+include("configuracion.php");
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
 
@@ -20,6 +20,8 @@ $result = $mysqli->query($query);
 
 	
 }
+
+
 
 ?>
         <div class="contenedor">

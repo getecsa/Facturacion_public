@@ -46,13 +46,12 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
     <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css">     
     <script src="scripts/modernizr-2.6.2.min.js"></script>
     <script src="scripts/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="scripts/default.js" type="text/javascript"></script>   
-    <script src="scripts/funciones.js" type="text/javascript"></script>   
+    <script src="scripts/funciones.js" type="text/javascript"></script>
+    <script src="scripts/default.js" type="text/javascript"></script>
     <script type="text/javascript" src="scripts/thickbox.js"></script>
     <script type="text/javascript" src="scripts/jquery-ui.js"></script>
     <script src="scripts/jquery-ui-1.9.2.custom.min.js"></script>
-
-	    <script src="scripts/validaciones.js"></script>
+    <script src="scripts/validaciones.js"></script>
 
 </head>
 <body>

@@ -1,3 +1,5 @@
+var arreglo_conceptos = [];
+
 $(document).ready(function(){
 
     // funcion para cambio de select en solicitud 
@@ -326,6 +328,14 @@ $('#tomar_solicitud').submit();
       });
 
 
+        $.imprimirconceptos = function(){
+            $.each(arreglo_conceptos, function(id,concepto){
+                console.log('el id es: '+id+' su concepto es'+concepto);
+
+            });
+        }
+
+
 }); 
 
 //funcion daniel
@@ -340,7 +350,7 @@ $(function(){
 });
 
 //
-var arreglo_conceptos = array();
+
 
 //funcion para llegar el arreglo con los conceptos
 function listaConceptos() {
@@ -351,10 +361,10 @@ function listaConceptos() {
   }).done(function(data) {
     if (data.length > 0) {
       for (i=0;i<data.length;i++) {
-          arreglo_conceptos[i]['CODIGO'] = data[i]['CODIGO'];
-          arreglo_conceptos[i]['DESCRIPCION'] = data[i]['DESCRIPCION'];
-          //$('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
-         //$('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
+          //arreglo_conceptos[i]['CODIGO'] = data[i]['CODIGO'];
+          //arreglo_conceptos[i]['DESCRIPCION'] = data[i]['DESCRIPCION'];
+          $('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
+         $('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
 
       }
     } else {
@@ -367,3 +377,9 @@ function listaConceptos() {
       listaConceptos();
   });
 };
+
+//funcion para imprimir los conceptos de scl
+
+
+
+

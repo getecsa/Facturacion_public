@@ -107,11 +107,13 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
 if ($rs = $mysqli->query($sql)) {
     /* fetch array asociativo*/
 //while ($fila = mysqli_fetch_assoc($rs)) {
+	$bgcolor=0;
 while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
+	if ($bgcolor%2==0){ $color="FFFFFF"; $bgcolor++; } else { $color="CEF6F5"; $bgcolor++;}
         
 ?>
 
-                    <tr>
+                    <tr bgcolor="<?php echo $color; ?>">
             
                         <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
 								<td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
@@ -150,18 +152,19 @@ while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
 if ($rs_aclaraciones = $mysqli->query($sql_aclaraciones)) {
     /* fetch array asociativo*/
 //while ($fila =  mysqli_fetch_assoc($rs_aclaraciones)) {
+	$bgcolor=0;
 while ($fila = $rs_aclaraciones->fetch_array(MYSQLI_ASSOC)) {
    
-        
+        if ($bgcolor%2==0){ $color="FFFFFF"; $bgcolor++; } else { $color="CEF6F5"; $bgcolor++;}
 
 
-               echo    	'<tr>           				
+               echo    	'<tr bgcolor='.$color.'>           				
                         <td >'.$fila["id"].'</td>
                         <td >'.$fila["fecha_recep"].'</td>
                         <td >'.$fila["fecha_atenc"].'</td>
-								<td >'.utf8_encode($fila["tipo_solic"]).'</td>
-                        <td >'.utf8_encode($fila["detalle_solic"]).'</td>
-                        <td >'.utf8_encode($fila["linea_negoc"]).'</td>
+								<td >'.$fila["tipo_solic"].'</td>
+                        <td >'.$fila["detalle_solic"].'</td>
+                        <td >'.$fila["linea_negoc"].'</td>
                         <td >'.$fila["cod_cte"].'</td>
                         <td >'.$fila["proceso"].'</td>
                         <td >'.$fila["fecha_cierre"].'</td>                 

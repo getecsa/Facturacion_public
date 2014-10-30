@@ -80,7 +80,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
          AND do.estado_actual=0 || do.estado_actual=1 || do.estado_actual=2 || do.estado_actual=3 ||
-             do.estado_actual=5 || do.estado_actual=6 ORDER BY fecha DESC";
+             do.estado_actual=5 || do.estado_actual=6 ORDER BY fecha ASC";
 
 }
 
@@ -90,7 +90,7 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual= 4 ORDER BY fecha DESC";
+         AND do.estado_actual= 4 ORDER BY fecha ASC";
 
 }
 
@@ -100,18 +100,20 @@ $sql="SELECT so.id_solicitudes, td.tipo_doc, so.fecha_solicitud as fecha, do.est
   INNER JOIN solicitudes so ON do.solicitudes_idSolicitudes=so.id_solicitudes
   INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        WHERE so.users_id_usuario='$id_user'
-         AND do.estado_actual= 7 ORDER BY fecha DESC";
+         AND do.estado_actual= 7 ORDER BY fecha ASC";
 
 }
 
 if ($rs = $mysqli->query($sql)) {
     /* fetch array asociativo*/
 //while ($fila = mysqli_fetch_assoc($rs)) {
+	$bgcolor=0;
 while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
+	if ($bgcolor%2==0){ $color="FFFFFF"; $bgcolor++; } else { $color="CEF6F5"; $bgcolor++;}
         
 ?>
 
-                    <tr>
+                    <tr bgcolor="<?php echo $color; ?>">
             
                         <td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_solicitudes"]; ?></a></td>
 								<td><a href="ver_folio.php?id_doc=<?php echo $fila["id_documento"];?>&estado=<?php echo $fila["estado"];?>&id_sol=<?php echo $fila["id_solicitudes"];?>" title="ID <?php echo $fila["id_documento"];?>" class="thickbox"><?php echo $fila["id_documento"]; ?></a></td>
@@ -150,12 +152,13 @@ while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
 if ($rs_aclaraciones = $mysqli->query($sql_aclaraciones)) {
     /* fetch array asociativo*/
 //while ($fila =  mysqli_fetch_assoc($rs_aclaraciones)) {
+	$bgcolor=0;
 while ($fila = $rs_aclaraciones->fetch_array(MYSQLI_ASSOC)) {
    
-        
+        if ($bgcolor%2==0){ $color="FFFFFF"; $bgcolor++; } else { $color="CEF6F5"; $bgcolor++;}
 
 
-               echo    	'<tr>           				
+               echo    	'<tr bgcolor='.$color.'>           				
                         <td >'.$fila["id"].'</td>
                         <td >'.$fila["fecha_recep"].'</td>
                         <td >'.$fila["fecha_atenc"].'</td>

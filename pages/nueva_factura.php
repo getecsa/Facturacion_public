@@ -10,8 +10,7 @@
 <?php
 
 include("configuracion.php");
-// listaConceptos();
-
+echo "<script type='text/javascript'> listaConceptos(); /* $.imprimirconceptos(); */ </script>";
 $sql_iva="select * from iva";
 $result_iva=$mysqli->query($sql_iva);
 

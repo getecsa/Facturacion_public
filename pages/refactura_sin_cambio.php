@@ -1,5 +1,5 @@
 <?php
-include("config.php");
+include("configuracion.php");
 
 $sql_iva="select * from iva";
 $result_iva=mysql_db_query($db, $sql_iva,$link);
