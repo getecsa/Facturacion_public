@@ -180,13 +180,14 @@
                               $result=$mysqli->query($sql); 
 
       }
-
-                               if(!empty(trim($justificacion))) {  
+              $justificacion=trim($justificacion);
+              $observaciones=trim($observaciones);
+                               if(!empty($justificacion)) {
                                   $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                                   $result=$mysqli->query($query);
                                 }
 
-                               if(!empty(trim($observaciones))) {  
+                               if(!empty($observaciones)) {
                                    $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                                    $result=$mysqli->query($query);
                                 }
@@ -240,14 +241,15 @@
                                SET  estado_actual='$estado_actual'
                              WHERE id_documento='$id_documento'";       
 
-                      $result=$mysqli->query($sql); 
-
-                     if(!empty(trim($justificacion))) {  
+                      $result=$mysqli->query($sql);
+              $justificacion=trim($justificacion);
+              $observaciones=trim($observaciones);
+                     if(!empty($justificacion)) {
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                         $result=$mysqli->query($query);
                       }
 
-                     if(!empty(trim($observaciones))) {  
+                     if(!empty($observaciones)) {
                          $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                          $result=$mysqli->query($query);
                       }
@@ -336,12 +338,14 @@
                       $result=$mysqli->query($sql); 
              */
 
-                     if(!empty(trim($justificacion))) {  
+                $justificacion=trim($justificacion);
+                $observaciones=trim($observaciones);
+                     if(!empty($justificacion)) {
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                         $result=$mysqli->query($query);
                       }
 
-                     if(!empty(trim($observaciones))) {  
+                     if(!empty($observaciones)) {
                          $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                          $result=$mysqli->query($query);
                       }
@@ -398,7 +402,7 @@
   $compa_fac=$row['compa_fac'];
   $moneda=$row['Moneda_idMoneda'];
   $salida=$row['salida'];
-  $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
+  $tipo_cliente=$row['tipo_cliente'];
   $tipo_documento=$row['tipo_documento_idtipo_doc'];
 
   $sql="SELECT *

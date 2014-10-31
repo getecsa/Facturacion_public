@@ -1,6 +1,6 @@
 <?php
 
-$server="localhost"; 
+//$server="localhost";
 $db="sis_fac"; 
 $dbuser="root"; 
 $dbpass="getecsa"; 

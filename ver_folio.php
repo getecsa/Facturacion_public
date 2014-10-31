@@ -1,4 +1,20 @@
-<script languaje="Javascript">    
+<?php
+ob_start();
+session_start();
+
+include("configuracion.php");
+$id_doc = $_GET['id_doc'];
+$id_sol = $_GET['id_sol'];
+
+$id_user = $_SESSION['uid'];
+$estado = $_GET['estado'];
+
+$sql = "SELECT fecha_observacion as fecha, observacion
+FROM `observaciones` WHERE `id_documento` = '$id_doc'
+and estado = '0'
+";
+?>
+<script languaje="Javascript">
 function MostrarOcultar(clase,id_b)  
 {  
     if (document.getElementById)  
@@ -17,21 +33,6 @@ function Ocultar(clase,id_b)
     }  
 }  
 </script>
-<?php 
-	include("conectar_bd.php");
-$id_doc = $_GET['id_doc'];
-$id_sol = $_GET['id_sol'];
-session_start();
- $id_user = $_SESSION['uid'];
-$estado = $_GET['estado'];
-
-$sql = "SELECT fecha_observacion as fecha, observacion 
-FROM `observaciones` WHERE `id_documento` = '$id_doc'
-and estado = '0'
-";
-
-?>
-
 <div id="ver_folio">
 
     <br>
@@ -61,9 +62,9 @@ limit 0,1
                       
                         
             </tr>';
-if ($rs_fecha = mysqli_query($con, $sql_fecha)) {
+if ($rs_fecha = $mysqli->query($sql_fecha)) {
 	/* fetch array asociativo*/
-while ($fila_fecha = mysqli_fetch_assoc($rs_fecha)) {
+while ($fila_fecha = $rs_fecha->fetch_array(MYSQLI_ASSOC)) {
  
  			echo '<tr>
             
@@ -91,9 +92,9 @@ while ($fila_fecha = mysqli_fetch_assoc($rs_fecha)) {
 
 <?php
 
-if ($rs = mysqli_query($con, $sql)) {
+if ($rs = $mysqli->query($sql)) {
 	/* fetch array asociativo*/
-while ($fila = mysqli_fetch_assoc($rs)) {
+while ($fila =$rs->fetch_array(MYSQLI_ASSOC)) {
 		
 ?>
 

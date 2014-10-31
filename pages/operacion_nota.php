@@ -16,6 +16,7 @@
     $id_documento=$_POST["id_documento"];
     $id_solicitud=$_POST["id_solicitud"];    
     $observaciones=$_POST["observaciones"];
+    $observaciones=trim($observaciones);
     $id_usuario=$_SESSION['uid'];
 
 
@@ -63,6 +64,7 @@
         if(!isset($_POST['clasificacion'])){$_POST['clasificacion']="";}
         
            $justificacion=$_POST["justificacion"];
+           $justificacion=trim($justificacion);
            $clasificacion=$_POST["clasificacion"];
            $oper1=$_POST["oper_plataforma"];
            $oper2=$_POST["oper_oficina"];
@@ -90,6 +92,7 @@
 
         
            $justificacion=$_POST["justificacion"];
+           $justificacion=trim($justificacion);
            $clasificacion=$_POST["clasificacion"];
            $proceso=$_POST["proceso"];
            $numero_folio=$_POST["numero_folio"];
@@ -160,12 +163,12 @@
 
       }
 
-                               if(!empty(trim($justificacion))) {  
+                               if(!empty($justificacion)) {
                                   $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                                   $result=$mysqli->query($query);
                                 }
 
-                               if(!empty(trim($observaciones))) {  
+                               if(!empty($observaciones)) {
                                    $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                                    $result=$mysqli->query($query);
                                 }
@@ -221,12 +224,12 @@
 
                       $result=$mysqli->query($sql); 
 
-                     if(!empty(trim($justificacion))) {  
+                     if(!empty($justificacion)) {
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                         $result=$mysqli->query($query);
                       }
 
-                     if(!empty(trim($observaciones))) {  
+                     if(!empty($observaciones)) {
                          $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                          $result=$mysqli->query($query);
                       }
@@ -309,12 +312,12 @@
 
                       $result=$mysqli->query($sql); 
 */
-                     if(!empty(trim($justificacion))) {  
+                     if(!empty($justificacion)) {
                         $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes,estado) VALUES ('$justificacion',now(),'$id_usuario','$id_documento','$id_solicitud',1)";
                         $result=$mysqli->query($query);
                       }
 
-                     if(!empty(trim($observaciones))) {  
+                     if(!empty($observaciones)) {
                          $query="INSERT INTO observaciones (observacion,fecha_observacion,users_id_usuario,id_documento,solicitudes_id_solicitudes) VALUES ('$observaciones',now(),'$id_usuario','$id_documento','$id_solicitud')";
                          $result=$mysqli->query($query);
                       }
@@ -372,7 +375,9 @@
   $razon_social=$row['razon_social'];
   $monto_afectar_nc=$row['monto_afectar_nc'];
   $moneda=$row['Moneda_idMoneda'];
-  $tipo_cliente=$row['tipo_cliente_idtipo_cliente'];
+  $tipo_cliente=$row['tipo_cliente
+
+  '];
   $tipo_documento=$row['tipo_documento_idtipo_doc'];
 
 

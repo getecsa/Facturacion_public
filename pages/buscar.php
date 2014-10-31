@@ -1,5 +1,5 @@
 <?php
-include("conectar_bd.php");	
+include("configuracion.php");
 
 $id_user = $_SESSION['uid'];
 
@@ -85,9 +85,9 @@ echo 'Folio del Documento';
                         <td ><font color="#fff">Estatus</font></td>
                   </tr>';
 
-					if ($rs = mysqli_query($con, $sql)) {
+					if ($rs = $mysqli->query($sql)) {
     
-						while ($fila = mysqli_fetch_assoc($rs)) {
+						while ($fila =$rs->fetch_array(MYSQLI_ASSOC)) {
 
 							if($fila["estado_actual"]==0 || $fila["estado_actual"]==1 || $fila["estado_actual"]==2 || $fila["estado_actual"]==3 ||
              				$fila["estado_actual"]==5 || $fila["estado_actual"]==6){
@@ -116,9 +116,9 @@ $adjuntos="SELECT *
 FROM  `adjuntos` 
 WHERE  `id_documento` =  '$folio'
 AND  `area` =  '6'";
-if ($rs_adjuntos = mysqli_query($con, $adjuntos)) {
+if ($rs_adjuntos = $mysqli->query($adjuntos)) {
 	/* fetch array asociativo*/
-		while ($fila_adjuntos = mysqli_fetch_assoc($rs_adjuntos)) {
+		while ($fila_adjuntos =$rs_adjuntos->fetch_array(MYSQLI_ASSOC)) {
 				echo '<a href="Archivos/'.$fila_adjuntos["nombre"].'"><h2>DESCARGAR DOCUMENTO GENERADO</h2></a>';
 		}
 }
@@ -136,9 +136,9 @@ if ($rs_adjuntos = mysqli_query($con, $adjuntos)) {
 $sql = "SELECT fecha_observacion as fecha, observacion 
 FROM `observaciones` WHERE `solicitudes_id_solicitudes` = '$folio'";
 
-	if ($rs = mysqli_query($con, $sql)) {
+	if ($rs = $mysqli->query($sql)) {
 	/* fetch array asociativo*/
-		while ($fila = mysqli_fetch_assoc($rs)) {
+		while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
 
 			echo '<tr>           				
                         <td colspan="2">'.$fila["fecha"].'</td>
@@ -173,9 +173,9 @@ echo 'Folio de Aclaración ó Queja';
                         <td ><font color="#fff">Fecha Cierre</font></td>
                   </tr>';
 
-					if ($rs = mysqli_query($con, $sql)) {
+					if ($rs = $mysqli->query($sql)) {
     
-						while ($fila = mysqli_fetch_assoc($rs)) {
+						while ($fila =$rs->fetch_array(MYSQLI_ASSOC)) {
 
 						echo '<tr>           				
                         <td >'.$fila["id"].'</td>

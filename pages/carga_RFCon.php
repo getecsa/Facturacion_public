@@ -1,6 +1,3 @@
-<?php 
- error_reporting (0);
-?>
         <div class="contenedor">
             <div class="header">
                  <h1 class="h1_header">
@@ -47,7 +44,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 
 
 
-include("config.php");
+include("configuracion.php");
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
 
@@ -55,7 +52,7 @@ $id_usuario=$_SESSION['uid'];
 $query="SELECT *
           FROM flujo_trabajo
          WHERE prioridad=1 AND sub_prioridad=0 AND tipo_documento_id_tipo_doc='3'";
-$result=$mysqli->query($query) or die(mysqli_error());
+$result=$mysqli->query($query) or die($mysqli->error);
 $row=$result->fetch_array(MYSQLI_ASSOC);
 $area_inicial=$row['area_id_area'];
 
@@ -100,7 +97,7 @@ for ($i=2;$i<=300;$i++){
                           VALUES (now(),
                                   '$id_area',
                                   '$id_usuario')";
- 					$result=$mysqli->query($query) or die(mysqli_error());
+ 					$result=$mysqli->query($query) or die($mysqli->error);
 					$id_solicitud=$mysqli->insert_id;
  					 $query1="INSERT INTO `sis_fac`.`documento`(
  					 					 id_codigo_cliente,
@@ -160,7 +157,7 @@ for ($i=2;$i<=300;$i++){
                                 '1'					
                            )";
 
-                        $result1=$mysqli->query($query1) or die(mysqli_error());
+                        $result1=$mysqli->query($query1) or die($mysqli->error);
                         $id_documento=$mysqli->insert_id;
                         
                                      $query="INSERT INTO historial_estados (fecha,
@@ -173,7 +170,7 @@ for ($i=2;$i<=300;$i++){
                                                     '$id_usuario',
                                                     '$id_area',
                                                     '$id_documento')";
-                                $mysqli->query($query) or die(mysqli_error());
+                                $mysqli->query($query) or die($mysqli->error);
                                 
 							$query="INSERT INTO conceptos_doc (id_codigo_concepto,tx_concepto,fac_unidades,
 								fac_precio_uni,fac_descuento,documento_iddocumento) 
