@@ -1,7 +1,7 @@
         <div class="contenedor">
             <div class="header">
                  <h1 class="h1_header">
-                   Facturación
+                   Re-Facturación Sin Cambio
                 </h1>
             
             </div>

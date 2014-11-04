@@ -1,8 +1,6 @@
-var arreglo_conceptos = [];
-
 $(document).ready(function(){
 
-    // funcion para cambio de select en solicitud 
+    // funcion para cambio de select en solicitud
     $("#cboClientes").change(function() {
         // obtenemos el valor seleccionado
         var cliente = $(this).val();
@@ -336,6 +334,59 @@ $('#tomar_solicitud').submit();
         }
 
 
+
+    //////
+
+
+    var arreglo_codigo = new Array();
+    var arreglo_conceptos = new Array();
+
+//funcion para llenar el arreglo con los conceptos
+    function listaConceptos() {
+        $.ajax({
+            url: "scripts/funciones.php",
+            data: { request: "getConceptosdoc" },
+            type: "POST"
+        }).done(function(data) {
+            if (data.length > 0) {
+                for (i=0;i<data.length;i++) {
+                    arreglo_codigo[i] = data[i]['CODIGO'];
+                    arreglo_conceptos[i] = data[i]['DESCRIPCION'];
+                    //  $('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
+                    // $('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
+                }
+            } else {
+                $('#cod_datos_conceptos').children().each(function() {
+                    $(this).remove();
+                });
+                alert ("No existen conceptos");
+            }
+        }).fail(function() {
+            listaConceptos();
+        });
+    };
+
+
+//funcion solicita datos de usuario
+    function docFactura(idCliente){
+        $.ajax({
+            url: "scripts/funciones.php",
+            data: {request: "getdocfactura", id: idCliente},
+            type: "POST"
+        }).done(function(data){
+            if (data.length > 0){
+                console.log(data);
+                $('#razon_social').val(data);
+            } else {
+                alert("No existe el cliente");
+            }
+        }).error(function(A,B,C){
+            console.log(B);
+            alert("Error en la conexion para datos del cliente");
+        });
+    };
+
+
 }); 
 
 //funcion daniel
@@ -348,38 +399,6 @@ $(function(){
             return 0;
     });
 });
-
-//
-
-
-//funcion para llegar el arreglo con los conceptos
-function listaConceptos() {
-  $.ajax({
-    url: "scripts/funciones.php",
-    data: { request: "getConceptosdoc" },
-    type: "POST",
-  }).done(function(data) {
-    if (data.length > 0) {
-      for (i=0;i<data.length;i++) {
-          //arreglo_conceptos[i]['CODIGO'] = data[i]['CODIGO'];
-          //arreglo_conceptos[i]['DESCRIPCION'] = data[i]['DESCRIPCION'];
-          $('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
-         $('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
-
-      }
-    } else {
-      $('#cod_datos_conceptos').children().each(function() {
-        $(this).remove();
-      });
-      alert ("No existen conceptos");
-    }
-  }).fail(function() {
-      listaConceptos();
-  });
-};
-
-//funcion para imprimir los conceptos de scl
-
 
 
 

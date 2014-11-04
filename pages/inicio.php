@@ -35,11 +35,21 @@ if (isset($_POST['txtUsuario'])){
                 $_SESSION['materno']        = $fila['n_materno'];
                 $_SESSION['oper_sol']        = $fila['oper_sol'];
 
-             if($fila['oper_sol']==0){
+
+             if(($fila['oper_sol']==0  ) && ($id_area==7  )){
+                        header('Location: homepage.php?id=operacion_ATC');
+                
+                }
+
+
+
+           else if($fila['oper_sol']==0 ){
                         header('Location: homepage.php?id=operador');
+                        
                 }
                 else {
                      header('Location: homepage.php?id=solicitante');
+                
                 }
         
         }

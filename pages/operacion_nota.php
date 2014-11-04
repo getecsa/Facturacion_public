@@ -621,12 +621,7 @@ $result_moneda=$mysqli->query($sql_moneda);
           }
          if ($area_operador==6){
         ?>
-            <div class="custom-input-file botones">
-            <input type="file" class="input-file" name="archivo" />
-            Adjuntar Archivos
-            <div class="archivo">...</div>
-            <input name="action" type="hidden" value="upload" /> 
-            </div>
+           
           <?php } ?>
       </div>
         <?php

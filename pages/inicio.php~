@@ -1,24 +1,25 @@
 <?php
+ob_start();
+
 if (isset($_POST['txtUsuario'])){
    
    $usuario = $_POST['txtUsuario'];
    $pass = $_POST['txtContraseña'];
  
-    include("config.php");
+    include("configuracion.php");
      
     $sql ="SELECT   id_usuario, username, nombre, n_paterno, n_materno,
                     users.area_idarea as id_area, area.tx_area as tx_area, area.oper_sol as oper_sol
-           	FROM   users
-	       	INNER JOIN   area
-            ON   users.area_idarea = area.id_area
+             FROM   users
+       INNER JOIN   area
+               ON   users.area_idarea = area.id_area
             WHERE   username =  '$usuario'
-            AND   pass = '$pass'";
-
-     $result=mysql_db_query($db, $sql, $link); 
+              AND   pass = '$pass'";
+     $result=$mysqli->query($sql);
 
     $uid = "";
-     
-    if( $fila=mysql_fetch_array($result) )
+    //$fila=mysql_fetch_array($result);
+    if( $fila=$result->fetch_array(MYSQLI_ASSOC))
        {       
         
                 $uid = $fila['id_usuario'];
@@ -27,7 +28,6 @@ if (isset($_POST['txtUsuario'])){
                 $_SESSION['autenticado']    = 'SI';
                 $_SESSION['uid']            = $uid;
                 $_SESSION['username']       = $fila['username'];
-                $_SESSION['id_usuario']       = $fila['id_usuario'];
                 $_SESSION['area']        = $fila['id_area'];
                 $_SESSION['tx_area']        = $fila['tx_area'];
                 $_SESSION['nombre']        = $fila['nombre'];
@@ -35,11 +35,21 @@ if (isset($_POST['txtUsuario'])){
                 $_SESSION['materno']        = $fila['n_materno'];
                 $_SESSION['oper_sol']        = $fila['oper_sol'];
 
-             if($fila['oper_sol']==0){
-                        header('Location: homepage.php?id=operador');
-                	
+
+             if(($fila['oper_sol']==0  ) && ($id_area==7  )){
+                       // header('Location: homepage.php?id=operacion_ATC');
+                       echo $fila['oper_sol'],"id :", $id_area," entro 1" ;
+                }
+
+
+
+           else if($fila['oper_sol']==0 ){
+                       // header('Location: homepage.php?id=operador');
+                        echo $fila['oper_sol'],"id :", $id_area," entro 2" ;
+                }
                 else {
-                     header('Location: homepage.php?id=solicitante');
+                     //header('Location: homepage.php?id=solicitante');
+                      echo $fila['oper_sol'],"id :", $id_area," entro 3" ;
                 }
         
         }

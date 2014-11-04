@@ -10,12 +10,13 @@
 <?php
 
 include("configuracion.php");
-echo "<script type='text/javascript'> listaConceptos(); /* $.imprimirconceptos(); */ </script>";
 $sql_iva="select * from iva";
 $result_iva=$mysqli->query($sql_iva);
 
 $sql_moneda="select * from moneda";
 $result_moneda=$mysqli->query($sql_moneda);
+
+$cod_cliente=$_POST['codigo_cliente'];
 
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
@@ -56,9 +57,20 @@ $tipo_cliente=$_POST['tipo_cliente'];
 $tipo_documento=$_POST['tipo_documento'];
 $id_area=$_SESSION['area'];
 $id_usuario=$_SESSION['uid'];
-
 }
 //termina return
+
+echo "<script type='text/javascript'>
+
+$( document ).ready(function() {
+    listaConceptos();
+    docFactura($cod_cliente);
+
+});
+
+
+
+</script>";
 
 ?>
                   <form class="formulario_n" action="homepage.php?id=nueva_factura_pro" method="post" name="form1" id="form1">
@@ -67,7 +79,7 @@ $id_usuario=$_SESSION['uid'];
                     <fieldset>
                     
                       <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
+                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
                         <label for="motivo_sol">Motivo de solicitud:</label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?> />
                         <label for="dias_ven">Días de vencimiento:</label><input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
                         <label for="leyenda_doc">Leyenda del documento:</label><input type="text" name="leyenda_doc" id="leyenda_doc" <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
@@ -93,7 +105,7 @@ $id_usuario=$_SESSION['uid'];
                       </div>
 
                       <div class="column">      
-                        <label for="razon_social">Razón Social:</label><input type="text" name="razon_social" id="razon_social" <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
+                        <label for="razon_social">Razón Social:</label><input type="text" name="razon_social" id="razon_social" readonly <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
                         <label for="compa_fac">Compañía facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
                         <label for="moneda">Moneda:</label>
                         <select name="moneda">
