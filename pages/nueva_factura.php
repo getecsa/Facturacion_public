@@ -61,17 +61,13 @@ $id_usuario=$_SESSION['uid'];
 //termina return
 
 echo "<script type='text/javascript'>
-
-$( document ).ready(function() {
-    listaConceptos();
-    docFactura($cod_cliente);
-
+$(document).ready(function() {
+$('#main').listaConceptos();
+$('#main').docFactura($cod_cliente);
+$('#main').numConceptos('#num_principal');
+$('#main').txtConceptos('#txt_principal');
 });
-
-
-
 </script>";
-
 ?>
                   <form class="formulario_n" action="homepage.php?id=nueva_factura_pro" method="post" name="form1" id="form1">
 
@@ -138,6 +134,7 @@ $( document ).ready(function() {
       <td>Cargo</td>
       <td>Descuento</td>
       <td>Subtotal</td>
+      <td></td>
     </tr>
 
       <?php
@@ -155,6 +152,7 @@ $( document ).ready(function() {
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][5]" class="calcular_subtotal" value="<?php echo $array_cont[$i][5]; ?>" /></td>
       <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][6]" readonly class="suma_subtotal" value="<?php echo $array_cont[$i][6]; ?>" /></td>
+      <td></td>
     </tr>
     
      <?php }  } else {      ?>
@@ -189,8 +187,8 @@ $( document ).ready(function() {
       ?>    
 
     
-              <td><select id="cod_datos_conceptos" name="add_cont[1][0]" class="descripcion_concepto"></select></td>
-              <td><select id="des_datos_conceptos" name="add_cont[1][1]" class="descripcion_concepto"></select></td>
+              <td><select id="num_principal" name="add_cont[1][0]" class="descripcion_concepto"></select></td>
+              <td><select id="txt_principal" name="add_cont[1][1]" class="descripcion_concepto"></select></td>
         <?php  } else {?>
       <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>
