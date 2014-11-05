@@ -5,12 +5,10 @@
     $id_user = $_SESSION['uid'];
     $id_area = $_SESSION['area'];
     $id_area_op= $_SESSION['area'];
-    if(!isset($_POST['id_estado_sol'])){$_POST['id_estado_sol']=0;}
-    $id_estado_click=$_POST['id_estado_sol'];
-    if(!isset($_POST['id_documento'])){$_POST['id_documento']=0;}
-    $id_documento=$_POST['id_documento'];
-    if(!isset($_POST['accion'])){$_POST['accion']="-";}
-    $accion=$_POST['accion'];
+
+    $marca=$_GET['marca'];
+    
+    echo $marca;
 
 
 /*
@@ -139,22 +137,18 @@ if($accion==3){
                                                   <H2>Solicitudes <?php //echo $row['estado_sol'];?></H2>
                     <table class="gridview">
 <tr >
-                        <td colspan="9" align="right" bgcolor="00517A"><font color="#fff">Filtro de solicitud:
+                        <td colspan="10" align="right" bgcolor="00517A"><font color="#fff">Filtro de solicitud:
 <form action="operacion_ATC.php" method="post" id="id_estados_sol">
-                         <select id='select_operador' name="id_estado_sol">
+                         <select id='' name="">
 <option value='...'>---</option> 
-<?php
-  $sql_per="SELECT pe.id_estado_solicitud, es.estado_sol
-          FROM permisos pe
-    INNER JOIN estado_solicitud es ON pe.id_estado_solicitud=es.id_estado_solicitud 
-         WHERE permiso=1 AND id_area='$id_area'";
 
-    $result=$mysqli->query($sql_per);
-    while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-?>
-  <option value='<?php echo $row['id_estado_solicitud']; ?>'><?php echo $row['estado_sol']; ?></option> 
+  	<option value='PENDIENTES'>PENDIENTES</option>
+  	<option value='RECIBIDO'>RECIBIDO</option>  
+  	<option value='LIBERADO'>LIBERADO</option>
+	<option value='GESTION TERCEROS'>GESTION TERCEROS</option>
+  	<option value='FINALIZADO'>FINALIZADO</option> 
                         
-<?php } ?>
+
                     
 </select></form></td>
                         
@@ -172,6 +166,7 @@ if($accion==3){
                         <td ><font color="#fff">Código de Cliente</font></td>
                         <td ><font color="#fff">Proceso</font></td>
                         <td ><font color="#fff">Fecha Cierre</font></td>
+                        <td></td>
                   </tr>
 <?php 
 
@@ -198,7 +193,10 @@ WHERE  `Area_Proceso` =  'ATC'";
                         <td ><?php echo $row["cod_cte"]; ?></td>
                         <td ><?php echo $row["proceso"]; ?></td>
                         <td ><?php echo $row["fecha_cierre"]; ?></td>                 
-               			<td><a href="pages/operacion_ATC.php" class="tomar_solicitud" id="<?php echo $row['id']; ?>"><span class="icon-checkmark espacio"></span></a></td>
+               			<td><a href="homepage.php?id=operacion_ATC&marca=1" class="tomar_solicitud" id="<?php echo $row['id']; ?>"><span class="icon-checkmark espacio"></span></a>
+									<a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>               			
+               			
+               			</td>
                        
                     </tr>
 <?php }  ?>
