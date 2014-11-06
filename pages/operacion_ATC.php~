@@ -6,11 +6,21 @@
     $id_area = $_SESSION['area'];
     $id_area_op= $_SESSION['area'];
 
-    $marca=$_GET['marca'];
+    if(isset($_GET['marca'])) {
     
-    echo $marca;
-
-
+ echo  "Entró-usuario";
+ 
+ echo $id_user.'- area'.$id_area;
+ 
+ $id = $_GET['i'];
+ 
+$sql = "UPDATE `sis_fac`.`aclaracion_queja` 
+		  SET `reservada` = '1', usuario_reserva = '$id_user' 
+		  WHERE `aclaracion_queja`.`id` = '$id';";
+$result=$mysqli->query($sql);
+ 
+ 
+}
 /*
 if(isset($_POST['bandera'])) {
 	
@@ -138,7 +148,7 @@ if($accion==3){
                     <table class="gridview">
 <tr >
                         <td colspan="10" align="right" bgcolor="00517A"><font color="#fff">Filtro de solicitud:
-<form action="operacion_ATC.php" method="post" id="id_estados_sol">
+<form action="operar_ATC.php" method="post" id="id_estados_sol">
                          <select id='' name="">
 <option value='...'>---</option> 
 
@@ -173,7 +183,9 @@ if($accion==3){
 
 $sql="SELECT * 
 FROM  `aclaracion_queja` 
-WHERE  `Area_Proceso` =  'ATC'";
+WHERE  `area_flujo` =  '7'
+and reservada is null
+";
 
 
 
@@ -193,7 +205,7 @@ WHERE  `Area_Proceso` =  'ATC'";
                         <td ><?php echo $row["cod_cte"]; ?></td>
                         <td ><?php echo $row["proceso"]; ?></td>
                         <td ><?php echo $row["fecha_cierre"]; ?></td>                 
-               			<td><a href="homepage.php?id=operacion_ATC&marca=1" class="tomar_solicitud" id="<?php echo $row['id']; ?>"><span class="icon-checkmark espacio"></span></a>
+               			<td><a href="homepage.php?id=operacion_ATC&marca=1&i=<?php echo $row['id']; ?>" class="tomar_solicitud" id="<?php echo $row['id']; ?>"><span class="icon-checkmark espacio"></span></a>
 									<a href="ver_historial.php?sol=<?php echo $row['id_documento']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>               			
                			
                			</td>

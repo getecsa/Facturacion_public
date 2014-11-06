@@ -116,6 +116,7 @@ $(document).ready(function(){
                           if( x > 1 ) {
                                   $(this).parent().parent().remove();
                                   FieldCount--;
+                                  x--;
 
                                   $("#num_concepto").val(x);
                             
@@ -165,7 +166,6 @@ $(document).ready(function(){
 
 
  // calculamos el total de todos los grupos
-
 
 var total_cargo = 0;
 var total_sub=0;

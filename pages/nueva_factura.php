@@ -6,15 +6,9 @@
               </div>
   <div class="content">
 
-
 <?php
 
 include("configuracion.php");
-$sql_iva="select * from iva";
-$result_iva=$mysqli->query($sql_iva);
-
-$sql_moneda="select * from moneda";
-$result_moneda=$mysqli->query($sql_moneda);
 
 $cod_cliente=$_POST['codigo_cliente'];
 
@@ -25,10 +19,27 @@ if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
 $tipo_cliente=$_POST["tipo_cliente"];
 
-  $sql_t="select conexion from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
-  $result_t=$mysqli->query($sql_t);
-  $row_t=$result_t->fetch_array(MYSQLI_ASSOC);
-  $conexion=$row_t['conexion'];
+$sql_iva="SELECT i.valor_tx, i.valor_int
+            FROM iva i
+      INNER JOIN permisos pe ON i.id_iva = pe.id_iva
+           WHERE pe.permiso =1 AND pe.id_tipo_documento =1
+             AND pe.id_tipo_cliente ='$tipo_cliente'";
+$result_iva=$mysqli->query($sql_iva);
+
+$sql_moneda="SELECT m.id_moneda, m.moneda
+            FROM moneda m
+      INNER JOIN permisos pe ON m.id_moneda = pe.id_moneda
+           WHERE pe.permiso =1 AND pe.id_tipo_documento =1
+             AND pe.id_tipo_cliente ='$tipo_cliente'";
+$result_moneda=$mysqli->query($sql_moneda);
+
+
+
+  $sql_t="select conexion, caracteres from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+     $result_t=$mysqli->query($sql_t);
+     $row_t=$result_t->fetch_array(MYSQLI_ASSOC);
+     $conexion=$row_t['conexion'];
+     $caracteres=$row_t['caracteres'];
 
  // RFC="SELECT COD_CLIENTE, NOM_CLIENTE ||' ' || NOM_APECLIEN1||' '|| NOM_APECLIEN2 FROM FA_HISTCLIE_19010102"
 
@@ -78,7 +89,7 @@ $('#main').txtConceptos('#txt_principal');
                         <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
                         <label for="motivo_sol">Motivo de solicitud:</label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?> />
                         <label for="dias_ven">Días de vencimiento:</label><input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
-                        <label for="leyenda_doc">Leyenda del documento:</label><input type="text" name="leyenda_doc" id="leyenda_doc" <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
+                        <label for="leyenda_doc">Leyenda del documento:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_doc" id="leyenda_doc"  <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
                       </div>  
                       <div class="column bottom">   
                       <label for="iva">IVA:</label>
@@ -97,7 +108,7 @@ $('#main').txtConceptos('#txt_principal');
                               }
                           ?>
                       </select>
-                      <label for="leyenda_mat">Leyenda Material:</label><input type="text" name="leyenda_mat" id="leyenda_mat" <?php if($return==1){ echo 'value="'.$leyenda_mat.'"';} ?> />
+                      <label for="leyenda_mat">Leyenda Material:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_mat" id="leyenda_mat" <?php if($return==1){ echo 'value="'.$leyenda_mat.'"';} ?> />
                       </div>
 
                       <div class="column">      

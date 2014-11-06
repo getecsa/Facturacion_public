@@ -15,7 +15,7 @@ $cod_cte=$_POST['cod_cte'];
 	
 $query="INSERT INTO `sis_fac`.`aclaracion_queja` 
 ( `fecha_recep`, `usuario`, `area`, `tipo_solic`, `detalle_solic`, `linea_negoc`, `cod_cte`, estatus, area_flujo) 
-VALUES ( now(), '$id_usuario', '$id_area',  '$tipo_sol', '$detalle_solic', '$linea_negoc', '$cod_cte', 'Pendientes', 'ATC')";
+VALUES ( now(), '$id_usuario', '$id_area',  '$tipo_sol', '$detalle_solic', '$linea_negoc', '$cod_cte', 'Pendientes', '7')";
 $result = $mysqli->query($query);
 
 	

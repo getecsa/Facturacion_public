@@ -1,0 +1,38 @@
+
+
+***********************************************************************
+Fatal NI connect error 12543, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SERVICE_NAME=REPOSCEL)(CID=(PROGRAM=apache2)(HOST=getecsa-Latitude-3540)(USER=www-data)))(ADDRESS=(PROTOCOL=TCP)(HOST=10.225.173.100)(PORT=1521)))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 10.2.0.3.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 10.2.0.3.0 - Production
+  Time: 06-NOV-2014 09:33:21
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12543
+    TNS-12543: Message 12543 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 12560
+    nt main err code: 513
+    TNS-00513: Message 513 not found; No message file for product=network, facility=TNS
+
+
+***********************************************************************
+Fatal NI connect error 12543, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SERVICE_NAME=REPOSCEL)(CID=(PROGRAM=apache2)(HOST=getecsa-Latitude-3540)(USER=www-data)))(ADDRESS=(PROTOCOL=TCP)(HOST=10.225.173.100)(PORT=1521)))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 10.2.0.3.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 10.2.0.3.0 - Production
+  Time: 06-NOV-2014 09:37:35
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12543
+    TNS-12543: Message 12543 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 12560
+    nt main err code: 513
+    TNS-00513: Message 513 not found; No message file for product=network, facility=TNS
+    nt secondary err code: 101
+    nt OS err code: 0
+    nt secondary err code: 101
+    nt OS err code: 0
