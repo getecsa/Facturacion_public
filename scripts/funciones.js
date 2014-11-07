@@ -252,6 +252,13 @@ $('#id_estados_sol').attr('action', 'homepage.php?id=operador');
 $('#id_estados_sol').submit();
 });
 
+
+$('#select_ATC').change(function(){
+var id_estado_sol=$(this).val();
+$('#id_estados_sol').attr('action', 'homepage.php?id=operacion_ATC');
+$('#id_estados_sol').submit();
+});
+
 //funcion para tomar solicitud
 
 $('.tomar_solicitud').click(function(){
@@ -261,6 +268,27 @@ $("#id_documento").val(id_documento);
 $("#accion").val(1);
 $('#tomar_solicitud').submit();  
 });
+
+$('.tomar_solicitudATC').click(function(){
+var id_documento = $(this).attr("id");
+$('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_ATC');
+$("#id_documento").val(id_documento);
+$("#accion").val(1);
+$('#tomar_solicitud').submit();  
+});
+
+
+
+//funcion para liberar solicitud
+
+    $('.liberar_solicitud').click(function(){
+        var id_documento = $(this).attr("id");
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
+        $("#id_documento").val(id_documento);
+        $("#accion").val(2);
+        $('#tomar_solicitud').submit();
+    });
+
 
 //funcion para tomar solicitud
 
@@ -272,15 +300,7 @@ $("#accion").val(3);
 $('#tomar_solicitud').submit();  
 });
 
-//funcion para liberar solicitud
 
-$('.liberar_solicitud').click(function(){
-var id_documento = $(this).attr("id");
-$('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
-$("#id_documento").val(id_documento);
-$("#accion").val(2);
-$('#tomar_solicitud').submit();  
-});
 
 //funcion para seguir solicitud
 

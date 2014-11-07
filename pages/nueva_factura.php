@@ -91,8 +91,28 @@ $('#main').txtConceptos('#txt_principal');
                         <label for="dias_ven">Días de vencimiento:</label><input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
                         <label for="leyenda_doc">Leyenda del documento:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_doc" id="leyenda_doc"  <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
                       </div>  
-                      <div class="column bottom">   
-                      <label for="iva">IVA:</label>
+                      <div class="column_rz">
+                          <label for="razon_social">Razón Social:</label><input type="text" size="50" name="razon_social" id="razon_social" readonly <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
+                      </div>
+                        <div class="column">
+
+                          <label for="moneda">Moneda:</label>
+                          <select name="moneda">
+                              <option value="0">Seleccione Moneda</option>
+                              <?php
+                              while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
+                                  echo "<option value='",$row['id_moneda'],"'";
+                                  if($return==1){
+                                      if($row['id_moneda']==$moneda)
+                                      {
+                                          echo"selected";
+                                      }
+                                  }
+                                  echo ">",$row['moneda'],"</option>";
+                              }
+                              ?>
+                          </select>
+                          <label for="iva">IVA:</label>
                       <select id="iva" name="iva">
                           <option value="0">Seleccione IVA</option>
                       <?php 
@@ -108,38 +128,23 @@ $('#main').txtConceptos('#txt_principal');
                               }
                           ?>
                       </select>
-                      <label for="leyenda_mat">Leyenda Material:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_mat" id="leyenda_mat" <?php if($return==1){ echo 'value="'.$leyenda_mat.'"';} ?> />
+                          <label for="salida">Salida:</label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
+
                       </div>
 
-                      <div class="column">      
-                        <label for="razon_social">Razón Social:</label><input type="text" name="razon_social" id="razon_social" readonly <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
+                      <div class="column">
                         <label for="compa_fac">Compañía facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
-                        <label for="moneda">Moneda:</label>
-                        <select name="moneda">
-                          <option value="0">Seleccione Moneda</option>
-                          <?php 
-                            while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
-                            echo "<option value='",$row['id_moneda'],"'";
-                              if($return==1){ 
-                                if($row['id_moneda']==$moneda)
-                                  {
-                                    echo"selected";
-                                  }
-                                } 
-                            echo ">",$row['moneda'],"</option>";
-                              }
-                          ?>
-                        </select>
 
 
-                        <label for="salida">Salida:</label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
+
                       </div>
 
   <div id="detalles_factura">
-  <table class="gridview" id="agregar_detalle">
+  <table border="1" class="gridview" id="agregar_detalle">
     <tr>
       <td>Código Concepto</td>
       <td>Descripción Concepto</td>
+      <td>Leyenda Material</td>
       <td>Unidades</td>
       <td>Precio Unitario</td>
       <td>Cargo</td>
@@ -156,13 +161,15 @@ $('#main').txtConceptos('#txt_principal');
     ?>
   
     <tr class="add_factura">
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>"/> </td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>"/> </td>
       <td><input type="text" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /></td>
+      <td><input type="text" size="9" maxlength="<?=$caracteres ?>" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][7]; ?>" /> </td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal"  /></td>
       <td><input type="text" size="5" name="add_cont[<?php echo $i; ?>][2]" class="calcular_subtotal total_unidades" value="<?php echo $array_cont[$i][2]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal" value="<?php echo $array_cont[$i][3]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][5]" class="calcular_subtotal" value="<?php echo $array_cont[$i][5]; ?>" /></td>
-      <td><input type="text" size="10" name="add_cont[<?php echo $i; ?>][6]" readonly class="suma_subtotal" value="<?php echo $array_cont[$i][6]; ?>" /></td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal" value="<?php echo $array_cont[$i][3]; ?>" /></td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][5]" class="calcular_subtotal" value="<?php echo $array_cont[$i][5]; ?>" /></td>
+      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][6]" readonly class="suma_subtotal" value="<?php echo $array_cont[$i][6]; ?>" /></td>
       <td></td>
     </tr>
     
@@ -201,14 +208,15 @@ $('#main').txtConceptos('#txt_principal');
               <td><select id="num_principal" name="add_cont[1][0]" class="descripcion_concepto"></select></td>
               <td><select id="txt_principal" name="add_cont[1][1]" class="descripcion_concepto"></select></td>
         <?php  } else {?>
-      <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
+      <td><input type="text" size="9" name="add_cont[1][0]" /> </td>
       <td><input type="text" name="add_cont[1][1]" /></td>
         <?php } ?>
+      <td><input type="text" size="9" maxlength="<?=$caracteres ?>" name="add_cont[1][7]" /> </td>
       <td><input type="text" size="5" name="add_cont[1][2]" class="calcular_subtotal total_unidades" /></td>
-      <td><input type="text" size="10" name="add_cont[1][3]" class="calcular_subtotal" /></td>
-      <td><input type="text" size="10" name="add_cont[1][4]" readonly class="suma_cargo"/></td>
-      <td><input type="text" size="10" name="add_cont[1][5]" class="calcular_subtotal" value="0"/></td>
-      <td><input type="text" size="10" name="add_cont[1][6]" readonly class="suma_subtotal" /></td>
+      <td><input type="text" size="9" name="add_cont[1][3]" class="calcular_subtotal" /></td>
+      <td><input type="text" size="9" name="add_cont[1][4]" readonly class="suma_cargo"/></td>
+      <td><input type="text" size="9" name="add_cont[1][5]" class="calcular_subtotal" value="0"/></td>
+      <td><input type="text" size="9" name="add_cont[1][6]" readonly class="suma_subtotal" /></td>
     </tr>
     <?php } ?>
     </table>
