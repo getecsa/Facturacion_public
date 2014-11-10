@@ -1,3 +1,6 @@
+<?php
+include("configuracion.php");
+?>
 <div id="divNotificacion" />
   <div class="contenedor">
               <div class="header">
@@ -7,10 +10,7 @@
   <div class="content">
 
 <?php
-
-include("configuracion.php");
-
-$cod_cliente=$_POST['codigo_cliente'];
+$cod_cliente=$_POST['cod_cliente'];
 
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
@@ -19,7 +19,7 @@ if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
 
 $tipo_cliente=$_POST["tipo_cliente"];
 
-$sql_iva="SELECT i.valor_tx, i.valor_int
+$sql_iva="SELECT i.valor_tx, i.valor_int, i.id_iva
             FROM iva i
       INNER JOIN permisos pe ON i.id_iva = pe.id_iva
            WHERE pe.permiso =1 AND pe.id_tipo_documento =1
@@ -32,6 +32,13 @@ $sql_moneda="SELECT m.id_moneda, m.moneda
            WHERE pe.permiso =1 AND pe.id_tipo_documento =1
              AND pe.id_tipo_cliente ='$tipo_cliente'";
 $result_moneda=$mysqli->query($sql_moneda);
+
+$sql_compania="SELECT li.sociedad
+                 FROM linea_negocio li
+           INNER JOIN permisos pe ON li.id=pe.id_linea_negocio
+                WHERE pe.permiso=1 AND pe.id_tipo_documento=1
+                  AND pe.id_tipo_cliente='$tipo_cliente'";
+$result_compania=$mysqli->query($sql_compania);
 
 
 
@@ -86,7 +93,7 @@ $('#main').txtConceptos('#txt_principal');
                     <fieldset>
                     
                       <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
+                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['cod_cliente']; }?>" />
                         <label for="motivo_sol">Motivo de solicitud:</label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?> />
                         <label for="dias_ven">Días de vencimiento:</label><input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
                         <label for="leyenda_doc">Leyenda del documento:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_doc" id="leyenda_doc"  <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
@@ -97,7 +104,7 @@ $('#main').txtConceptos('#txt_principal');
                         <div class="column">
 
                           <label for="moneda">Moneda:</label>
-                          <select name="moneda">
+                          <select name="moneda" id="moneda">
                               <option value="0">Seleccione Moneda</option>
                               <?php
                               while($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
@@ -133,14 +140,26 @@ $('#main').txtConceptos('#txt_principal');
                       </div>
 
                       <div class="column">
-                        <label for="compa_fac">Compañía facturadora:</label><input type="text" name="compa_fac" id="compa_fac" <?php if($return==1){ echo 'value="'.$compa_fac.'"';} ?>  />
-
-
-
+                        <label for="compa_fac">Compañía facturadora:</label>
+                          <select name="compa_fac" id="compa_fac">
+                              <option value="0">Seleccione Compañia</option>
+                              <?php
+                              while($row=$result_compania->fetch_array(MYSQLI_ASSOC)){
+                                  echo "<option value='",$row['sociedad'],"'";
+                                  if($return==1){
+                                      if($row['sociedad']==$compa_fac)
+                                      {
+                                          echo"selected";
+                                      }
+                                  }
+                                  echo ">",$row['sociedad'],"</option>";
+                              }
+                              ?>
+                          </select>
                       </div>
 
   <div id="detalles_factura">
-  <table border="1" class="gridview" id="agregar_detalle">
+  <table class="gridview" id="agregar_detalle">
     <tr>
       <td>Código Concepto</td>
       <td>Descripción Concepto</td>
@@ -163,8 +182,8 @@ $('#main').txtConceptos('#txt_principal');
     <tr class="add_factura">
       <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>"/> </td>
       <td><input type="text" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" /></td>
-      <td><input type="text" size="9" maxlength="<?=$caracteres ?>" name="add_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][7]; ?>" /> </td>
-      <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal"  /></td>
+      <td><input type="text" size="9" maxlength="<?=$caracteres ?>" name="add_cont[<?php echo $i; ?>][7]" value="<?php echo $array_cont[$i][7]; ?>" /> </td>
+    <!--  <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal"  /></td> -->
       <td><input type="text" size="5" name="add_cont[<?php echo $i; ?>][2]" class="calcular_subtotal total_unidades" value="<?php echo $array_cont[$i][2]; ?>" /></td>
       <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][3]" class="calcular_subtotal" value="<?php echo $array_cont[$i][3]; ?>" /></td>
       <td><input type="text" size="9" name="add_cont[<?php echo $i; ?>][4]" readonly class="suma_cargo" value="<?php echo $array_cont[$i][4]; ?>"/></td>
@@ -260,6 +279,8 @@ $('#main').txtConceptos('#txt_principal');
    <div id="errorForm"></div> 
         </fieldset>
                    <div class="boton_envio">
+                    <input  type="hidden" value="0" name="lista_concepto_cod" id="lista_concepto_cod">
+                    <input  type="hidden" value="0" name="lista_concepto_tex" id="lista_concepto_tex">
                     <input  type="hidden" value="<?php echo $return; ?>" name="return" id="return">
                     <input  type="hidden" value="<?php echo $num_return; ?>" name="num_return" id="num_return">
                     <input  type="hidden" id="num_concepto" value="1" name="num_concepto">

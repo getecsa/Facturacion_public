@@ -50,7 +50,7 @@ include("cliente.php");
                                       
                                         <tr>
                                            <td>Código cliente:</td>  
-                                           <td><input type="text" name="codigo_cliente" required="required" required /></td>
+                                           <td><input type="text" name="cod_cliente" required="required" required /></td>
                                         </tr>
                                         <tr class="sol_oculto">
                                            <td>Código cliente a afectar:</td>  

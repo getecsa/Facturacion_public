@@ -272,7 +272,7 @@ $('#tomar_solicitud').submit();
 $('.tomar_solicitudATC').click(function(){
 var id_documento = $(this).attr("id");
 $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_ATC');
-$("#id").val(id_documento);
+$("#id_documento").val(id_documento);
 $("#accion").val(1);
 $('#tomar_solicitud').submit();  
 });
@@ -284,6 +284,15 @@ $('#tomar_solicitud').submit();
     $('.liberar_solicitud').click(function(){
         var id_documento = $(this).attr("id");
         $('#tomar_solicitud').attr('action', 'homepage.php?id=operador');
+        $("#id_documento").val(id_documento);
+        $("#accion").val(2);
+        $('#tomar_solicitud').submit();
+    });
+    
+    
+    $('.liberar_solicitudATC').click(function(){
+        var id_documento = $(this).attr("id");
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_ATC');
         $("#id_documento").val(id_documento);
         $("#accion").val(2);
         $('#tomar_solicitud').submit();
@@ -323,6 +332,9 @@ var tipo_documento = $(this).attr("title");
 
       if(tipo_documento=="REFACTURA SIN CAMBIO"){
         $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_refactura_sin_cambio');
+      }
+      if(tipo_documento=="ATC"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_AT');
       }
 $("#valor_solicitud").val(id_solicitud);
 $("#id_documento").val(id_documento);

@@ -103,7 +103,7 @@ $(document).ready(function(){
 
                             FieldCount++; 
                             //$(contenedor).append('<tr class="add_factura"><td><input type="text" size="10" name="add_cont['+ FieldCount +'][0]" class="add_cont['+ FieldCount +'][0]" placeholder="Codigo '+ FieldCount +'"/></td><td><input type="text" name="add_cont['+ FieldCount +'][1]"  placeholder="Descripcion '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][2]" class="calcular_subtotal total_unidades"  placeholder="Unidades '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][3]" class="calcular_subtotal" placeholder="Precio '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][4]" readonly="readonly" class="suma_cargo"  placeholder="Cargo '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][5]" class="calcular_subtotal" placeholder="Descuento '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][6]"  readonly="readonly" class="suma_subtotal" placeholder="Subtotal '+ FieldCount +'"/></td><td><a href="#" class="eliminar">&times;</a></td></tr>');
-                            $(contenedor).append('<tr class="add_factura"><td><select id="add_cont'+ FieldCount +'0" name="add_cont['+ FieldCount +'][0]" class="descripcion_concepto" /></select></td><td><select id="add_cont'+ FieldCount +'1" name="add_cont['+ FieldCount +'][1]" class="descripcion_concepto" /></select></td><td class="calcular_subtotal"><input type="text" size="5" name="add_cont['+ FieldCount +'][2]" class="calcular_subtotal total_unidades"  placeholder="Unidades '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][3]" class="calcular_subtotal" placeholder="Precio '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][4]" readonly="readonly" class="suma_cargo"  placeholder="Cargo '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="10" name="add_cont['+ FieldCount +'][5]" class="calcular_subtotal" placeholder="Descuento '+ FieldCount +'"/></td><td><input type="text" size="10" name="add_cont['+ FieldCount +'][6]"  readonly="readonly" class="suma_subtotal" placeholder="Subtotal '+ FieldCount +'"/></td><td><a href="#" class="eliminar">&times;</a></td></tr>');
+                            $(contenedor).append('<tr class="add_factura"><td><select id="add_cont'+ FieldCount +'0" name="add_cont['+ FieldCount +'][0]" class="descripcion_concepto" /></select></td><td><select id="add_cont'+ FieldCount +'1" name="add_cont['+ FieldCount +'][1]" class="descripcion_concepto" /></select></td><td><input type="text" size="9" maxlength="<?=$caracteres ?>" name="add_cont['+ FieldCount +'][7]" /></td><td class="calcular_subtotal"><input type="text" size="5" name="add_cont['+ FieldCount +'][2]" class="calcular_subtotal total_unidades"  placeholder="Unidades '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="9" name="add_cont['+ FieldCount +'][3]" class="calcular_subtotal" placeholder="Precio '+ FieldCount +'"/></td><td><input type="text" size="9" name="add_cont['+ FieldCount +'][4]" readonly="readonly" class="suma_cargo"  placeholder="Cargo '+ FieldCount +'"/></td><td class="calcular_subtotal"><input type="text" size="9" name="add_cont['+ FieldCount +'][5]" class="calcular_subtotal" placeholder="Descuento '+ FieldCount +'"/></td><td><input type="text" size="9" name="add_cont['+ FieldCount +'][6]"  readonly="readonly" class="suma_subtotal" placeholder="Subtotal '+ FieldCount +'"/></td><td><a href="#" class="eliminar">&times;</a></td></tr>');
                             $("#num_concepto").val(x);
                             $.fn.numConceptos('#add_cont'+ FieldCount +'0');
                             $.fn.txtConceptos('#add_cont'+ FieldCount +'1');
@@ -177,13 +177,13 @@ var descuento=0;
 
                      $(".add_factura").keyup(function()
                          {       
-                     var unidad=$(this).find("td:eq(2) > input").val();  
-                     var unitario=$(this).find("td:eq(3) > input").val(); 
-                     var descuento=$(this).find("td:eq(5) > input").val(); 
+                     var unidad=$(this).find("td:eq(3) > input").val();
+                     var unitario=$(this).find("td:eq(4) > input").val();
+                     var descuento=$(this).find("td:eq(6) > input").val();
                      total_cargo=unidad*unitario; 
                      total_sub=total_cargo-descuento;
-                    $(this).find("td:eq(4) > input").val(total_cargo);
-                    $(this).find("td:eq(6) > input").val(total_sub);
+                    $(this).find("td:eq(5) > input").val(total_cargo);
+                    $(this).find("td:eq(7) > input").val(total_sub);
 
                           });
 
@@ -288,6 +288,15 @@ $('#tomar_solicitud').submit();
         $("#accion").val(2);
         $('#tomar_solicitud').submit();
     });
+    
+    
+    $('.liberar_solicitudATC').click(function(){
+        var id_documento = $(this).attr("id");
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_ATC');
+        $("#id_documento").val(id_documento);
+        $("#accion").val(2);
+        $('#tomar_solicitud').submit();
+    });
 
 
 //funcion para tomar solicitud
@@ -323,6 +332,9 @@ var tipo_documento = $(this).attr("title");
 
       if(tipo_documento=="REFACTURA SIN CAMBIO"){
         $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_refactura_sin_cambio');
+      }
+      if(tipo_documento=="ATC"){
+        $('#tomar_solicitud').attr('action', 'homepage.php?id=operacion_AQ');
       }
 $("#valor_solicitud").val(id_solicitud);
 $("#id_documento").val(id_documento);
@@ -378,6 +390,8 @@ $('#tomar_solicitud').submit();
                  //    $('#cod_datos_conceptos').append(new Option(data[i]['CODIGO'],data[i]['CODIGO']));
                  //    $('#des_datos_conceptos').append(new Option(data[i]['DESCRIPCION'],data[i]['DESCRIPCION']));
                 }
+                $("#lista_concepto_cod").val(arreglo_codigo);
+                $("#lista_concepto_tex").val(arreglo_conceptos);
             } else {
                 $('#cod_datos_conceptos').children().each(function() {
                     $(this).remove();
@@ -394,7 +408,7 @@ $('#tomar_solicitud').submit();
         if(arreglo_codigo.length > 0) {
             console.log(idPrint);
             for (i = 0; i < arreglo_codigo.length; i++) {
-                $(''+idPrint).append("<option>"+arreglo_codigo[i]+"</option>");
+                $(''+idPrint).append("<option value='"+i+"'>"+arreglo_codigo[i]+"</option>");
             }
         }else{
             $(idPrint).append("<option>Error en carga</option>");
@@ -405,7 +419,7 @@ $('#tomar_solicitud').submit();
     jQuery.fn.txtConceptos = function(idPrint){
             if(arreglo_conceptos.length > 0) {
                 for (i = 0; i < arreglo_codigo.length; i++) {
-                    $(idPrint).append("<option>"+arreglo_conceptos[i]+"</option>");
+                    $(idPrint).append("<option value='"+i+"'>"+arreglo_conceptos[i]+"</option>");
                 }
             }else{
                 $(idPrint).append("<option>Error en carga</option>");
@@ -437,6 +451,18 @@ $('#tomar_solicitud').submit();
             alert("Error en la conexion para datos del cliente");
         });
     };
+
+//funciona que proporcionas indice y te da el codigo y el concepto
+
+
+    jQuery.fn.getDatosconceptos = function(indice){
+
+    var datos = Array();
+        datos['CODIGO']=arreglo_codigo[indice];
+        datos['CONCEPTO']=arreglo_conceptos[indice];
+        return datos;
+    };
+
 
 
 

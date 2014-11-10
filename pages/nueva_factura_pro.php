@@ -10,8 +10,7 @@
 
 
 if(isset($_POST["submit_pro"])) {
-
-      if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
+        if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
 
               header('Location: homepage.php?id=nueva_factura');
           }
@@ -171,7 +170,10 @@ $area_inicial=$row['area_id_area'];
   
   $array_cont=$_POST["add_cont"]; 
   $num_concepto=$_POST['num_concepto'];
-
+  $lista_concepto_cod=$_POST['lista_concepto_cod'];
+  $lista_concepto_cod=explode(",", $lista_concepto_cod);
+  $lista_concepto_tex=$_POST['lista_concepto_tex'];
+  $lista_concepto_tex=explode(",", $lista_concepto_tex);
   if($_POST['return']==1){
   $num_return=$_POST['num_return'];
   $num_concepto=$num_concepto+$num_return-1;
@@ -182,6 +184,7 @@ $area_inicial=$row['area_id_area'];
   $dias_ven=$_POST['dias_ven'];
   $leyenda_doc=$_POST['leyenda_doc'];
   $iva=$_POST["iva"];
+  if(!isset($_POST['leyenda_mat'])){$_POST['leyenda_mat']="";}
   $leyenda_mat=$_POST['leyenda_mat'];
   $razon_social=$_POST['razon_social'];
   $compa_fac=$_POST['compa_fac'];
@@ -198,8 +201,19 @@ $area_inicial=$row['area_id_area'];
                         <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $motivo_sol;?></p>
                         <label for="dias_ven">Días de vencimiento:</label><p><?php echo $dias_ven;?></p>
                         <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $leyenda_doc;?></p>
-                      </div>  
-                      <div class="column bottom">   
+                      </div>
+                        <div class="column_rz">
+                            <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
+                        </div>
+                      <div class="column">
+                          <label for="moneda">Moneda:</label>
+                          <?php
+                          $sql_moneda="select * from moneda where id_moneda=$moneda";
+                          $result_moneda=$mysqli->query($sql_moneda);
+                          if($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
+                              echo "<p>",$row['moneda'],"</p>";
+                          }
+                          ?>
                       <label for="iva">IVA:</label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
@@ -209,23 +223,11 @@ $area_inicial=$row['area_id_area'];
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
                           ?>
-                    <label for="leyenda_mat">Leyenda Material:</label><p><?php echo $leyenda_mat;?></p>
+                          <label for="salida">Salida:</label><p><?php echo $salida;?></p>
                       </div>
 
                       <div class="column">      
-                        <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
                         <label for="compa_fac">Compañía facturadora:</label><p><?php echo $compa_fac;?></p>
-                        <label for="moneda">Moneda:</label>
-                        <?php 
-                            $sql_moneda="select * from moneda where id_moneda=$moneda";
-                            $result_moneda=$mysqli->query($sql_moneda);
-                            if($row=$result_moneda->fetch_array(MYSQLI_ASSOC)){
-                            echo "<p>",$row['moneda'],"</p>";
-                              }
-                          ?>
-
-
-                        <label for="salida">Salida:</label><p><?php echo $salida;?></p>
                       </div>
                     
   <div id="detalles_factura">
@@ -233,6 +235,7 @@ $area_inicial=$row['area_id_area'];
     <tr>
       <td>Código Concepto</td>
       <td>Descripción Concepto</td>
+      <td>Leyenda Material</td>
       <td>Unidades</td>
       <td>Precio Unitario</td>
       <td>Cargo</td>
@@ -245,10 +248,13 @@ $area_inicial=$row['area_id_area'];
     $subtotal=$subtotal+$array_cont[$i][6];
     ?>
     <tr class="add_factura">
-      <td><?php echo $array_cont[$i][0]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $array_cont[$i][0]; ?>" /></td>
-      <td><?php echo $array_cont[$i][1]; ?>
-      <input  type="hidden" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $array_cont[$i][1]; ?>" />
+      <td><?php echo $lista_concepto_cod[$array_cont[$i][0]]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][0]" value="<?php echo $lista_concepto_cod[$array_cont[$i][0]];  ?>" /></td>
+      <td><?php echo $lista_concepto_tex[$array_cont[$i][1]]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][1]" value="<?php echo $lista_concepto_tex[$array_cont[$i][1]]; ?>" />
+      </td>
+      <td><?php echo $array_cont[$i][7]; ?>
+      <input  type="hidden" name="array_cont[<?php echo $i; ?>][7]" value="<?php echo $array_cont[$i][7]; ?>" />
       </td>
       <td><?php echo $array_cont[$i][2]; ?>
       <input  type="hidden" name="array_cont[<?php echo $i; ?>][2]" value="<?php echo $array_cont[$i][2]; ?>" />

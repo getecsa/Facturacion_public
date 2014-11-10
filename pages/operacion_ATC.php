@@ -13,7 +13,7 @@
     $accion=$_POST['accion'];
 
 
-
+/*
 if(isset($_POST['bandera'])) {
 	
 	echo 'form'.$_POST['comentario'].$_POST['id_observacion'];
@@ -26,7 +26,7 @@ $result=$mysqli->query($sql);
 
 }
 	
-
+*/
 if($accion==1){
 
 /*
@@ -68,7 +68,12 @@ if($accion==2){
       }
 */
 
-echo 'Accion 2';
+$sql = "UPDATE `sis_fac`.`aclaracion_queja` 
+		  SET `reservada` = NULL, usuario_reserva = NULL 
+		  WHERE `aclaracion_queja`.`id` = '$id_documento';";
+		  $result=$mysqli->query($sql);
+
+ echo 'Accion 2 LIBERAR -ID solicitud '.$id_documento;
 }
 
 
@@ -287,17 +292,17 @@ echo '5';
                             } 
                           if(($id_estado_click==1) || ($id_estado_click==2) || ($id_estado_click==5) || ($id_estado_click==6)){
                           ?>
-                              <a href="#" class="seguir_solicitud" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="<?php echo $row['tipo_doc']; ?>"><span class="icon-eye espacio"></span></a>
+                              <a href="#" class="seguir_solicitud" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="ATC"><span class="icon-eye espacio"></span></a>
                           <?php
                             }
                           if (($id_estado_click==1) AND ($id_area_op==2)){
                           ?>
-                            <a href="#" class="asignar_solicitud" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
+                            <a href="#" class="asignar_solicitudATC" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
                           <?php
                             }
                           if ($id_estado_click==1){
                           ?>
-                              <a href="#" class="liberar_solicitud" id="<?php echo $row['id']; ?>"><span class="icon-close espacio"></span></a>
+                              <a href="#" class="liberar_solicitudATC" id="<?php echo $row['id']; ?>"><span class="icon-close espacio"></span></a>
                           <?php 
                              } ?>
                               <a href="ver_historial.php?sol=<?php echo $row['id']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>

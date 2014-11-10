@@ -3,7 +3,7 @@ function validarUsuarioForm()
     var formulario = document.form1;
     var msgError   = '';
     var flagError  = true;
-    if(formulario.motivo_sol.value == /^[0-9]$/){
+    if(formulario.motivo_sol.value == 0){
         msgError  = 'Ingresar motivo de solicitud';
         showError(msgError);
         flagError = false;
@@ -53,8 +53,8 @@ function validarUsuarioForm()
         formulario.compa_fac.focus();
         return false;
     }
-     else if(formulario.moneda.value == 0){
-        msgError  = 'Ingresar moneda';
+    else if(formulario.moneda.value == 0){
+        msgError  = 'Ingresar Moneda';
         showError(msgError);
         flagError = false;
         formulario.moneda.focus();
