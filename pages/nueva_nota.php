@@ -1,16 +1,20 @@
 <?php
 include("configuracion.php");
+if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
+    header('Location: homepage.php?id=nueva_solicitud');
+}
+$tipo_cliente=$_POST["tipo_cliente"];
+
+$sql="select * from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+$result=$mysqli->query($sql);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+
 
 $sql_iva="select * from iva";
 $result_iva=$mysqli->query($sql_iva);
 
 $sql_moneda="select * from moneda";
 $result_moneda=$mysqli->query($sql_moneda);
-
-if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
-
-    header('Location: homepage.php?id=nueva_solicitud');
-}
 
 $tipo_cliente=$_POST["tipo_cliente"];
 $tipo_documento=$_POST["tipo_documento"];
@@ -43,31 +47,33 @@ $id_usuario=$_SESSION['uid'];
 
 }
 //termina return
-
+$razon_social="";
 ?>
 <div id="divNotificacion" />
   <div class="contenedor">
               <div class="header">
                   <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                  <h1>Nueva nota de crédito</h1>
+                  <h1 class="h1_header">Nueva nota de crédito</h1> <h2 class="subtitulo"><?=$row['tx_tipo_cliente']?></h2>
               </div>
   <div class="content">
                   <form class="formulario_n" action="homepage.php?id=nueva_nota_pro" method="post" name="form1" id="form1">
-                    <fieldset>
-                      <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
-                        <label for="motivo_sol">Motivo de solicitud:</label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?>/>
-                        <label for="leyenda_doc">Leyenda del documento:</label><input type="text" name="leyenda_doc" id="leyenda_doc" <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?>/>
-                        <label for="folio_fac_origen">Folio factura origen:</label><input type="text" name="folio_fac_origen" id="folio_fac_origen" <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} ?> />
-                      </div>  
-                      <div class="column bottom_nc">   
-                      <label for="tipo_nc">Tipo Nota:</label>
+                    <div class="column">
+                        <label for="cod_cliente"><p>Código de cliente:</p></label><input type="text" name="cod_cliente" id="cod_cliente" <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
+                        <label for="motivo_sol"><p>Motivo de solicitud:</p></label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?>/>
+                        <label for="leyenda_doc"><p>Leyenda del doc.:</p></label><input type="text" name="leyenda_doc" id="leyenda_doc" <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?>/>
+                        <label for="folio_fac_origen"><p>Folio factura origen:</p></label><input type="text" name="folio_fac_origen" id="folio_fac_origen" <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} ?> />
+                      </div>
+                      <div class="column_rz">
+                          <label for="razon_social"><p>Razón Social:</p></label><input type="text" size="73" name="razon_social" id="razon_social" readonly <?php echo 'value="'.$razon_social.'"'; ?> />
+                      </div>
+                      <div class="column_enmedio espacio">
+                      <label for="tipo_nc"><p>Tipo Nota:</p></label>
                       <select name="tipo_nc">
                         <option value="0">Seleccione Tipo</option>
                         <option <?php if($return==1){ if($tipo_nc=="Parcial") { echo"selected"; } } ?> >Parcial</option>
                         <option <?php if($return==1){ if($tipo_nc=="Total") { echo"selected"; } } ?> >Total</option>
                       </select>
-                      <label for="iva">IVA:</label>
+                      <label for="iva"><p>IVA:</p></label>
                       <select id="iva" name="iva">
                       <option value="0">Seleccione IVA</option>
                       <?php 
@@ -84,12 +90,12 @@ $id_usuario=$_SESSION['uid'];
                               }
                           ?>
                       </select>
-                      <label for="mt_fac_orig">Monto Total (Fac Origen):</label><input type="text" name="mt_fac_orig" id="mt_fac_orig" <?php if($return==1){ echo 'value="'.$mt_fac_orig.'"';} ?>/>
+                      <label for="mt_fac_orig"><p>Monto Total (Fac Origen):</p></label><input type="text" name="mt_fac_orig" id="mt_fac_orig" <?php if($return==1){ echo 'value="'.$mt_fac_orig.'"';} ?>/>
                       </div>
 
                       <div class="column">      
-                        <label for="razon_social">Razón Social:</label><input type="text" name="razon_social" id="razon_social" <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?>/>
-                        <label for="moneda">Moneda:</label>
+                       <!-- <label for="razon_social"><p>Razón Social:</p></label><input type="text" name="razon_social" id="razon_social" <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?>/>
+                        --><label for="moneda"><p>Moneda:</p></label>
                         <select name="moneda">
                         <option value="0">Seleccione Moneda</option>
                           <?php 
@@ -105,8 +111,8 @@ $id_usuario=$_SESSION['uid'];
                               }
                           ?>
                         </select>
-                        <label for="fecha_emision_nc">Fecha Emisión:</label><input type="text" name="fecha_emision_nc" id="fecha_emision_nc" readonly="readonly" <?php if($return==1){ echo 'value="'.$fecha_emision_nc.'"';} ?> />
-                        <label for="monto_afectar_nc">Monto Afectar con NC:</label><input type="text" name="monto_afectar_nc" id="monto_afectar_nc" <?php if($return==1){ echo 'value="'.$monto_afectar_nc.'"';} ?> />
+                        <label for="fecha_emision_nc"><p>Fecha Emisión:</p></label><input type="text" name="fecha_emision_nc" id="fecha_emision_nc" readonly="readonly" <?php if($return==1){ echo 'value="'.$fecha_emision_nc.'"';} ?> />
+                        <label for="monto_afectar_nc"><p>Monto Afectar NC:</p></label><input type="text" name="monto_afectar_nc" id="monto_afectar_nc" <?php if($return==1){ echo 'value="'.$monto_afectar_nc.'"';} ?> />
                       </div>
                     
   <div id="detalles_factura">
@@ -149,37 +155,10 @@ $id_usuario=$_SESSION['uid'];
     <td></td>
     <td></td>
    </tr> 
-<!--   <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>SubTotal:</td>
-    <td></td>
-    <td></td>
-    <td class="total_subtotal">$0</td>
-   </tr>   
-    <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>IVA:</td>
-    <td></td>
-    <td></td>
-    <td>$32</td>
-   </tr>   
-    <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>IEPS:</td>
-    <td></td>
-    <td></td>
-    <td>$0</td>
-   </tr>
-   <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>Total:</td>
-    <td></td>
-    <td></td>
-    <td>$200</td>
-   </tr> -->
+
   </table> 
   <div id="errorForm"></div>
-        </fieldset>
+
                    <div class="boton_envio">
                     <input  type="hidden" value="<?php echo $return; ?>" name="return" id="return">
                     <input  type="hidden" value="<?php echo $num_return; ?>" name="num_return" id="num_return">

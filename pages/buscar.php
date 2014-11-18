@@ -20,46 +20,44 @@ include("cliente.php");
 
 <div class="contenedor">
             <div class="header">
-                <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                <h1>
+                <img alt="Movistar" class="logotipo" src="images/logo.png">
+                <h1 class='h1_header'>
                     <?php echo utf8_encode($_SESSION['username']);?>
                 </h1>
             </div>
             <div class="content">
 
                
-<table width=60%>
-<tr>
-<form action="homepage.php?id=buscar" method="post">  
-<td><h2 class="block">Folio documento:</h2></td>
-<td>  <input type="text" name="folio"></td>
-<td> <input type="submit" value="Buscar Documento" name="buscar"></td>
-<td></td>
-</form>
-</tr>
-<tr>
-<form action="homepage.php?id=buscar" method="post">  
-<td><h2 class="block">Folio Aclaración o Queja:</h2></td>
-<td>  <input type="text" name="folio_aclaracion"></td>
-<td> <input type="submit" value="Buscar Aclaración ó Queja" name="buscar_aclaracion"></td>
-<td></td>
-</form>
-</tr>
-<tr>
-<form action="homepage.php?id=buscar" method="post">  
-<td><h2 class="block">Tipo Solicitud:</h2></td>
-<td> <select>
-                <option>Seleccione Solicitud</option>
-                <option value="Factura">Factura</option>
-                <option value="NC">Nota de Crédito</option>
-                <option value="RFCon">Refactura Con Cambio</option>
-                <option value="RFSin">Refactura Sin Cambio</option>
-                 
-                 </select></td>
-<td> <input type="submit" value="Buscar Tipo" name="buscar"></td>
-<td></td>
-</form>
-</tr>
+<table width='60%'>
+    <tr>
+        <form action="homepage.php?id=buscar" method="post">  
+            <td><label>Folio documento:</label></td>
+            <td><input type="text" name="folio" style='width:155px;'></td>
+            <td><input type="submit" value="Buscar Documento" name="buscar"></td>
+        </form>
+    </tr>
+    <tr>
+        <form action="homepage.php?id=buscar" method="post">  
+            <td><label>Folio Aclaración o Queja:</label></td>
+            <td><input type="text" name="folio_aclaracion" style='width:155px;'></td>
+            <td><input type="submit" value="Buscar Aclaración ó Queja" name="buscar_aclaracion"></td>
+        </form>
+    </tr>
+    <tr>
+        <form action="homepage.php?id=buscar" method="post">  
+            <td><label>Tipo Solicitud:</label></td>
+            <td>
+                <select>
+                    <option>Seleccione Solicitud</option>
+                    <option value="Factura">Factura</option>
+                    <option value="NC">Nota de Crédito</option>
+                    <option value="RFCon">Refactura Con Cambio</option>
+                    <option value="RFSin">Refactura Sin Cambio</option>     
+                </select>
+            </td>
+            <td><input type="submit" value="Buscar Tipo" name="buscar"></td>
+        </form>
+    </tr>
 </table>
 
                 
@@ -76,7 +74,7 @@ include("cliente.php");
   			INNER JOIN tipo_documento td ON do.tipo_documento_idtipo_doc=td.id_tipo_doc
        	WHERE so.users_id_usuario='$id_user'
          AND so.id_solicitudes='$folio'";
-echo 'Folio del Documento';
+echo '<br><h2>Folio del Documento</h2>';
 			echo '<table class="gridview">
 						<tr bgcolor="00517A">
                         <td ><font color="#fff">ID</font></td>
@@ -159,7 +157,7 @@ else if(isset($_POST["buscar_aclaracion"])&& $_POST["buscar_aclaracion"]== 'Busc
 			$sql="SELECT * 
 					FROM  `aclaracion_queja` 
 					WHERE id = '$folio'";
-echo 'Folio de Aclaración ó Queja';
+echo '<br><h2>Folio de Aclaración ó Queja</h2>';
 			echo '<table class="gridview">
 						<tr bgcolor="00517A">
                         <td ><font color="#fff">ID</font></td>

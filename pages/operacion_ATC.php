@@ -13,6 +13,92 @@
     $accion=$_POST['accion'];
 
 
+if(isset($_POST['bandera'])) {
+	$detalle_solic = $_POST['detalle_solic'];
+	$id = $_POST['id'];
+	$estatus = $_POST['estatus'];
+
+		if($estatus=='Cerrar') {
+
+			if($id_area=='7') {
+
+		  $sql = "UPDATE `sis_fac`.`aclaracion_queja` 
+		  SET `reservada` = NULL, usuario_reserva = NULL, fecha_cierre = now(), 
+		  estatus = '7',
+		  area_flujo = '$estatus',
+		  area_flujo_anterior = '$id_area' 
+		  WHERE `aclaracion_queja`.`id` = '$id';";
+		  $result=$mysqli->query($sql);
+		   	
+			}	
+			
+			else {
+					
+		$sql = "UPDATE `sis_fac`.`aclaracion_queja` 
+		  SET `reservada` = NULL, usuario_reserva = NULL, fecha_cierre = now(), 
+		  estatus = '0',
+		  area_flujo = '7',
+		  area_flujo_anterior = '$id_area' 
+		  WHERE `aclaracion_queja`.`id` = '$id';";
+		  $result=$mysqli->query($sql);
+			
+$query="INSERT INTO historial_estados (fecha, estado_solicitud_idestado_solicitud, users_id_usuario,
+															  area_id_area, id_aclaracion) 
+                VALUES (now(), '3', '$id_user', '$id_area', '$id')";
+        $mysqli->query($query) or die($mysqli->error);			
+			
+			
+			}
+			
+			
+
+			$query = "INSERT INTO observaciones( observacion,fecha_observacion,users_id_usuario,
+															 estado,solicitudes_id_solicitudes )
+ 						 VALUES ( '$detalle_solic', now(), '$id_user', '2', '$id')";
+			$result = $mysqli->query($query);
+	
+		}
+
+		
+
+
+else {
+
+	echo 'Viene AQ';
+
+$sql = "UPDATE `sis_fac`.`aclaracion_queja` 
+		  SET `reservada` = NULL, usuario_reserva = NULL, fecha_atenc = now(), 
+		  estatus = '0',
+		  area_flujo = '$estatus',
+		  area_flujo_anterior = '$id_area' 
+		  WHERE `aclaracion_queja`.`id` = '$id';";
+		  $result=$mysqli->query($sql);
+		  
+ //guarda Historial
+                               $query="INSERT INTO historial_estados (fecha,
+                                                   estado_solicitud_idestado_solicitud,
+                                                   users_id_usuario,
+                                                   area_id_area,
+                                                   id_aclaracion) 
+                                            VALUES (now(),
+                                                    7,
+                                                    '$id_user',
+                                                    '$id_area',
+                                                    '$id')";
+                                $mysqli->query($query) or die($mysqli->error);
+
+$query = "INSERT INTO observaciones( observacion,fecha_observacion,users_id_usuario,
+ estado,solicitudes_id_solicitudes )
+ VALUES ( '$detalle_solic', now(), '$id_user', '2', '$id')";
+$result = $mysqli->query($query);		  
+
+//`observacion` = concat(observacion, '<br>' ,now(), '-', '$comentario')
+
+
+}
+}
+
+
 /*
 if(isset($_POST['bandera'])) {
 	
@@ -42,7 +128,7 @@ if($accion==1){
       }
       */
       $sql = "UPDATE `sis_fac`.`aclaracion_queja` 
-		  SET `reservada` = '1', usuario_reserva = '$id_user' 
+		  SET `reservada` = '1', usuario_reserva = '$id_user', estatus = '1' 
 		  WHERE `aclaracion_queja`.`id` = '$id_documento';";
 		  $result=$mysqli->query($sql);
 
@@ -69,7 +155,7 @@ if($accion==2){
 */
 
 $sql = "UPDATE `sis_fac`.`aclaracion_queja` 
-		  SET `reservada` = NULL, usuario_reserva = NULL 
+		  SET `reservada` = NULL, usuario_reserva = NULL, estatus = 0 
 		  WHERE `aclaracion_queja`.`id` = '$id_documento';";
 		  $result=$mysqli->query($sql);
 
@@ -120,36 +206,42 @@ echo 'Accion 3';
                     $num_liberados=0;
                     $num_rechazado=0;
 
-                    $sql="SELECT *
-                            FROM documento
-                           WHERE estado_actual!=4 || estado_actual!=7 AND area_flujo=$id_area_op";
+                    $sql="SELECT * 
+									FROM  `aclaracion_queja` 
+									WHERE  `area_flujo` =  '$id_area'	
+									and reservada is null
+									and estatus = '0'";
                     $result=$mysqli->query($sql);
                     $num_pendientes=$result->num_rows;
 
-                    $sql="SELECT *
-                            FROM historial_estados
-                           WHERE estado_solicitud_idestado_solicitud=3 AND users_id_usuario=$id_user";
-                    $result=$mysqli->query($sql);
+							$sql = "SELECT * 
+									FROM  `aclaracion_queja` 
+									WHERE  `area_flujo` =  '$id_area'	
+									
+									and estatus = '1'
+									AND usuario_reserva = '$id_user'";                    
+						  $result=$mysqli->query($sql);
                     $num_liberados=$result->num_rows;
 
-                    $sql="SELECT *
-                            FROM historial_estados
-                           WHERE estado_solicitud_idestado_solicitud=4 AND users_id_usuario=$id_user";
+                    $sql="SELECT DISTINCT  `id_aclaracion` 
+FROM  `historial_estados` 
+WHERE  `area_id_area` =  '$id_area'
+AND  `users_id_usuario` =  '$id_user'";
                     $result=$mysqli->query($sql);
                     $num_rechazado=$result->num_rows;
 
                   ?>
                   <div class="datos_totales">
-                <p>Total de solicitudes pendientes: <span><?php echo $num_pendientes; ?></span></p> 
-                <p>Total de solicitudes liberadas: <span><?php echo $num_liberados; ?></span></p> 
-                <p>Total de solicitudes rechazadas: <span><?php echo $num_rechazado; ?></span> </p> 
+                <p>Total de solicitudes pendientes (Universo ATC): <span><?php echo $num_pendientes; ?></span></p> 
+                <p>Total de solicitudes pendientes (Subconjunto ATC): <span><?php echo $num_liberados; ?></span></p> 
+                <p>Total de solicitudes Atendidas: <span><?php echo $num_rechazado; ?></span> </p> 
                 <p>Total de solicitudes: <span><?php echo $num_pendientes+$num_liberados+$num_rechazado; ?></span></p> 
                   </div>
-
+<!--
                   <div class="datos_totales right">
                 <p>Solicitudes pendientes fuera dei tiempo: <span>0</span></p> 
                   </div>
-                </div>
+                </div>-->
                 <?php 
                   $sql_estado="SELECT estado_sol
                           FROM estado_solicitud
@@ -189,7 +281,7 @@ echo 'Accion 3';
                         <td ><font color="#fff">Fecha Recepción</font></td>
                         <td ><font color="#fff">Fecha Atención</font></td>
                         <td ><font color="#fff">Tipo Solicitud</font></td>
-                        <td ><font color="#fff">Detalle Solicitud</font></td>
+                       
                         <td ><font color="#fff">Línea de Negocio</font></td>
                         <td ><font color="#fff">Código de Cliente</font></td>
                         <td ><font color="#fff">Proceso</font></td>
@@ -203,7 +295,9 @@ if ($id_estado_click==0){
 $sql="SELECT * 
 FROM  `aclaracion_queja` 
 WHERE  `area_flujo` =  '$id_area'
-and reservada is null"  ;
+and reservada is null
+and estatus = ('0' and '3') 
+"  ;
 echo '0';
 }
 
@@ -211,7 +305,9 @@ if ($id_estado_click==1){
 
 $sql = "SELECT * FROM `aclaracion_queja` 
 		  WHERE `reservada` = '1' 
-		  and `usuario_reserva` = '$id_user'";
+		  and `usuario_reserva` = '$id_user'
+		  and estatus = '1' 		  
+		  ";
 
 /*
 $sql="SELECT * 
@@ -277,7 +373,7 @@ echo '5';
                         <td ><?php echo $row["fecha_recep"]; ?></td>
                         <td ><?php echo $row["fecha_atenc"]; ?></td>
 								<td ><?php echo $row["tipo_solic"]; ?></td>
-                        <td ><?php echo $row["detalle_solic"]; ?></td>
+                       
                         <td ><?php echo $row["linea_negoc"]; ?></td>
                         <td ><?php echo $row["cod_cte"]; ?></td>
                         <td ><?php echo $row["proceso"]; ?></td>
@@ -297,7 +393,7 @@ echo '5';
                             }
                           if (($id_estado_click==1) AND ($id_area_op==2)){
                           ?>
-                            <a href="#" class="asignar_solicitudATC" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>
+                          <!--  <a href="#" class="asignar_solicitudATC" id="<?php echo $row['id']; ?>" rel="<?php echo $row['id']; ?>" title="ASIGNACION TEMM"><span class="icon-delicious espacio"></span></a>-->
                           <?php
                             }
                           if ($id_estado_click==1){
@@ -305,40 +401,7 @@ echo '5';
                               <a href="#" class="liberar_solicitudATC" id="<?php echo $row['id']; ?>"><span class="icon-close espacio"></span></a>
                           <?php 
                              } ?>
-                              <a href="ver_historial.php?sol=<?php echo $row['id']; ?>&height=450&width=650" title="Documento <?php echo $row['id_documento']; ?>" class="thickbox"><span class="icon-stack espacio"></span></a>
-                           <?php 
-                          $id_documento=$row['id'];
-                          $sql1="SELECT ad.nombre as nombre
-                                  FROM adjuntos ad
-                            INNER JOIN users us ON ad.id_usuario=us.id_usuario
-                            INNER JOIN area ar ON us.area_idarea=ar.id_area 
-                                 WHERE id_documento='$id_documento' AND ar.oper_sol=1";
-                          $result1=$mysqli->query($sql1);
-                          $cont = $result1->num_rows;
-                          $row1=$result1->fetch_array(MYSQLI_ASSOC);
-                          if($cont>0){       
-                           ?>
-                          <a href="<?php echo "Archivos/",$row1['nombre']; ?>" title="<?php echo $row1['nombre']; ?>"><span class="icon-download espacio azul"></span></a>
-                          <?php
-                            }
-                           if ($id_area_op==6){
-
-                                  $id_documento=$row['id_documento'];
-                          $sql2="SELECT ad.nombre as nombre
-                                  FROM adjuntos ad
-                            INNER JOIN users us ON ad.id_usuario=us.id_usuario
-                            INNER JOIN area ar ON us.area_idarea=ar.id_area 
-                                 WHERE id_documento='$id_documento' AND ar.oper_sol=0";
-                                  $result2=$mysqli->query($sql2);
-                                  $cont = $result2->num_rows;
-                                  $row2=$result2->fetch_array(MYSQLI_ASSOC);
-                                  if($cont>0){       
-                           ?>
-                          <a href="<?php echo "Archivos/",$row2['nombre']; ?>" title="<?php echo $row2['nombre']; ?>"><span class="icon-download espacio verde"></span></a>
-                          <?php
-                              }
-                          }
-                            ?>
+                       
 
                         </td>
                     </tr>

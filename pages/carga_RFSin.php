@@ -4,8 +4,9 @@
 
         <div class="contenedor">
             <div class="header">
-                 <h1 class="h1_header">
-                   Re-Facturación Sin Cambio
+                <img alt="Movistar" class="logotipo" src="images/logo.png">
+                <h1 class="h1_header">
+                    Re-Facturación Sin Cambio
                 </h1>
             
             </div>

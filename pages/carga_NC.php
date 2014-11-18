@@ -4,8 +4,9 @@
 
         <div class="contenedor">
             <div class="header">
-                 <h1 class="h1_header">
-                   Nota de Crédito
+                <img alt="Movistar" class="logotipo" src="images/logo.png">
+                <h1 class="h1_header">
+                    Nota de Crédito
                 </h1>
             
             </div>

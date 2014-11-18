@@ -617,7 +617,7 @@ else if(formulario.elements[18].value == 0){
 
 
   
-function validarUsuarioNuevaSolictud()
+function validarNuevaSolicitud()
 {
     var formulario = document.nueva_solicitud;
     var msgError   = '';
@@ -629,8 +629,140 @@ function validarUsuarioNuevaSolictud()
         formulario.tipo_cliente.focus();
         return false;
     }
-   
-  }  
+    switch($('#cboDocumentos').val()){
+        case '1':
+            if($('#cod_cliente').val() != ''){
+                $("body").addClass("loading");
+                $.ajax({
+                    type: "POST",
+                    url: "scripts/funciones.php",
+                    data: {request : 'getdocfactura',id : $('#cod_cliente').val()},
+                    timeout: 60000,
+                    success: function(response){
+                        if(response != 'no result'){
+                            formulario.method = 'POST';
+                            $('#razon_social').val(response);
+                            formulario.submit();
+                            $("body").removeClass("loading");
+                        }else{
+                            showError('Código Cliente NO Existe. Verifique.');
+                        }
+                    },
+                    error: function(xhr,status,trn){
+                        if(status == 'error'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x001 (" + trn + ")' falló la consulta del Código de Cliente.");
+                        }else if(status == 'timeout'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x002 (" + trn + ")' Tiempo Excedido al consultar el Código de Cliente.");
+                        }
+                        return false;
+                    }
+                });
+            }else{
+                showError('Debe escribir el Código del Cliente.');
+                formulario.cod_cliente.focus();
+                return false;
+            }
+            break;
+        case '2':
+            if(formulario.folio_factura_afectar_a.value != '' || formulario.folio_factura_afectar_b.value != ''){
+                $("body").addClass("loading");
+                $.ajax({
+                    type: "POST",
+                    url: "scripts/funciones.ph",
+                    data: {request : 'getdocfactura',id : $('#cod_cliente').val()},
+                    timeout: 60000,
+                    success: function(response){
+                        if(response != 'no result'){
+                            formulario.method = 'POST';
+                            $('#razon_social').val(response);
+                            formulario.submit();
+                            $("body").removeClass("loading");
+                        }else{
+                            showError('Código Cliente NO Existe. Verifique.');
+                        }
+                    },
+                    error: function(xhr,status,trn){
+                        if(status == 'error'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x003 (" + trn + ")' falló la consulta del Folio de la Factura.");
+                        }else if(status == 'timeout'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x004 (" + trn + ")' Tiempo Excedido al consultar el Folio de la Factura.");
+                        }
+                        return false;
+                    }
+                });
+            }else{
+                showError('Debe escribir el Folio de la Factura.');
+                if(formulario.folio_factura_afectar_a.value.length > 0){
+                    formulario.folio_factura_afectar_b.focus();
+                }else{
+                    formulario.folio_factura_afectar_a.focus();
+                }
+                return false;
+            }
+            break;
+        case '3':
+        case '4':
+            if($('#cod_cliente').val() == ''){
+                msgError  = 'Se debe escribir el Código de Cliente.';
+                showError(msgError);
+                flagError = false;
+                $('#cod_cliente').focus();
+                return false;
+            }
+            if(formulario.codigo_cliente_afectar.value == ''){
+                msgError  = 'Se debe escribir el Código de Cliente a Afectar.';
+                showError(msgError);
+                flagError = false;
+                formulario.codigo_cliente_afectar.focus();
+                return false;
+            }
+            if(formulario.folio_factura_afectar_a.value == '' || formulario.folio_factura_afectar_b.value == ''){
+                if(formulario.folio_factura_afectar_a.value.length > 0){
+                    formulario.folio_factura_afectar_b.focus();
+                }else{
+                    formulario.folio_factura_afectar_a.focus();
+                }
+                msgError  = 'Se debe escribir el Folio de la Factura.';
+                showError(msgError);
+                flagError = false;
+                return false;
+            }
+            if(flagError){
+                $("body").addClass("loading");
+                $.ajax({
+                    type: "POST",
+                    url: "scripts/funciones.ph",
+                    data: {request : 'getdocfactura',id : $('#cod_cliente').val()},
+                    timeout: 60000,
+                    success: function(response){
+                        if(response != 'no result'){
+                            formulario.method = 'POST';
+                            $('#razon_social').val(response);
+                            formulario.submit();
+                            $("body").removeClass("loading");
+                        }else{
+                            showError('Código Cliente NO Existe. Verifique.');
+                        }
+                    },
+                    error: function(xhr,status,trn){
+                        if(status == 'error'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x005 (" + trn + ")' falló la consulta de los datos solicitados.");
+                        }else if(status == 'timeout'){
+                            showError("Error has ocurred 'validar Nueva Solicitud 0x006 (" + trn + ")' Tiempo Excedido al consultar los datos solicitados.");
+                        }
+                        return false;
+                    }
+                });
+            }else{
+                showError('Se deben escribir todos los campos obligatorios.');
+                return false;
+            }
+            break;
+        default:
+            showError("Error has ocurred 'validar Nueva solicitud 0x007 (Tipo de Documento Inexistente)'.");
+            break;
+    }
+} 
   
   function showError(msg)
 {
@@ -642,5 +774,5 @@ function validarUsuarioNuevaSolictud()
             $('#errorForm').removeClass('contentBoxError');
             $('#errorForm').text('');
         });
-    },2000);
+    },5000);
 }

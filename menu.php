@@ -1,4 +1,10 @@
  <?php
+
+
+
+
+
+
  //Validar que el usuario este logueado y exista un UID
 if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 {
@@ -23,9 +29,29 @@ if (($_SESSION['autenticado'] == 'SI' &&  isset($_SESSION['oper_sol'])) )
 	if($_SESSION['oper_sol'] == 0){
 ?>
 <ul class="menu"> 
+<?php if($_SESSION['area'] <> 7){
+?>
+
 	 	<li> <a href="homepage.php?id=operador">Inicio</a></li>
+	 		<li> <a href="homepage.php?id=operacion_ATC">Atención a Consultas</a></li>
       <!--  <li> <a href="buscar.php" >Busqueda</a></li> -->
+
+<?php }
+
+ else {
+?>
+
+	 	<li> <a href="homepage.php?id=operacion_ATC">Inicio</a></li>
+	 	<!--	<li> <a href="homepage.php?id=operacion_ATC">Atención a Consultas</a></li> -->
+      <!--  <li> <a href="buscar.php" >Busqueda</a></li> -->
+
+<?php }
+
+?>
+      
 </ul>
+
+
 <?php } ?>
 <div class="bienvenida">
 <p>Bienvenido: <?php echo $_SESSION['username'];?> <a href="logout.php">Logout</a></p>

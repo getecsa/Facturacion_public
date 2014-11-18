@@ -195,18 +195,22 @@ $area_inicial=$row['area_id_area'];
 
 ?>
   <form class="formulario_n" action="#" method="post" id="nueva_factura" enctype="multipart/form-data">
-                    <fieldset>
-                      <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><p><?php echo $cod_cliente;?></p>
-                        <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $motivo_sol;?></p>
-                        <label for="dias_ven">Días de vencimiento:</label><p><?php echo $dias_ven;?></p>
-                        <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $leyenda_doc;?></p>
+
+      <div class="column">
+                        <label for="cod_cliente"><p>Código de cliente:</p></label>
+       <div class="ver">                   <?php echo $cod_cliente;?></div>
+                        <label for="motivo_sol"><p>Motivo de solicitud:</p></label>
+          <div class="ver">                       <?php echo $motivo_sol;?></div>
+                        <label for="dias_ven"><p>Días de vencimiento:</p></label>
+              <div class="ver">                      <?php echo $dias_ven;?></div>
+                        <label for="leyenda_doc"><p>Leyenda del documento:</p></label>
+                  <div class="ver">                      <?php echo $leyenda_doc;?></div>
                       </div>
                         <div class="column_rz">
-                            <label for="razon_social">Razón Social:</label><p><?php echo $razon_social;?></p>
+                            <label for="razon_social"><p>Razón Social:</p></label><p><?php echo $razon_social;?></p>
                         </div>
                       <div class="column">
-                          <label for="moneda">Moneda:</label>
+                          <label for="moneda"><p>Moneda:</p></label>
                           <?php
                           $sql_moneda="select * from moneda where id_moneda=$moneda";
                           $result_moneda=$mysqli->query($sql_moneda);
@@ -214,7 +218,7 @@ $area_inicial=$row['area_id_area'];
                               echo "<p>",$row['moneda'],"</p>";
                           }
                           ?>
-                      <label for="iva">IVA:</label>
+                      <label for="iva"><p>IVA:</p></label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
                             $result_iva=$mysqli->query($sql_iva);
@@ -223,11 +227,11 @@ $area_inicial=$row['area_id_area'];
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
                           ?>
-                          <label for="salida">Salida:</label><p><?php echo $salida;?></p>
+                          <label for="salida"><p>Salida:</p></label><p><?php echo $salida;?></p>
                       </div>
 
                       <div class="column">      
-                        <label for="compa_fac">Compañía facturadora:</label><p><?php echo $compa_fac;?></p>
+                        <label for="compa_fac"><p>Compañía facturadora:</p></label><p><?php echo $compa_fac;?></p>
                       </div>
                     
   <div id="detalles_factura">
@@ -325,7 +329,7 @@ Adjuntar Archivos
     <td><?php echo $iva+$subtotal; ?></td>
    </tr>
   </table> 
-        </fieldset>
+
                    <div class="boton_envio">                
    <input  type="hidden" id="num_concepto" name="num_concepto" value="<?php echo $num_concepto; ?>">                  
    <input  type="hidden" id="cod_cliente" name="cod_cliente" value="<?php echo $cod_cliente; ?>">                  

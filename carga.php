@@ -215,5 +215,16 @@ unlink($destino);
 }
 
 ?>
+<script language='javascript'>
+    $(document).on({
+        ajaxStart: function(){
+            $("body").addClass("loading");
+        },
+        ajaxStop: function(){
+            $("body").removeClass("loading");
+        }
+    });
+</script>
+<div class='modal'></div>
 </body>
 </html>

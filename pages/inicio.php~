@@ -37,19 +37,19 @@ if (isset($_POST['txtUsuario'])){
 
 
              if(($fila['oper_sol']==0  ) && ($id_area==7  )){
-                       // header('Location: homepage.php?id=operacion_ATC');
-                       echo $fila['oper_sol'],"id :", $id_area," entro 1" ;
+                        header('Location: homepage.php?id=operacion_ATC');
+                
                 }
 
 
 
            else if($fila['oper_sol']==0 ){
-                       // header('Location: homepage.php?id=operador');
-                        echo $fila['oper_sol'],"id :", $id_area," entro 2" ;
+                        header('Location: homepage.php?id=operador');
+                        
                 }
                 else {
-                     //header('Location: homepage.php?id=solicitante');
-                      echo $fila['oper_sol'],"id :", $id_area," entro 3" ;
+                     header('Location: homepage.php?id=solicitante');
+                
                 }
         
         }

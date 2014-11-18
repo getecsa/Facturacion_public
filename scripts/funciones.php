@@ -85,19 +85,26 @@ if(isset($_POST['request'])) {
                            WHERE COD_CLIENTE= '$id_cliente'
                              AND ROWNUM <= 1";
                 $result = oci_parse($oracle, $query);
-                oci_execute($result);
-                $row = oci_fetch_array($result, OCI_ASSOC);
-                $razon_social=$row['RAZON_SOCIAL'];
-                echo json_encode($razon_social);
-                //echo $razon_social;
+                $ok=oci_execute($result);
+                if ($ok != false) {
+                    $row = oci_fetch_array($result, OCI_ASSOC);
+                    if(!empty($row)){
+                        $razon_social=$row['RAZON_SOCIAL'];
+                        echo json_encode($razon_social);
+                    }else{
+                        echo json_encode('no result');
+                    }
+                }else{
+                    echo json_encode('no result');
+                }
 
             } else {
-                if (!isset($_SESSION['usuario'])) {
+              /*  if (!isset($_SESSION['usuario'])) {
                     header('Forbidden',true,403);
                 } else {
                     echo json_encode(array());
-                }
-                echo json_encode(array());
+                } */
+                echo json_encode(false);
             }
             break;
 

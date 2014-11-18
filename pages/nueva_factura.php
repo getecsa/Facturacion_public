@@ -1,23 +1,28 @@
 <?php
 include("configuracion.php");
+if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
+    header('Location: homepage.php?id=nueva_solicitud');
+}
+$tipo_cliente=$_POST["tipo_cliente"];
+
+$sql="select * from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+$result=$mysqli->query($sql);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+
+
 ?>
 <div id="divNotificacion" />
   <div class="contenedor">
               <div class="header">
                   <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                  <h1>Nueva Factura</h1>
+                  <h1 class="h1_header">Nueva Factura</h1> <h2 class="subtitulo"><?=$row['tx_tipo_cliente']?></h2>
               </div>
   <div class="content">
 
 <?php
 $cod_cliente=$_POST['cod_cliente'];
+$razon_social=$_POST['razon_social'];
 
-if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
-
-    header('Location: homepage.php?id=nueva_solicitud');
-}
-
-$tipo_cliente=$_POST["tipo_cliente"];
 
 $sql_iva="SELECT i.valor_tx, i.valor_int, i.id_iva
             FROM iva i
@@ -54,56 +59,45 @@ $tipo_documento=$_POST["tipo_documento"];
 $return=0;
 $num_return=0;
 //return
-
 if(isset($_POST["submit_return"])) {    
-$return=1;
-
-$array_cont=$_POST["array_cont"];  
-$num_concepto=$_POST['num_concepto'];
-$num_return=$num_concepto;
-$cod_cliente=$_POST['cod_cliente'];
-$motivo_sol=$_POST['motivo_sol'];
-$dias_ven=$_POST['dias_ven'];
-$leyenda_doc=$_POST['leyenda_doc'];
-$iva=$_POST["iva"];
-$leyenda_mat=$_POST['leyenda_mat'];
-$razon_social=$_POST['razon_social'];
-$compa_fac=$_POST['compa_fac'];
-$moneda=$_POST['moneda'];
-$salida=$_POST['salida'];
-$tipo_cliente=$_POST['tipo_cliente'];
-$tipo_documento=$_POST['tipo_documento'];
-$id_area=$_SESSION['area'];
-$id_usuario=$_SESSION['uid'];
+    $return=1;
+    $array_cont=$_POST["array_cont"];  
+    $num_concepto=$_POST['num_concepto'];
+    $num_return=$num_concepto;
+    $cod_cliente=$_POST['cod_cliente'];
+    $motivo_sol=$_POST['motivo_sol'];
+    $dias_ven=$_POST['dias_ven'];
+    $leyenda_doc=$_POST['leyenda_doc'];
+    $iva=$_POST["iva"];
+    $leyenda_mat=$_POST['leyenda_mat'];
+    $razon_social=$_POST['razon_social'];
+    $compa_fac=$_POST['compa_fac'];
+    $moneda=$_POST['moneda'];
+    $salida=$_POST['salida'];
+    $tipo_cliente=$_POST['tipo_cliente'];
+    $tipo_documento=$_POST['tipo_documento'];
+    $id_area=$_SESSION['area'];
+    $id_usuario=$_SESSION['uid'];
 }
 //termina return
-
-echo "<script type='text/javascript'>
-$(document).ready(function() {
-$('#main').listaConceptos();
-$('#main').docFactura($cod_cliente);
-$('#main').numConceptos('#num_principal');
-$('#main').txtConceptos('#txt_principal');
-});
-</script>";
 ?>
                   <form class="formulario_n" action="homepage.php?id=nueva_factura_pro" method="post" name="form1" id="form1">
 
-                   
-                    <fieldset>
-                    
                       <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['cod_cliente']; }?>" />
-                        <label for="motivo_sol">Motivo de solicitud:</label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?> />
-                        <label for="dias_ven">Días de vencimiento:</label><input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
-                        <label for="leyenda_doc">Leyenda del documento:</label><input type="text" maxlength="<?=$caracteres ?>" name="leyenda_doc" id="leyenda_doc"  <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
-                      </div>  
-                      <div class="column_rz">
-                          <label for="razon_social">Razón Social:</label><input type="text" size="50" name="razon_social" id="razon_social" readonly <?php if($return==1){ echo 'value="'.$razon_social.'"';} ?> />
+                          <label for="cod_cliente"><p>Código de cliente:</p></label>
+                          <input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['cod_cliente']; }?>" />
+                          <label for="motivo_sol"><p>Motivo de solicitud:</p></label>
+                          <input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?> />
+                          <label for="dias_ven"><p>Días de vencimiento:</p></label>
+                          <input type="text" name="dias_ven" id="dias_ven" <?php if($return==1){ echo 'value="'.$dias_ven.'"';} ?> />
+                          <label for="leyenda_doc"><p>Leyenda del doc.:</p></label>
+                          <input type="text" maxlength="<?=$caracteres ?>" name="leyenda_doc" id="leyenda_doc"  <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?> />
                       </div>
-                        <div class="column">
-
-                          <label for="moneda">Moneda:</label>
+                      <div class="column_rz">
+                          <label for="razon_social"><p>Razón Social:</p></label><input type="text" size="73" name="razon_social" id="razon_social" readonly <?php echo 'value="'.$razon_social.'"'; ?> />
+                      </div>
+                        <div class="column_enmedio espacio">
+                          <label for="moneda"><p>Moneda:</p></label>
                           <select name="moneda" id="moneda">
                               <option value="0">Seleccione Moneda</option>
                               <?php
@@ -119,28 +113,28 @@ $('#main').txtConceptos('#txt_principal');
                               }
                               ?>
                           </select>
-                          <label for="iva">IVA:</label>
+                          <label for="iva"><p>IVA:</p></label>
                       <select id="iva" name="iva">
                           <option value="0">Seleccione IVA</option>
-                      <?php 
+                      <?php
                             while($row=$result_iva->fetch_array(MYSQLI_ASSOC)){
                             echo "<option value='",$row['id_iva'],"'";
-                              if($return==1){ 
+                              if($return==1){
                                 if($row['id_iva']==$iva)
                                   {
                                     echo"selected";
                                   }
-                                } 
+                                }
                             echo ">",$row['valor_tx'],"</option>";
                               }
                           ?>
                       </select>
-                          <label for="salida">Salida:</label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
+                          <label for="salida"><p>Salida:</p></label><input type="text" name="salida" id="salida" <?php if($return==1){ echo 'value="'.$salida.'"';} ?> />
 
                       </div>
 
                       <div class="column">
-                        <label for="compa_fac">Compañía facturadora:</label>
+                        <label for="compa_fac"><p>CIA facturadora:</p></label>
                           <select name="compa_fac" id="compa_fac">
                               <option value="0">Seleccione Compañia</option>
                               <?php
@@ -196,34 +190,9 @@ $('#main').txtConceptos('#txt_principal');
     <tr class="add_factura">
       <?php 
         //validar conexiones para 0 ninguna 1 SCL 2 SAP 
-          if($conexion==1){
-/*
-            $scl=ConectaGuio();
-            $q="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
-            $qp=OCIParse($scl,$q);
-            OCIExecute($qp,OCI_DEFAULT);
-  
-*/        /*
-          $oracle=ConexionSCL();
-          $query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS ORDER BY DES_CONCEPTO";
-          //$query="SELECT COD_CONCEPTO as codigo, DES_CONCEPTO as descripcion FROM FA_CONCEPTOS  WHERE ROWNUM <= 2";
-          $result = oci_parse($oracle, $query);
-          $result2 = oci_parse($oracle, $query);
-          oci_execute($result);
-          oci_execute($result2);
-          */
-          
-          /*
-         while (($row = oci_fetch_array($result, OCI_BOTH)) != false) {
-            // Usar nombres de columna en mayúsculas para los índices del array asociativo
-              echo $row[0] . "<br>\n";
-              echo $row[1] . "<br>\n";
-            }
-          */
+          if($conexion == 1){
+      ?>
 
-      ?>    
-
-    
               <td><select id="num_principal" name="add_cont[1][0]" class="descripcion_concepto"></select></td>
               <td><select id="txt_principal" name="add_cont[1][1]" class="descripcion_concepto"></select></td>
         <?php  } else {?>
@@ -239,45 +208,9 @@ $('#main').txtConceptos('#txt_principal');
     </tr>
     <?php } ?>
     </table>
-    <table class="gridview">
-    <tr>
-    <td colspan="3"><a href="#" id="agregar_campo_fac"><div class="agregar_observacion botones">Agregar Concepto</div></a></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-   </tr> 
-<!--   <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>SubTotal:</td>
-    <td></td>
-    <td></td>
-    <td class="total_subtotal">$0</td>
-   </tr>   
-    <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>IVA:</td>
-    <td></td>
-    <td></td>
-    <td>$32</td>
-   </tr>   
-    <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>IEPS:</td>
-    <td></td>
-    <td></td>
-    <td>$0</td>
-   </tr>
-   <tr>
-    <td colspan="3">&nbsp;</td>
-    <td>Total:</td>
-    <td></td>
-    <td></td>
-    <td>$200</td>
-   </tr> -->
-  </table>
+      <a href="#" id="agregar_campo_fac"> <div class="agregar_observacion botones">Agregar Concepto</div></a>
    <div id="errorForm"></div> 
-        </fieldset>
+
                    <div class="boton_envio">
                     <input  type="hidden" value="0" name="lista_concepto_cod" id="lista_concepto_cod">
                     <input  type="hidden" value="0" name="lista_concepto_tex" id="lista_concepto_tex">
@@ -295,5 +228,14 @@ $('#main').txtConceptos('#txt_principal');
       </div>
     </div>
  </div>   
+<script type='text/javascript'>
+    $(document).ready(function(){
+        //$('#main').docFactura($cod_cliente);
+        $('#main').listaConceptos();
+        $('#main').numConceptos('#num_principal');
+        $('#main').txtConceptos('#txt_principal');
+        //window.location.replace('homepage.php?id=nueva_solicitud');
+    });
+</script>
  
  

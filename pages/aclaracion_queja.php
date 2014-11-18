@@ -14,11 +14,30 @@ $linea_negoc=$_POST['linea_negoc'];
 $cod_cte=$_POST['cod_cte'];
 	
 $query="INSERT INTO `sis_fac`.`aclaracion_queja` 
-( `fecha_recep`, `usuario`, `area`, `tipo_solic`, `detalle_solic`, `linea_negoc`, `cod_cte`, estatus, area_flujo) 
-VALUES ( now(), '$id_usuario', '$id_area',  '$tipo_sol', '$detalle_solic', '$linea_negoc', '$cod_cte', 'Pendientes', '7')";
+( `fecha_recep`, `usuario`, `area`, `tipo_solic`, 
+`detalle_solic`, `linea_negoc`, `cod_cte`, estatus, area_flujo) 
+VALUES ( now(), '$id_usuario', '$id_area',  '$tipo_sol', 
+'$detalle_solic', '$linea_negoc', '$cod_cte', '0', '7')";
 $result = $mysqli->query($query);
+$id_solicitud=$mysqli->insert_id;
 
-	
+ //guarda Historial
+                               $query="INSERT INTO historial_estados (fecha,
+                                                   estado_solicitud_idestado_solicitud,
+                                                   users_id_usuario,
+                                                   area_id_area,
+                                                   id_aclaracion) 
+                                            VALUES (now(),
+                                                    0,
+                                                    '$id_usuario',
+                                                    '$id_area',
+                                                    '$id_solicitud')";
+                                $mysqli->query($query) or die($mysqli->error);
+
+$query = "INSERT INTO observaciones( observacion,fecha_observacion,users_id_usuario,
+ estado,solicitudes_id_solicitudes )
+ VALUES ( '$detalle_solic', now(), '$id_usuario', '2', '$id_solicitud')";
+$result = $mysqli->query($query);	
 }
 
 
@@ -26,9 +45,8 @@ $result = $mysqli->query($query);
 ?>
         <div class="contenedor">
             <div class="header">
-                <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                <h1>Aclaración o Queja
-                </h1>    
+                <img alt="Movistar" class="logotipo" src="images/logo.png">
+                <h1 class='h1_header'>Aclaración o Queja</h1>    
             </div>
             <div class="content">
 <form method="POST" action="#">                

@@ -44,7 +44,7 @@
     content "\e603"
 
 .icon-eye
-  &:before 
+  &:before
     content: "\e609"
 
 .icon-close
@@ -93,7 +93,7 @@ p
 
 .h1_header
   font-family: 'MovistarHeadlineBold'
-  padding-left 20px
+  padding-left 22px
   font-size 25px
   font-weight normal
   color #00517A
@@ -189,7 +189,7 @@ p
   text-align center
 
 .botones
-  display block
+  display inline-block
   width 150px
   margin-top 30px
 
@@ -220,31 +220,82 @@ p
   width 100%
 
   .column 
-    width 32%
+    width 285px
     padding 2px 6px
-    float left
+    display inline-block
+    position relative
 
     label
       display block
-      width 140px
       float left
-      margin-top 5px  
+      margin-top 5px
+
+      p
+        display block
+        height 14px
+        margin-top 2px
+        padding-top 5px
+        padding-bottom 5px
+        width 120px
+
+    input, select
+      display block
+      float left
+
+    .ver
+      display block
+      float left
+      width 120px
+      height: 30px
+      vertical-align text-bottom
+
+  .column_enmedio
+    width 285px
+    padding 2px 6px
+    display inline-block
+    vertical-align text-bottom
+
+    label
+      display block
+      float left
+      margin-top 5px
+
+      p
+        display block
+        height 14px
+        margin-top 2px
+        padding-top 5px
+        padding-bottom 5px
+        width 72px
+
+    input, select
+      display block
+
+  .column_rz
+    position absolute
+    left 315px
+    top 0
+
+  .column_rz_con
+    position absolute
+    left 315px
+    top 0px
 
     p
       display block
-      width 140px
       height 14px
+      margin-top 2px
+      padding-top 5px
+      padding-bottom 5px
+      width 120px
       float left
-      margin-top 3px
-      padding 5px  
 
-      input
-        display block
-        margin-top -10px
-        margin-left -3px
 
-  .column_rz label
-    padding  5px
+    input
+      width  455px
+
+.espacio
+  margin 0 10px
 
   .bottom
     margin-top 64px
@@ -284,12 +335,12 @@ p
       border-top .5px solid #fff
 
       .botones
-        display block
+        display inline-block
         width 100px
         height 20px
         margin 10px 0
 
-.sol_oculto
+.sol_oculto, .sol_oculto_fac
   display none
 
 .ancho_descripcion
@@ -324,9 +375,6 @@ p
         right 0
   .right
     right 0
-
-.espacio
-  margin 0 10px
 
 .detalle_historial
   font-size small
@@ -383,3 +431,48 @@ p
 
 .descripcion_concepto
   font-size 10px
+
+.subtitulo
+  vertical-align middle
+  display inline-block
+  margin-left 50px
+  margin-top -20px
+
+.column_rz p
+  margin 0
+  padding 0
+  display inline-block
+
+/* VENTANA MODAL LOADING */
+.modal
+  display    none
+  position   fixed
+  z-index    1000
+  top        0
+  left       0
+  height     100%
+  width      100%
+  background rgba( 255, 255, 255, .8 ) url('../images/ajax-loader.gif')  50% 50%  no-repeat
+
+body
+  .loading
+    overflow hidden
+
+    .modal
+      display block
+
+.eliminar
+  color: #f00
+
+.contentBoxError
+  position relative
+  width 100%
+  margin-left auto
+  margin-right auto
+  background-color #FFE9E7
+  border 1px solid red
+  line-height auto
+  padding 10px
+  font-size 13px
+  font-family arial
+  text-align center

@@ -36,7 +36,7 @@ if (isset($_POST['txtUsuario'])){
                 $_SESSION['oper_sol']        = $fila['oper_sol'];
 
 
-             if(($fila['oper_sol']==0  ) && ($id_area==7  )){
+             if(($fila['oper_sol']==0  ) && ($id_area==7 || $id_area==24 || $id_area==25 || $id_area==26 || $id_area==27)){
                         header('Location: homepage.php?id=operacion_ATC');
                 
                 }

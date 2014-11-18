@@ -41,7 +41,8 @@ location = location.pathname + '?id=solicitante&param=' + valor;
 
 <div class="contenedor">
             <div class="header">
-                 <h1 class="h1_header">
+                <img alt="Movistar" class="logotipo" src="images/logo.png">
+                <h1 class="h1_header">
                     <?php echo utf8_encode($_SESSION['username']);?> 
                 </h1>
             
@@ -134,7 +135,7 @@ while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
                         <td ><font color="#fff">Fecha Recepción</font></td>
                         <td ><font color="#fff">Fecha Atención</font></td>
                         <td ><font color="#fff">Tipo Solicitud</font></td>
-                        <td ><font color="#fff">Detalle Solicitud</font></td>
+                       
                         <td ><font color="#fff">Línea de Negocio</font></td>
                         <td ><font color="#fff">Código de Cliente</font></td>
                         <td ><font color="#fff">Proceso</font></td>
@@ -143,10 +144,26 @@ while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
 <?php 
 //Si el estado esta en proceso para el solicitante
 
-
+if ($param=='Pendientes'){
 					$sql_aclaraciones="SELECT * 
 					FROM  `aclaracion_queja` 
-					WHERE estatus = '$param'";
+					WHERE estatus = '0' || estatus = '1' || estatus = '2' || estatus = '3' || estatus = '5' || estatus = '6' ";
+}
+
+
+else if ($param=='Rechazadas'){
+					$sql_aclaraciones="SELECT * 
+					FROM  `aclaracion_queja` 
+					WHERE estatus = '4'  ";
+	
+}
+
+else if ($param=='Aceptadas'){
+					$sql_aclaraciones="SELECT * 
+					FROM  `aclaracion_queja` 
+					WHERE estatus = '7'  ";
+	
+}
 
 
 if ($rs_aclaraciones = $mysqli->query($sql_aclaraciones)) {
@@ -163,7 +180,7 @@ while ($fila = $rs_aclaraciones->fetch_array(MYSQLI_ASSOC)) {
                         <td >'.$fila["fecha_recep"].'</td>
                         <td >'.$fila["fecha_atenc"].'</td>
 								<td >'.$fila["tipo_solic"].'</td>
-                        <td >'.$fila["detalle_solic"].'</td>
+                       
                         <td >'.$fila["linea_negoc"].'</td>
                         <td >'.$fila["cod_cte"].'</td>
                         <td >'.$fila["proceso"].'</td>

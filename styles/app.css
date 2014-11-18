@@ -77,7 +77,7 @@ p {
 }
 .h1_header {
   font-family: 'MovistarHeadlineBold';
-  padding-left: 20px;
+  padding-left: 22px;
   font-size: 25px;
   font-weight: normal;
   color: #00517a;
@@ -176,7 +176,7 @@ p {
   text-align: center;
 }
 .botones {
-  display: block;
+  display: inline-block;
   width: 150px;
   margin-top: 30px;
 }
@@ -207,47 +207,99 @@ p {
   width: 100%;
 }
 .formulario_n .column {
-  width: 32%;
+  width: 285px;
   padding: 2px 6px;
-  float: left;
+  display: inline-block;
+  position: relative;
 }
 .formulario_n .column label {
   display: block;
-  width: 140px;
   float: left;
   margin-top: 5px;
 }
-.formulario_n .column p {
+.formulario_n .column label p {
   display: block;
-  width: 140px;
   height: 14px;
-  float: left;
-  margin-top: 3px;
-  padding: 5px;
+  margin-top: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 120px;
 }
-.formulario_n .column p input {
+.formulario_n .column input,
+.formulario_n .column select {
   display: block;
-  margin-top: -10px;
-  margin-left: -3px;
+  float: left;
 }
-.formulario_n .column_rz label {
-  padding: 5px;
+.formulario_n .column .ver {
+  display: block;
+  float: left;
+  width: 120px;
+  height: 30px;
+  vertical-align: text-bottom;
 }
-.formulario_n .bottom {
+.formulario_n .column_enmedio {
+  width: 285px;
+  padding: 2px 6px;
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+.formulario_n .column_enmedio label {
+  display: block;
+  float: left;
+  margin-top: 5px;
+}
+.formulario_n .column_enmedio label p {
+  display: block;
+  height: 14px;
+  margin-top: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 72px;
+}
+.formulario_n .column_enmedio input,
+.formulario_n .column_enmedio select {
+  display: block;
+}
+.formulario_n .column_rz {
+  position: absolute;
+  left: 315px;
+  top: 0;
+}
+.formulario_n .column_rz_con {
+  position: absolute;
+  left: 315px;
+  top: 0px;
+}
+.formulario_n .column_rz_con p {
+  display: block;
+  height: 14px;
+  margin-top: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 120px;
+  float: left;
+}
+.formulario_n .column_rz_con input {
+  width: 455px;
+}
+.espacio {
+  margin: 0 10px;
+}
+.espacio .bottom {
   margin-top: 64px;
 }
-.formulario_n .bottom_nc {
+.espacio .bottom_nc {
   margin-top: 30px;
 }
-.formulario_n #detalles_factura {
+.espacio #detalles_factura {
   clear: left;
   max-width: 920px;
   margin: -5px;
 }
-.formulario_n #detalles_factura table td {
+.espacio #detalles_factura table td {
   text-align: center;
 }
-.formulario_n #detalles_factura .deta_factura li {
+.espacio #detalles_factura .deta_factura li {
   display: inline-block;
   width: 120px;
   min-height: 20px;
@@ -258,7 +310,7 @@ p {
   margin: 0;
   border-top: 0.5px solid #fff;
 }
-.formulario_n #detalles_factura .deta_factura_all li {
+.espacio #detalles_factura .deta_factura_all li {
   display: inline-block;
   width: 120px;
   min-height: 20px;
@@ -269,13 +321,14 @@ p {
   margin: 0;
   border-top: 0.5px solid #fff;
 }
-.formulario_n #detalles_factura .deta_factura_all li .botones {
-  display: block;
+.espacio #detalles_factura .deta_factura_all li .botones {
+  display: inline-block;
   width: 100px;
   height: 20px;
   margin: 10px 0;
 }
-.sol_oculto {
+.sol_oculto,
+.sol_oculto_fac {
   display: none;
 }
 .ancho_descripcion {
@@ -311,9 +364,6 @@ p {
 }
 .datos_informacion .right {
   right: 0;
-}
-.espacio {
-  margin: 0 10px;
 }
 .detalle_historial {
   font-size: small;
@@ -374,4 +424,48 @@ p {
 }
 .descripcion_concepto {
   font-size: 10px;
+}
+.subtitulo {
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 50px;
+  margin-top: -20px;
+}
+.column_rz p {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+/* VENTANA MODAL LOADING */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(255,255,255,0.8) url("../images/ajax-loader.gif") 50% 50% no-repeat;
+}
+body .loading {
+  overflow: hidden;
+}
+body .loading .modal {
+  display: block;
+}
+.eliminar {
+  color: #f00;
+}
+.contentBoxError {
+  position: relative;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffe9e7;
+  border: 1px solid #f00;
+  line-height: auto;
+  padding: 10px;
+  font-size: 13px;
+  font-family: arial;
+  text-align: center;
 }
