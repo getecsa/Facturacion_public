@@ -81,7 +81,7 @@ if(isset($_POST['request'])) {
                 $query = "SELECT NOM_CLIENTE ||' ' ||
                                  NOM_APECLIEN1||' '||
                                  NOM_APECLIEN2 as razon_social
-                            FROM FA_HISTCLIE_19010102
+                            FROM GE_CLIENTES
                            WHERE COD_CLIENTE= '$id_cliente'
                              AND ROWNUM <= 1";
                 $result = oci_parse($oracle, $query);
@@ -98,6 +98,7 @@ if(isset($_POST['request'])) {
                     echo json_encode('no result');
                 }
 
+
             } else {
               /*  if (!isset($_SESSION['usuario'])) {
                     header('Forbidden',true,403);
@@ -107,6 +108,46 @@ if(isset($_POST['request'])) {
                 echo json_encode(false);
             }
             break;
+
+        case 'getdocnota':
+            $oracle=ConexionSCL();
+            if (isset($_SESSION['username'])) {
+                $factura_a=$_POST['factura_a'];
+                $factura_b=$_POST['factura_b'];
+
+
+                $query = "SELECT NOM_CLIENTE ||' ' ||
+                                 NOM_APECLIEN1||' '||
+                                 NOM_APECLIEN2 as razon_social
+                            FROM GE_CLIENTES
+                           WHERE COD_CLIENTE= '$id_cliente'
+                             AND ROWNUM <= 1";
+                $result = oci_parse($oracle, $query);
+                $ok=oci_execute($result);
+                if ($ok != false) {
+                    $row = oci_fetch_array($result, OCI_ASSOC);
+                    if(!empty($row)){
+                        $razon_social=$row['RAZON_SOCIAL'];
+                        echo json_encode($razon_social);
+                    }else{
+                        echo json_encode('no result');
+                    }
+                }else{
+                    echo json_encode('no result');
+                }
+
+
+            } else {
+                /*  if (!isset($_SESSION['usuario'])) {
+                      header('Forbidden',true,403);
+                  } else {
+                      echo json_encode(array());
+                  } */
+                echo json_encode(false);
+            }
+            break;
+
+
 
         default:
             break;

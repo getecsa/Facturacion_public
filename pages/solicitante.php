@@ -52,7 +52,7 @@ location = location.pathname + '?id=solicitante&param=' + valor;
                                                   <H2>Solicitudes <?php echo $param;?></H2>
                     <table class="gridview" width=30%>
 <tr >
-                        <td colspan="7" align="right" bgcolor="00517A"><font color="#fff">Filtro de solicitud:
+                        <td colspan="7" align="right" bgcolor="00517A"><font color="#ffffff">Filtro de solicitud:
                         <select id='mySelect' onchange='enviar_parametro(this.value);'>
 <option value='...'>---</option> 
 <option value='Pendientes'>Pendientes</option> 
@@ -65,10 +65,10 @@ location = location.pathname + '?id=solicitante&param=' + valor;
                         
                     </tr>
                     <tr bgcolor="00517A">
-                        <td ><font color="#fff">ID Solicitud</font></td>
-                        <td ><font color="#fff">ID Documento</font></td>
-                        <td ><font color="#fff">Tipo de solictud</font></td>
-                        <td ><font color="#fff">Fecha Ingreso</font></td>
+                        <td ><font color="#ffffff">ID Solicitud</font></td>
+                        <td ><font color="#ffffff">ID Documento</font></td>
+                        <td ><font color="#ffffff">Tipo de solictud</font></td>
+                        <td ><font color="#ffffff">Fecha Ingreso</font></td>
                         
                     </tr>
 <?php 
@@ -131,15 +131,15 @@ while ($fila = $rs->fetch_array(MYSQLI_ASSOC)) {
                                                 <H2>Aclaraciones ó Quejas <?php echo $param;?></H2>
                     <table class="gridview" width=30%>
                    <tr bgcolor="00517A">
-                        <td ><font color="#fff">ID</font></td>
-                        <td ><font color="#fff">Fecha Recepción</font></td>
-                        <td ><font color="#fff">Fecha Atención</font></td>
-                        <td ><font color="#fff">Tipo Solicitud</font></td>
+                        <td ><font color="#ffffff">ID</font></td>
+                        <td ><font color="#ffffff">Fecha Recepción</font></td>
+                        <td ><font color="#ffffff">Fecha Atención</font></td>
+                        <td ><font color="#ffffff">Tipo Solicitud</font></td>
                        
-                        <td ><font color="#fff">Línea de Negocio</font></td>
-                        <td ><font color="#fff">Código de Cliente</font></td>
-                        <td ><font color="#fff">Proceso</font></td>
-                        <td ><font color="#fff">Fecha Cierre</font></td>
+                        <td ><font color="#ffffff">Línea de Negocio</font></td>
+                        <td ><font color="#ffffff">Código de Cliente</font></td>
+                        <td ><font color="#ffffff">Proceso</font></td>
+                        <td ><font color="#ffffff">Fecha Cierre</font></td>
                   </tr>
 <?php 
 //Si el estado esta en proceso para el solicitante

@@ -1,7 +1,7 @@
 <?php
 include("configuracion.php");
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
-    header('Location: homepage.php?id=nueva_solicitud');
+  //  header('Location: homepage.php?id=nueva_solicitud');
 }
 $tipo_cliente=$_POST["tipo_cliente"];
 

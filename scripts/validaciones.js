@@ -668,8 +668,9 @@ function validarNuevaSolicitud()
                 $("body").addClass("loading");
                 $.ajax({
                     type: "POST",
-                    url: "scripts/funciones.ph",
-                    data: {request : 'getdocfactura',id : $('#cod_cliente').val()},
+                    url: "scripts/funciones.php",
+                    data: {request : 'getdocnota',factura_a : $('#folio_factura_afectar_a').val(),
+                           factura_b: $('#folio_factura_afectar_b').val() },
                     timeout: 60000,
                     success: function(response){
                         if(response != 'no result'){
@@ -678,7 +679,7 @@ function validarNuevaSolicitud()
                             formulario.submit();
                             $("body").removeClass("loading");
                         }else{
-                            showError('Código Cliente NO Existe. Verifique.');
+                            showError('Factura NO Existe. Verifique.');
                         }
                     },
                     error: function(xhr,status,trn){

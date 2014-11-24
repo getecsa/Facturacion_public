@@ -163,14 +163,14 @@ if($accion==3){
                     </tr>
 
                     <tr bgcolor="00517A">
-                        <td ><font color="#fff">ID Solicitud</font></td>
-                        <td ><font color="#fff">ID Documento</font></td>
-                        <td ><font color="#fff">Solicitante</font></td>
-                        <td ><font color="#fff">Área</font></td>
-                        <td ><font color="#fff">Tipo de solicitud</font></td>
-                        <td ><font color="#fff">Fecha Ingreso</font></td>
-                        <td ><font color="#fff">Estado</font></td>
-                        <td ><font color="#fff">&nbsp;</font></td>
+                        <td ><font color="#ffffff">ID Solicitud</font></td>
+                        <td ><font color="#ffffff">ID Documento</font></td>
+                        <td ><font color="#ffffff">Solicitante</font></td>
+                        <td ><font color="#ffffff">Área</font></td>
+                        <td ><font color="#ffffff">Tipo de solicitud</font></td>
+                        <td ><font color="#ffffff">Fecha Ingreso</font></td>
+                        <td ><font color="#ffffff">Estado</font></td>
+                        <td ><font color="#ffffff">&nbsp;</font></td>
                       
                     </tr>
 <?php 

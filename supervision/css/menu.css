@@ -1,0 +1,76 @@
+﻿.menu {
+    background-color: #003046;
+    /*background: url(../images/bgmenu.fw.png) repeat-x;*/
+    padding: 5px;
+    padding-bottom: 4px;
+    padding-left: 35px;
+    height: 35px;
+    list-style: none;
+    margin: 0px;
+}
+
+.menu a {
+    color: #00A5BD;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 16px;
+    font-variant: small-caps;
+    font-weight: bold;
+    display: block;
+}
+
+.menu a:hover {
+    color: #7AB800;
+}
+
+.menu a.activo {
+    color: white;
+}
+
+.menu a.activo:hover {
+    color: white;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0px;
+}
+
+.menu li {
+    float: left;
+    min-width: 120px;
+}
+
+.menu li ul {
+    position: absolute;
+    display: block;
+    display: none;
+    background-color: #003046;
+}
+
+.menu li:hover ul {
+    display: block;
+}
+
+.menu li li {
+    display: list-item;
+    float: none;
+}
+
+.menu li li a {
+    font-weight: normal;
+    font-variant: normal;
+}
+
+.menu li li a:hover {
+    color: white;
+}
+
+.menu li.salir {
+    float: right;
+    min-width: 0px;
+}
+
+.menu li.salir:hover {
+    background-color: transparent;
+}

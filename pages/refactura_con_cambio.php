@@ -1,7 +1,7 @@
 <?php
 include("configuracion.php");
 if( (!isset($_POST["tipo_cliente"])) || (!isset($_POST["tipo_documento"]))  ){
-    header('Location: homepage.php?id=nueva_solicitud');
+   // header('Location: homepage.php?id=nueva_solicitud');
 }
 $tipo_cliente=$_POST["tipo_cliente"];
 
@@ -69,10 +69,10 @@ $razon_social="";
                         <label for="fecha_emision_nc"><p>Fecha Emision NC:</p></label><input type="text" name="fecha_emision_nc" id="fecha_emision_nc" <?php if($return==1){ echo 'value="'.$fecha_emision_nc.'"';} ?> readonly="readonly" />
                        
                       </div>
-                      <div class="column_rz_con">
+                      <div class="column_rz">
                           <label for="razon_social"><p>Razón Social:</p></label><input type="text" size="73" name="razon_social" id="razon_social" readonly <?php echo 'value="'.$razon_social.'"'; ?> />
                       </div>
-                      <div class="column espacio">
+                      <div class="column_enmedio espacio">
                       <label for="moneda"><p>Moneda:</p></label>
                        <select name="moneda">
                        <option value="0">Seleccione Moneda</option>
@@ -105,7 +105,7 @@ $razon_social="";
                               }
                           ?>
                       </select>
-                      <label for="folio_fac_origen"><p>Folio Fac origen:</p></label><input type="text" name="folio_fac_origen" id="folio_fac_origen" <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} else{ ?> value="<?php echo $_POST['folio_factura_afectar']; }?>" readonly="readonly" />
+                      <label for="folio_fac_origen"><p>Folio Fac O:</p></label><input type="text" name="folio_fac_origen" id="folio_fac_origen" <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} else{ ?> value="<?php echo $_POST['folio_factura_afectar']; }?>" readonly="readonly" />
                       <label for="folio_nc"><p>Folio NC:</p></label><input type="text" name="folio_nc" id="folio_nc" <?php if($return==1){ echo 'value="'.$folio_nc.'"';} ?> />
                       <label for="fecha_emision_nc2"><p>Fecha Fac. Origen:</p></label><input type="text" name="fecha_emision_fac_or" id="fecha_emision_nc2" <?php if($return==1){ echo 'value="'.$fecha_emision_fac_or.'"';} ?> readonly="readonly" />
                        

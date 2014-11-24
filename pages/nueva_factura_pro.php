@@ -1,13 +1,21 @@
+<?php
+include("configuracion.php");
+
+$tipo_cliente=$_POST["tipo_cliente"];
+
+$sql="select * from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+$result=$mysqli->query($sql);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+?>
+
 <div id="divNotificacion" />
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Confirmación Factura</h1>
+                      <h1 class="h1_header">Confirmación Factura</h1> <h2 class="subtitulo"><?=$row['tx_tipo_cliente']?></h2>
                   </div>
           <div class="content">
 <?php
- include("configuracion.php");
-
 
 if(isset($_POST["submit_pro"])) {
         if( (!isset($_POST["cod_cliente"])) || (!isset($_POST["razon_social"]))  ){
@@ -196,20 +204,22 @@ $area_inicial=$row['area_id_area'];
 ?>
   <form class="formulario_n" action="#" method="post" id="nueva_factura" enctype="multipart/form-data">
 
-      <div class="column">
-                        <label for="cod_cliente"><p>Código de cliente:</p></label>
-       <div class="ver">                   <?php echo $cod_cliente;?></div>
-                        <label for="motivo_sol"><p>Motivo de solicitud:</p></label>
-          <div class="ver">                       <?php echo $motivo_sol;?></div>
-                        <label for="dias_ven"><p>Días de vencimiento:</p></label>
-              <div class="ver">                      <?php echo $dias_ven;?></div>
-                        <label for="leyenda_doc"><p>Leyenda del documento:</p></label>
-                  <div class="ver">                      <?php echo $leyenda_doc;?></div>
-                      </div>
-                        <div class="column_rz">
+
+      <div class="column_conf">
+          <label for="cod_cliente"><p>Código de cliente:</p></label>
+          <p><?php echo $cod_cliente;?></p>
+          <label for="motivo_sol"><p>Motivo de solicitud:</p></label>
+          <p>  <?php echo $motivo_sol;?></p>
+          <label for="dias_ven"><p>Días de vencimiento:</p></label>
+          <p> <?php echo $dias_ven;?></p>
+          <label for="leyenda_doc"><p>Leyenda del doc.:</p></label>
+          <p><?php echo $leyenda_doc;?></p>
+      </div>
+
+                        <div class="column_rz_conf">
                             <label for="razon_social"><p>Razón Social:</p></label><p><?php echo $razon_social;?></p>
                         </div>
-                      <div class="column">
+                      <div class="column_conf">
                           <label for="moneda"><p>Moneda:</p></label>
                           <?php
                           $sql_moneda="select * from moneda where id_moneda=$moneda";
@@ -230,8 +240,8 @@ $area_inicial=$row['area_id_area'];
                           <label for="salida"><p>Salida:</p></label><p><?php echo $salida;?></p>
                       </div>
 
-                      <div class="column">      
-                        <label for="compa_fac"><p>Compañía facturadora:</p></label><p><?php echo $compa_fac;?></p>
+                      <div class="column_conf">
+                        <label for="compa_fac"><p>CIA facturadora:</p></label><p><?php echo $compa_fac;?></p>
                       </div>
                     
   <div id="detalles_factura">

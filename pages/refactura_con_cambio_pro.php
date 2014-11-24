@@ -1,12 +1,20 @@
+<?php
+include("configuracion.php");
+
+$tipo_cliente=$_POST["tipo_cliente"];
+
+$sql="select * from tipo_cliente where id_tipo_cliente='$tipo_cliente'";
+$result=$mysqli->query($sql);
+$row=$result->fetch_array(MYSQLI_ASSOC);
+?>
 <div id="divNotificacion" />
       <div class="contenedor">
                   <div class="header">
                       <img alt="Movistar" class="logotipo" src="images/logo.png" />
-                      <h1>Confirmacion de refactura con cambio</h1>
+                      <h1 class="h1_header">Confirmacion de refactura con cambio</h1><h2 class="subtitulo"><?=$row['tx_tipo_cliente']?></h2>
                   </div>
           <div class="content">
 <?php
- include("configuracion.php");
 
   if(isset($_POST["submit_pro"])) {    
 
@@ -312,17 +320,21 @@ if ($archivo != "") 	{
 
 ?>
   <form class="formulario_n" action="#" method="post" id="nueva_refactura_cc" enctype="multipart/form-data">
-                    <fieldset>
-                      <div class="column">
-                        <label for="cod_cliente">Código de cliente:</label><p><?php echo $_POST['cod_cliente'];?></p>
-                        <label for="motivo_sol">Motivo de solicitud:</label><p><?php echo $_POST['motivo_sol'];?></p>
-                        <label for="leyenda_doc">Leyenda del documento:</label><p><?php echo $_POST['leyenda_doc'];?></p>
-                        <label for="dias_ven">Dias de vencimiento:</label><p><?php echo $_POST['dias_ven'];?></p>
-                        <label for="codigo_cliente_afectar">Codigo C.(Fac. Afectar):</label><p><?php echo $_POST['codigo_cliente_afectar'];?></p>
-                        <label for="fecha_emision_nc">Fecha Emision NC:</label><p><?php echo $_POST['fecha_emision_nc'];?></p>
-                      </div>  
-                      <div class="column bottom_nc">
-                      <label for="moneda">Moneda:</label>
+
+                      <div class="column_conf">
+                        <label for="cod_cliente"><p>Código de cliente:</p></label><p><?php echo $_POST['cod_cliente'];?></p>
+                        <label for="motivo_sol"><p>Motivo de solicitud:</p></label><p><?php echo $_POST['motivo_sol'];?></p>
+                        <label for="leyenda_doc"><p>Leyenda del doc:</p></label><p><?php echo $_POST['leyenda_doc'];?></p>
+                        <label for="dias_ven"><p>Dias de vencimiento:</p></label><p><?php echo $_POST['dias_ven'];?></p>
+                        <label for="codigo_cliente_afectar"><p>CC.(Fac. Afectar):</p></label><p><?php echo $_POST['codigo_cliente_afectar'];?></p>
+                        <label for="fecha_emision_nc"><p>Fecha Emision NC:</p></label><p><?php echo $_POST['fecha_emision_nc'];?></p>
+                      </div>
+      <div class="column_rz_conf">
+          <label for="razon_social"><p>Razón Social:</p></label><p><?php echo $razon_social;?></p>
+      </div>
+
+                      <div class="column_conf">
+                      <label for="moneda"><p>Moneda:</p></label>
                         <?php 
                             $sql_moneda="select * from moneda where id_moneda=$moneda";
                             $result_moneda=$mysqli->query($sql_moneda);
@@ -330,7 +342,7 @@ if ($archivo != "") 	{
                             echo "<p>",$row['moneda'],"</p>";
                               }
                           ?>
-                      <label for="iva">IVA:</label>
+                      <label for="iva"><p>IVA:</p></label>
                         <?php 
                             $sql_iva="select * from iva where id_iva=$iva";
                             $result_iva=$mysqli->query($sql_iva);
@@ -339,18 +351,17 @@ if ($archivo != "") 	{
                             echo "<p>",$row['valor_tx'],"</p>";
                               }
                           ?>
-                      <label for="folio_fac_origen">Folio factura origen:</label><p><?php echo $_POST['folio_fac_origen'];?></p>
-                      <label for="folio_nc">Folio NC:</label><p><?php echo $_POST['folio_nc'];?></p>
-                      <label for="fecha_emision_nc2">Fecha Emision Fac. Origen:</label><p><?php echo $_POST['fecha_emision_fac_or'];?></p>
+                      <label for="folio_fac_origen"><p>Folio factura origen:</p></label><p><?php echo $_POST['folio_fac_origen'];?></p>
+                      <label for="folio_nc"><p>Folio NC:</p></label><p><?php echo $_POST['folio_nc'];?></p>
+                      <label for="fecha_emision_nc2"><p>Fecha Emision Fac. Origen:</p></label><p><?php echo $_POST['fecha_emision_fac_or'];?></p>
                       </div>
 
-                      <div class="column">      
-                        <label for="razon_social">Razón Social:</label><p><?php echo $_POST['razon_social'];?></p>
-                        <label for="entrada">Entrada:</label><p><?php echo $_POST['entrada'];?></p>
-                        <label for="motivo_nc">Motivo NC:</label><p><?php echo $_POST['motivo_nc'];?></p>
-                        <label for="mt_fac_orig">Monto Total (Fac Origen):</label><p><?php echo $_POST['mt_fac_orig'];?></p>
-                        <label for="monto_afectar_nc">Monto Afectar con NC:</label><p><?php echo $_POST['monto_afectar_nc'];?></p>
-                        <label for="importe_total">Importe total:</label><p><?php echo $_POST['importe_total'];?></p>
+                      <div class="column_conf">
+                        <label for="entrada"><p>Entrada:</p></label><p><?php echo $_POST['entrada'];?></p>
+                        <label for="motivo_nc"><p>Motivo NC:</p></label><p><?php echo $_POST['motivo_nc'];?></p>
+                        <label for="mt_fac_orig"><p>Total (Fac Origen):</p></label><p><?php echo $_POST['mt_fac_orig'];?></p>
+                        <label for="monto_afectar_nc"><p>Afectar con NC:</p></label><p><?php echo $_POST['monto_afectar_nc'];?></p>
+                        <label for="importe_total"><p>Importe total:</p></label><p><?php echo $_POST['importe_total'];?></p>
                         
                       </div>
                     
@@ -445,7 +456,7 @@ Adjuntar Archivos
     <td><?php echo $iva+$subtotal; ?></td>
    </tr>
   </table> 
-        </fieldset>
+
                    <div class="boton_envio">    
 
 
