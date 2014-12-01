@@ -673,9 +673,17 @@ function validarNuevaSolicitud()
                            factura_b: $('#folio_factura_afectar_b').val() },
                     timeout: 60000,
                     success: function(response){
-                        if(response != 'no result'){
-                            formulario.method = 'POST';
-                            $('#razon_social').val(response);
+                        console.log(response);
+                       if(response != 'no result'){
+                            formulario.method = 'POST'
+                           $('#cod_cliente').val(response.c_cliente);
+                           $('#fecha_emision_nc').val(response.f_emision);
+                           $('#leyenda_doc').val(response.leyenda_doc);
+                           $('#razon_social').val(response.razon_social);
+                           $('#mt_fac_orig').val(response.t_factura);
+                           $('#total_nc').val(response.total_nc);
+                           $('#conceptos').val(response.conceptos_fac);
+
                             formulario.submit();
                             $("body").removeClass("loading");
                         }else{

@@ -16,6 +16,8 @@ $result_iva=$mysqli->query($sql_iva);
 $sql_moneda="select * from moneda";
 $result_moneda=$mysqli->query($sql_moneda);
 
+$folio_fac_origen=$_POST['folio_factura_afectar_a']."-".$_POST['folio_factura_afectar_b'];
+$total_nc=$_POST['mt_fac_orig']-$_POST['total_nc'];
 $tipo_cliente=$_POST["tipo_cliente"];
 $tipo_documento=$_POST["tipo_documento"];
 $return=0;
@@ -58,13 +60,13 @@ $razon_social="";
   <div class="content">
                   <form class="formulario_n" action="homepage.php?id=nueva_nota_pro" method="post" name="form1" id="form1">
                     <div class="column">
-                        <label for="cod_cliente"><p>Código de cliente:</p></label><input type="text" name="cod_cliente" id="cod_cliente" <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?php echo $_POST['codigo_cliente']; }?>" />
+                        <label for="cod_cliente"><p>Código de cliente:</p></label><input type="text" name="cod_cliente" id="cod_cliente" readonly <?php if($return==1){ echo 'value="'.$cod_cliente.'"';} else{ ?> value="<?=$_POST['cod_cliente']; }?>" />
                         <label for="motivo_sol"><p>Motivo de solicitud:</p></label><input type="text" name="motivo_sol" id="motivo_sol" <?php if($return==1){ echo 'value="'.$motivo_sol.'"';} ?>/>
-                        <label for="leyenda_doc"><p>Leyenda del doc.:</p></label><input type="text" name="leyenda_doc" id="leyenda_doc" <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} ?>/>
-                        <label for="folio_fac_origen"><p>Folio factura origen:</p></label><input type="text" name="folio_fac_origen" id="folio_fac_origen" <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} ?> />
+                        <label for="leyenda_doc"><p>Leyenda del doc.:</p></label><input type="text" name="leyenda_doc" id="leyenda_doc" readonly <?php if($return==1){ echo 'value="'.$leyenda_doc.'"';} else{ ?> value="<?=$_POST['leyenda_doc']; }?>" />
+                        <label for="folio_fac_origen"><p>Folio factura origen:</p></label><input type="text" name="folio_fac_origen" id="folio_fac_origen" readonly <?php if($return==1){ echo 'value="'.$folio_fac_origen.'"';} else{ ?> value="<?=$folio_fac_origen; }?>" />
                       </div>
                       <div class="column_rz">
-                          <label for="razon_social"><p>Razón Social:</p></label><input type="text" size="73" name="razon_social" id="razon_social" readonly <?php echo 'value="'.$razon_social.'"'; ?> />
+                          <label for="razon_social"><p>Razón Social:</p></label><input type="text" size="73" name="razon_social" id="razon_social" readonly value="<?=$_POST['razon_social']; ?>" />
                       </div>
                       <div class="column_enmedio espacio">
                       <label for="tipo_nc"><p>Tipo Nota:</p></label>
@@ -73,7 +75,7 @@ $razon_social="";
                         <option <?php if($return==1){ if($tipo_nc=="Parcial") { echo"selected"; } } ?> >Parcial</option>
                         <option <?php if($return==1){ if($tipo_nc=="Total") { echo"selected"; } } ?> >Total</option>
                       </select>
-                      <label for="iva"><p>IVA:</p></label>
+                    <!--  <label for="iva"><p>IVA:</p></label>
                       <select id="iva" name="iva">
                       <option value="0">Seleccione IVA</option>
                       <?php 
@@ -89,8 +91,8 @@ $razon_social="";
                             echo ">",$row['valor_tx'],"</option>";
                               }
                           ?>
-                      </select>
-                      <label for="mt_fac_orig"><p>Monto Total (Fac Origen):</p></label><input type="text" name="mt_fac_orig" id="mt_fac_orig" <?php if($return==1){ echo 'value="'.$mt_fac_orig.'"';} ?>/>
+                      </select>-->
+                      <label for="mt_fac_orig"><p>Monto Total (Fac Origen):</p></label><input type="text" name="mt_fac_orig" readonly id="mt_fac_orig" <?php if($return==1){ echo 'value="'.$mt_fac_orig.'"';} else{ ?> value="<?=$_POST['mt_fac_orig']; }?>"/>
                       </div>
 
                       <div class="column">      
@@ -111,8 +113,8 @@ $razon_social="";
                               }
                           ?>
                         </select>
-                        <label for="fecha_emision_nc"><p>Fecha Emisión:</p></label><input type="text" name="fecha_emision_nc" id="fecha_emision_nc" readonly="readonly" <?php if($return==1){ echo 'value="'.$fecha_emision_nc.'"';} ?> />
-                        <label for="monto_afectar_nc"><p>Monto Afectar NC:</p></label><input type="text" name="monto_afectar_nc" id="monto_afectar_nc" <?php if($return==1){ echo 'value="'.$monto_afectar_nc.'"';} ?> />
+                        <label for="fecha_emision_nc"><p>Fecha Emisión:</p></label><input type="text" name="fecha_emision_nc" id="fecha_emision_nc" readonly="readonly" <?php if($return==1){ echo 'value="'.$fecha_emision_nc.'"';} else{ ?> value="<?=$_POST['fecha_emision_nc']; }?>" />
+                        <label for="monto_afectar_nc"><p>Monto Afectar NC:</p></label><input type="text" name="monto_afectar_nc" id="monto_afectar_nc" readonly <?php if($return==1){ echo 'value="'.$monto_afectar_nc.'"';} else{ ?> value="<?=$total_nc; }?>" />
                       </div>
                     
   <div id="detalles_factura">
@@ -120,6 +122,7 @@ $razon_social="";
     <tr>
       <td>Código Concepto</td>
       <td>Descripción Concepto</td>
+      <td>Importe de Factura</td>
       <td>Importe Disponible</td>
       <td>Monto Afectar</td>
     </tr>
@@ -140,10 +143,11 @@ $razon_social="";
      <?php }  } else {?>
 
     <tr class="add_factura">
-      <td><input type="text" size="10" name="add_cont[1][0]" /> </td>
-      <td><input type="text" size="30" name="add_cont[1][1]" /></td>
-      <td><input type="text" size="10" name="add_cont[1][2]" /></td>
-      <td><input type="text" size="10" name="add_cont[1][3]" /></td>
+      <td><input type="text" size="10" name="add_cont[0][0]" /> </td>
+      <td><input type="text" size="30" name="add_cont[0][1]" /></td>
+      <td><input type="text" size="10" name="add_cont[0][2]" /></td>
+      <td><input type="text" size="10" name="add_cont[0][3]" /></td>
+      <td><input type="text" size="10" name="add_cont[0][4]" /></td>
     </tr>
     <?php } ?>
     </table>

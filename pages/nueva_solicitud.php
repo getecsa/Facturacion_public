@@ -57,12 +57,19 @@ include("cliente.php");
                                         </tr>                                      
                                         <tr class="sol_oculto_fac">
                                            <td>Folio de la factura:</td>
-                                           <td><input type="text" size="8" name="folio_factura_afectar_a" >-<input type="text" size="12" name="folio_factura_afectar_b"></td>
+                                           <td><input type="text" size="8" name="folio_factura_afectar_a" id="folio_factura_afectar_a" >-<input type="text" size="12" name="folio_factura_afectar_b" id="folio_factura_afectar_b"></td>
                                         </tr>
                                         <tr>
                                            <td></td>
-                                           <input type='hidden' name='razon_social' id='razon_social'>  
-                                           <td><input type="button" id="Enviar" name="Enviar" value="Enviar" onclick="return validarNuevaSolicitud();"></td>
+
+                                            <input type='hidden' name='razon_social' id='razon_social'>
+                                            <input type='hidden' name='fecha_emision_nc' id='fecha_emision_nc'>
+                                            <input type='hidden' name='leyenda_doc' id='leyenda_doc'>
+                                            <input type='hidden' name='mt_fac_orig' id='mt_fac_orig'>
+                                            <input type='hidden' name='total_nc' id='total_nc'>
+                                            <input type='hidden' name='conceptos' id='conceptos'>
+
+                                            <td><input type="button" id="Enviar" name="Enviar" value="Enviar" onclick="return validarNuevaSolicitud();"></td>
                                         </tr>
                                 </table>
                                 <div id="errorForm"></div> 

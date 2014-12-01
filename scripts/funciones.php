@@ -114,27 +114,116 @@ if(isset($_POST['request'])) {
             if (isset($_SESSION['username'])) {
                 $factura_a=$_POST['factura_a'];
                 $factura_b=$_POST['factura_b'];
+/*
+
+                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL, (
+                                      SELECT mens.desc_menslin
+                                        FROM
+                                             FA_MENSAJES mens,
+                                             FA_MENSPROCESO procmen,
+                                             FA_HISTDOCU histdocu
+                                       where mens.corr_mensaje=procmen.corr_mensaje
+                                         and mens.cod_idioma=1
+                                         and mens.num_linea=1
+                                         and procmen.num_proceso=histdocu.num_proceso
+                                         and histdocu.num_proceso  =his.NUM_PROCESO) as LEYENDA_DOC,
+                (SELECT NOM_CLIENTE ||' ' ||
+                NOM_APECLIEN1||' '||
+                NOM_APECLIEN2
+                                        FROM GE_CLIENTES
+                                       WHERE COD_CLIENTE=his.COD_CLIENTE
+                AND ROWNUM <= 1) as RAZON_SOCIAL,
+                                  (SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
+                                              ELSE 0 END
+                                     FROM FA_HISTDOCU
+                                    WHERE NUM_SECUREL=his.NUM_SECUENCI and COD_TIPDOCUM='25' and cod_cliente =his.COD_CLIENTE) as TOTAL_NC
+                             FROM FA_HISTDOCU his where PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b' ";
+
+ */
+
+                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL,
+                                     (SELECT NOM_CLIENTE ||' ' ||
+                                             NOM_APECLIEN1||' '||
+                                             NOM_APECLIEN2
+                                        FROM GE_CLIENTES
+                                       WHERE COD_CLIENTE=his.COD_CLIENTE
+                                  AND ROWNUM <= 1) as RAZON_SOCIAL,
+                                  (SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
+                                              ELSE 0 END
+                                     FROM FA_HISTDOCU
+                                    WHERE NUM_SECUREL=his.NUM_SECUENCI and COD_TIPDOCUM='25' and cod_cliente =his.COD_CLIENTE) as TOTAL_NC
+                             FROM FA_HISTDOCU his where PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b' ";
+
+                //numeros de conceptos que tiene cada factura
+                $query_concepto="select COD_CONCEPTO
+                                   from fa_histconc_19010102 his
+                                  where ind_ordentotal = '136649184' and COD_CONCEREL < '0'";
 
 
-                $query = "SELECT NOM_CLIENTE ||' ' ||
-                                 NOM_APECLIEN1||' '||
-                                 NOM_APECLIEN2 as razon_social
-                            FROM GE_CLIENTES
-                           WHERE COD_CLIENTE= '$id_cliente'
-                             AND ROWNUM <= 1";
+
+                //query para saber todas las notas de creditos existentes
+                 $query_nc="select ind_ordentotal
+                              from fa_histdocu
+                             where num_securel =
+                                         (SELECT num_secuenci
+                                            from FA_HISTDOCU
+                                           where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')
+                               and cod_tipdocum = 25
+                               and cod_cliente =
+                                         (SELECT cod_cliente
+                                            from FA_HISTDOCU
+                                           where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')";
+
                 $result = oci_parse($oracle, $query);
                 $ok=oci_execute($result);
                 if ($ok != false) {
                     $row = oci_fetch_array($result, OCI_ASSOC);
                     if(!empty($row)){
+                        $c_cliente=$row['COD_CLIENTE'];
+                        $t_factura=$row['TOT_CARGOSME'];
+                        $f_emision=$row['FEC_EMISION'];
+                        $leyenda_doc="NADA"; /*$row['LEYENDA_DOC'];*/
                         $razon_social=$row['RAZON_SOCIAL'];
-                        echo json_encode($razon_social);
+                        $total_nc=$row['TOTAL_NC'];
+                        $conceptos_fac=$row['IND_ORDENTOTAL'];
+                        $result=compact("c_cliente","t_factura","f_emision","leyenda_doc","razon_social","total_nc","conceptos_fac");
+                        echo json_encode($result);
                     }else{
                         echo json_encode('no result');
                     }
                 }else{
                     echo json_encode('no result');
                 }
+
+
+                $result_concepto = oci_parse($oracle, $query_concepto);
+                $ok=oci_execute($result_concepto);
+                if ($ok != false) {
+                    $i=0;
+                    while($row_concepto = oci_fetch_array($result, OCI_ASSOC)){
+                        $cod_con[$i]=$row_concepto['COD_CONCEPTO'];
+                        $i++;
+                    }
+                }else{
+                    echo json_encode('no result');
+                }
+
+
+                $result_nc = oci_parse($oracle, $query_nc);
+                $ok=oci_execute($result_nc);
+                if ($ok != false) {
+                    while($row_nc = oci_fetch_array($result, OCI_ASSOC)){
+
+
+
+
+
+
+                    }
+                }else{
+                    echo json_encode('no result');
+                }
+
 
 
             } else {
