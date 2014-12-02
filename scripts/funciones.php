@@ -44,8 +44,8 @@ function mysql_clonar_registro ( $tabla, $clave ) {
 
 // request de solicitud
 header('Content-type: application/json; charset=utf-8');
-if(isset($_POST['request'])) {
-    switch ($_POST['request']) {
+if(isset($_GET['request'])) {
+    switch ($_GET['request']) {
 
         case 'getConceptosdoc':
             $oracle=ConexionSCL();
@@ -112,8 +112,8 @@ if(isset($_POST['request'])) {
         case 'getdocnota':
             $oracle=ConexionSCL();
             if (isset($_SESSION['username'])) {
-                $factura_a=$_POST['factura_a'];
-                $factura_b=$_POST['factura_b'];
+                $factura_a=$_GET['factura_a'];
+                $factura_b=$_GET['factura_b'];
 /*
 
                 $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL, (
@@ -141,7 +141,7 @@ if(isset($_POST['request'])) {
 
  */
 
-                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL,
+                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL,IND_ORDENTOTAL,
                                      (SELECT NOM_CLIENTE ||' ' ||
                                              NOM_APECLIEN1||' '||
                                              NOM_APECLIEN2
@@ -154,31 +154,13 @@ if(isset($_POST['request'])) {
                                     WHERE NUM_SECUREL=his.NUM_SECUENCI and COD_TIPDOCUM='25' and cod_cliente =his.COD_CLIENTE) as TOTAL_NC
                              FROM FA_HISTDOCU his where PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b' ";
 
-                //numeros de conceptos que tiene cada factura
-                $query_concepto="select COD_CONCEPTO
-                                   from fa_histconc_19010102 his
-                                  where ind_ordentotal = '136649184' and COD_CONCEREL < '0'";
-
-
-
-                //query para saber todas las notas de creditos existentes
-                 $query_nc="select ind_ordentotal
-                              from fa_histdocu
-                             where num_securel =
-                                         (SELECT num_secuenci
-                                            from FA_HISTDOCU
-                                           where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')
-                               and cod_tipdocum = 25
-                               and cod_cliente =
-                                         (SELECT cod_cliente
-                                            from FA_HISTDOCU
-                                           where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')";
 
                 $result = oci_parse($oracle, $query);
                 $ok=oci_execute($result);
                 if ($ok != false) {
                     $row = oci_fetch_array($result, OCI_ASSOC);
                     if(!empty($row)){
+                        $int_ordentotal=$row['IND_ORDENTOTAL'];
                         $c_cliente=$row['COD_CLIENTE'];
                         $t_factura=$row['TOT_CARGOSME'];
                         $f_emision=$row['FEC_EMISION'];
@@ -186,42 +168,69 @@ if(isset($_POST['request'])) {
                         $razon_social=$row['RAZON_SOCIAL'];
                         $total_nc=$row['TOTAL_NC'];
                         $conceptos_fac=$row['IND_ORDENTOTAL'];
-                        $result=compact("c_cliente","t_factura","f_emision","leyenda_doc","razon_social","total_nc","conceptos_fac");
+                        $result=compact("c_cliente","t_factura","f_emision","leyenda_doc","razon_social","total_nc","conceptos_fac","int_ordentotal");
                         echo json_encode($result);
+
+                                //numeros de conceptos que tiene cada factura
+                                $query_concepto="select COD_CONCEPTO, DES_CONCEPTO, IMP_CONCEPTO AS IMPORTE_TOTAL
+                                           from fa_histconc_19010102 his
+                                          where ind_ordentotal = $int_ordentotal and COD_CONCEREL < '0'";
+                                $result_concepto = oci_parse($oracle, $query_concepto);
+                                $ok=oci_execute($result_concepto);
+                                if ($ok != false) {
+                                    $i=0;
+                                    while($row_concepto = oci_fetch_array($result_concepto, OCI_ASSOC)){
+                                        $cod_con[$i]['codigo']=$row_concepto['COD_CONCEPTO'];
+                                        $cod_con[$i]['concepto']=$row_concepto['DES_CONCEPTO'];
+                                        $cod_con[$i]['importe']=$row_concepto['IMPORTE_TOTAL'];
+                                        $i++;
+                                    }
+                                    echo json_encode($cod_con);
+
+                                    //query para saber todas las notas de creditos existentes
+
+                                    $query_nc="select ind_ordentotal
+                                                         from fa_histdocu
+                                                        where num_securel =
+                                                                     (SELECT num_secuenci
+                                                                        from FA_HISTDOCU
+                                                                       where  PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b')
+                                                                   and cod_tipdocum = 25
+                                                                   and cod_cliente =
+                                                                     (SELECT cod_cliente
+                                                                        from FA_HISTDOCU
+                                                                       where  PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b')";
+
+                                            $result_nc = oci_parse($oracle, $query_nc);
+                                            $ok=oci_execute($result_nc);
+                                            if ($ok != false) {
+                                                while($row_nc = oci_fetch_array($result_nc, OCI_ASSOC)){
+                                                  $nota=$row_nc['IND_ORDENTOTAL'];
+                                                  echo json_encode($nota);
+
+
+
+                                                }
+                                            }else{
+                                                echo json_encode('no result0');
+                                            }
+
+
+
+
+                                }else{
+                                    echo json_encode('no result1');
+                                }
+
+
+
+
+
                     }else{
-                        echo json_encode('no result');
+                        echo json_encode('no result2');
                     }
                 }else{
-                    echo json_encode('no result');
-                }
-
-
-                $result_concepto = oci_parse($oracle, $query_concepto);
-                $ok=oci_execute($result_concepto);
-                if ($ok != false) {
-                    $i=0;
-                    while($row_concepto = oci_fetch_array($result, OCI_ASSOC)){
-                        $cod_con[$i]=$row_concepto['COD_CONCEPTO'];
-                        $i++;
-                    }
-                }else{
-                    echo json_encode('no result');
-                }
-
-
-                $result_nc = oci_parse($oracle, $query_nc);
-                $ok=oci_execute($result_nc);
-                if ($ok != false) {
-                    while($row_nc = oci_fetch_array($result, OCI_ASSOC)){
-
-
-
-
-
-
-                    }
-                }else{
-                    echo json_encode('no result');
+                    echo json_encode('no result3');
                 }
 
 

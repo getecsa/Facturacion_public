@@ -22,7 +22,7 @@ if (mysqli_connect_errno()) {
 }
 
 //usuario scl
-/*
+
 function ConexionSCL(){
     $conn = oci_connect("APP_SOLFACT", "Mg2$8Xqw", "10.225.173.100/REPOSCEL");
     if (!$conn) {
@@ -32,8 +32,9 @@ function ConexionSCL(){
     }
     return $conn;
 }
-*/
 
+
+/*
 //usuario scl test
 
 function ConexionSCL(){
@@ -45,5 +46,5 @@ function ConexionSCL(){
     }
     return $conn;
 }
-
+*/
 ?>

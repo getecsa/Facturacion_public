@@ -46,10 +46,11 @@ SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
 
 SELECT * from FA_HISTDOCU WHERE cod_cliente ='2684842' AND NUM_SECUREL='919215';
 
-//saberlos conceptos de la factura
+//saberlos conceptos de la factura---
 select * from fa_histconc_19010102 where ind_ordentotal = '134694192'
 
 select  * from fa_histdocu where pref_plaza = 'DFFFM' AND NUM_FOLIO = 700108
+
 
 // obtener los impuestos y ieps de los conceptos que tiene en esa factura
 
@@ -67,6 +68,22 @@ where cod_concepto IN (11440,11438,11442)
 select COD_CONCEPTO, DES_CONCEPTO, IMP_CONCEPTO AS IMPORTE_TOTAL 
   from fa_histconc_19010102 his 
  where ind_ordentotal = '136649114' and COD_CONCEREL < '0'
+
+select ind_ordentotal
+                                                                  from fa_histdocu
+                                                                 where num_securel =
+                                                                             (SELECT num_secuenci
+                                                                                from FA_HISTDOCU
+                                                                               where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')
+                                                                   and cod_tipdocum = 25
+                                                                   and cod_cliente =
+                                                                             (SELECT cod_cliente
+                                                                                from FA_HISTDOCU
+                                                                               where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319')
+
+
+
+
 
 //OBTENER TOTAL DE LAS NOTAS DE CREDITO
 SELECT * from FA_HISTDOCU where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319';
@@ -93,6 +110,9 @@ SELECT INT_ORDENTOTAL from FA_HISTDOCU where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='
 ///// obtener notas de creditos existentes
 
 SELECT num_secuenci, cod_cliente from FA_HISTDOCU where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319';
+
+SELECT * from FA_HISTDOCU where  PREF_PLAZA='DFFFM' AND NUM_FOLIO='705319';
+
 
 select * 
   from fa_histdocu 
@@ -141,3 +161,8 @@ select COD_CONCEPTO, DES_CONCEPTO, IMP_CONCEPTO AS IMPORTE_TOTAL
 select * from fa_histdocu where num_securel = 1745746 and cod_tipdocum = 25 and cod_cliente =64841416 
 
 SELECT * FROM FA_HISTCONC_19010102 WHERE IND_ORDENTOTAL='136649184' AND COD_CONCEREL < '0' AND COD_CONCEPTO='734'
+
+
+select COD_CONCEPTO
+                                           from fa_histconc_19010102 his
+                                          where ind_ordentotal = '39353304' and COD_CONCEREL < '0'
