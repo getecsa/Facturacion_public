@@ -47,7 +47,7 @@ SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
 SELECT * from FA_HISTDOCU WHERE cod_cliente ='2684842' AND NUM_SECUREL='919215';
 
 //saberlos conceptos de la factura---
-select * from fa_histconc_19010102 where ind_ordentotal = '134694192'
+select cod_concepto, imp_concepto from fa_histconc_19010102 where ind_ordentotal = '136874306'
 
 select  * from fa_histdocu where pref_plaza = 'DFFFM' AND NUM_FOLIO = 700108
 

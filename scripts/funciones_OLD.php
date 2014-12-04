@@ -100,11 +100,11 @@ if(isset($_GET['request'])) {
 
 
             } else {
-                /*  if (!isset($_SESSION['usuario'])) {
-                      header('Forbidden',true,403);
-                  } else {
-                      echo json_encode(array());
-                  } */
+              /*  if (!isset($_SESSION['usuario'])) {
+                    header('Forbidden',true,403);
+                } else {
+                    echo json_encode(array());
+                } */
                 echo json_encode(false);
             }
             break;
@@ -114,32 +114,32 @@ if(isset($_GET['request'])) {
             if (isset($_SESSION['username'])) {
                 $factura_a=$_GET['factura_a'];
                 $factura_b=$_GET['factura_b'];
-                /*
+/*
 
-                                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL, (
-                                                      SELECT mens.desc_menslin
-                                                        FROM
-                                                             FA_MENSAJES mens,
-                                                             FA_MENSPROCESO procmen,
-                                                             FA_HISTDOCU histdocu
-                                                       where mens.corr_mensaje=procmen.corr_mensaje
-                                                         and mens.cod_idioma=1
-                                                         and mens.num_linea=1
-                                                         and procmen.num_proceso=histdocu.num_proceso
-                                                         and histdocu.num_proceso  =his.NUM_PROCESO) as LEYENDA_DOC,
-                                (SELECT NOM_CLIENTE ||' ' ||
-                                NOM_APECLIEN1||' '||
-                                NOM_APECLIEN2
-                                                        FROM GE_CLIENTES
-                                                       WHERE COD_CLIENTE=his.COD_CLIENTE
-                                AND ROWNUM <= 1) as RAZON_SOCIAL,
-                                                  (SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
-                                                              ELSE 0 END
-                                                     FROM FA_HISTDOCU
-                                                    WHERE NUM_SECUREL=his.NUM_SECUENCI and COD_TIPDOCUM='25' and cod_cliente =his.COD_CLIENTE) as TOTAL_NC
-                                             FROM FA_HISTDOCU his where PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b' ";
+                $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL, (
+                                      SELECT mens.desc_menslin
+                                        FROM
+                                             FA_MENSAJES mens,
+                                             FA_MENSPROCESO procmen,
+                                             FA_HISTDOCU histdocu
+                                       where mens.corr_mensaje=procmen.corr_mensaje
+                                         and mens.cod_idioma=1
+                                         and mens.num_linea=1
+                                         and procmen.num_proceso=histdocu.num_proceso
+                                         and histdocu.num_proceso  =his.NUM_PROCESO) as LEYENDA_DOC,
+                (SELECT NOM_CLIENTE ||' ' ||
+                NOM_APECLIEN1||' '||
+                NOM_APECLIEN2
+                                        FROM GE_CLIENTES
+                                       WHERE COD_CLIENTE=his.COD_CLIENTE
+                AND ROWNUM <= 1) as RAZON_SOCIAL,
+                                  (SELECT CASE WHEN sum(TOT_CARGOSME) !=0  THEN SUM(TOT_CARGOSME)
+                                              ELSE 0 END
+                                     FROM FA_HISTDOCU
+                                    WHERE NUM_SECUREL=his.NUM_SECUENCI and COD_TIPDOCUM='25' and cod_cliente =his.COD_CLIENTE) as TOTAL_NC
+                             FROM FA_HISTDOCU his where PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b' ";
 
-                 */
+ */
 
                 $query = "SELECT COD_CLIENTE, TOT_CARGOSME, FEC_EMISION,IND_ORDENTOTAL,IND_ORDENTOTAL,
                                      (SELECT NOM_CLIENTE ||' ' ||
@@ -171,25 +171,25 @@ if(isset($_GET['request'])) {
                         $result=compact("c_cliente","t_factura","f_emision","leyenda_doc","razon_social","total_nc","conceptos_fac","int_ordentotal");
                         echo json_encode($result);
 
-                        //numeros de conceptos que tiene cada factura
-                        $query_concepto="select COD_CONCEPTO, DES_CONCEPTO, IMP_CONCEPTO AS IMPORTE_TOTAL
+                                //numeros de conceptos que tiene cada factura
+                                $query_concepto="select COD_CONCEPTO, DES_CONCEPTO, IMP_CONCEPTO AS IMPORTE_TOTAL
                                            from fa_histconc_19010102 his
                                           where ind_ordentotal = $int_ordentotal and COD_CONCEREL < '0'";
-                        $result_concepto = oci_parse($oracle, $query_concepto);
-                        $ok=oci_execute($result_concepto);
-                        if ($ok != false) {
-                            $i=0;
-                            while($row_concepto = oci_fetch_array($result_concepto, OCI_ASSOC)){
-                                $cod_con[$i]['codigo']=$row_concepto['COD_CONCEPTO'];
-                                $cod_con[$i]['concepto']=$row_concepto['DES_CONCEPTO'];
-                                $cod_con[$i]['importe']=$row_concepto['IMPORTE_TOTAL'];
-                                $i++;
-                            }
-                            echo json_encode($cod_con);
+                                $result_concepto = oci_parse($oracle, $query_concepto);
+                                $ok=oci_execute($result_concepto);
+                                if ($ok != false) {
+                                    $i=0;
+                                    while($row_concepto = oci_fetch_array($result_concepto, OCI_ASSOC)){
+                                        $cod_con[$i]['codigo']=$row_concepto['COD_CONCEPTO'];
+                                        $cod_con[$i]['concepto']=$row_concepto['DES_CONCEPTO'];
+                                        $cod_con[$i]['importe']=$row_concepto['IMPORTE_TOTAL'];
+                                        $i++;
+                                    }
+                                    echo json_encode($cod_con);
 
-                            //query para saber todas las notas de creditos existentes
+                                    //query para saber todas las notas de creditos existentes
 
-                            $query_nc="select ind_ordentotal
+                                    $query_nc="select ind_ordentotal
                                                          from fa_histdocu
                                                         where num_securel =
                                                                      (SELECT num_secuenci
@@ -201,37 +201,37 @@ if(isset($_GET['request'])) {
                                                                         from FA_HISTDOCU
                                                                        where  PREF_PLAZA='$factura_a' AND NUM_FOLIO='$factura_b')";
 
-                            $result_nc = oci_parse($oracle, $query_nc);
-                            $ok=oci_execute($result_nc);
-                            if ($ok != false) {
+                                            $result_nc = oci_parse($oracle, $query_nc);
+                                            $ok=oci_execute($result_nc);
+                                            if ($ok != false) {
 
-                                while($row_nc = oci_fetch_array($result_nc, OCI_ASSOC)){
-                                    $nota=$row_nc['IND_ORDENTOTAL'];
-                                    //buscar el totalde concepto por nota existente
-                                    echo json_encode($nota);
-                                    $total_concepto=0;
-
-                                    for($a=0;$a<=$i;$a++) {
-                                        $query_total_concepto = "select imp_concepto
+                                                while($row_nc = oci_fetch_array($result_nc, OCI_ASSOC)){
+                                                  $nota=$row_nc['IND_ORDENTOTAL'];
+                                                  //buscar el totalde concepto por nota existente
+                                                    echo json_encode($nota);
+                                               $total_concepto=0;
+                                                    
+                                            for($a=0;$a<=$i;$a++) {
+                                                $query_total_concepto = "select imp_concepto
                                                                       from fa_histconc_19010102
                                                                      where ind_ordentotal = '$nota' and cod_concepto='$cod_con[$a]['codigo']'";
-                                        $result_total_concepto = oci_parse($oracle, $query_total_concepto);
-                                        $row_total_concepto = oci_fetch_array($result_total_concepto, OCI_ASSOC);
+                                                $result_total_concepto = oci_parse($oracle, $query_total_concepto);
+                                                $row_total_concepto = oci_fetch_array($result_total_concepto, OCI_ASSOC);
 
-                                    }
+                                            }
 
 
+                                                }
+                                            }else{
+                                                echo json_encode('no result0');
+                                            }
+
+
+
+
+                                }else{
+                                    echo json_encode('no result1');
                                 }
-                            }else{
-                                echo json_encode('no result0');
-                            }
-
-
-
-
-                        }else{
-                            echo json_encode('no result1');
-                        }
 
 
 
